@@ -3,6 +3,13 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
+'''
+Note, after pulling on gamma:
+1) Uncomment SERVER_NAME
+2) Change MYSQL_HOST to 127.0.0.1
+'''
+
+#app.config['SERVER_NAME'] = 'gamma.meteoadriatic.net'
 app.config['MYSQL_HOST'] = 'gamma.meteoadriatic.net'
 app.config['MYSQL_USER'] = 'meteoadriatic-remote'
 app.config['MYSQL_PASSWORD'] = 'Power/Off'
@@ -18,7 +25,6 @@ def index():
         SELECT TMP_2, RH_2 FROM model_output WHERE location = 'zadar' AND datetime = '2018-09-01 01:00:00'
     ''')
     rv = cur.fetchall()
-    #return str(rv)
 
     return render_template('index.html',
                            title='CRD - Climate Reanalysis Database',
