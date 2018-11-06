@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }}</title>
+      {% else %}
+      <title>TEST CRD - Climate Reanalysis Database</title>
+      {% endif %}
+    </head>
+    <body>
+        <h1>Dobrodošli u (test) CRD - Climate Reanalysis Database</h1>
+        <div>
+            <p>Ova web aplikacija realizira se kao open source projekt hostan na <a href="https://github.com/meteoadriatic/Reanalysis">GitHub-u</a>.</p>
+            <p>Pozivamo zainteresirane volontere da nam se pridruže u razvoju. Projekt je započet u Python/Flask framework.</p>
+        </div>
+        <div><a href="/">CRD početna</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
+</html>
