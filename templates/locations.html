@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h4>Popis lokacija u bazi s koordinatama i nadmorskom visinom</h4>
+
+<table border="1" cellpadding="5" cellspacing="5">
+    {% for row in locs %}
+        <tr>
+        {% for d in row %}
+            <td>{{ d }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

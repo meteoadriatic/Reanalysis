@@ -30,7 +30,16 @@ def index():
                            title='CRD - Climate Reanalysis Database',
                            mydata=str(rv))
 
-
+@app.route('/locations')
+def locations():
+    cur = mysql.connection.cursor()
+    cur.execute('''
+        SELECT * FROM locations;'
+    ''')
+    response = cur.fetchall()
+    return render_template('locations.html',
+                           title='CRD - Climate Reanalysis Database',
+                           locs=response)
 
 
 
