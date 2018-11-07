@@ -1,15 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_mysqldb import MySQL
+from forms import SQLForm
 
 app = Flask(__name__)
 
-'''
-Note, after pulling on gamma:
-1) Uncomment SERVER_NAME
-2) Change MYSQL_HOST to 127.0.0.1
-'''
-
-#app.config['SERVER_NAME'] = 'crd.meteoadriatic.net'
+app.config['SECRET_KEY'] = 'zMUVtqorW01Zke6F46w3U9M5QXZ6KCYY'
 app.config['MYSQL_HOST'] = 'gamma.meteoadriatic.net'
 app.config['MYSQL_USER'] = 'meteoadriatic-remote'
 app.config['MYSQL_PASSWORD'] = 'Power/Off'
@@ -20,15 +15,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
-    cur.execute('''
-        SELECT TMP_2, RH_2 FROM model_output WHERE location = 'zadar' AND datetime = '2018-09-01 01:00:00'
-    ''')
-    rv = cur.fetchall()
-
-    return render_template('index.html',
-                           title='CRD - Climate Reanalysis Database',
-                           mydata=str(rv))
+    return render_template('index.html', title='CRD - Climate Reanalysis Database')
 
 @app.route('/locations')
 def locations():
@@ -41,6 +28,10 @@ def locations():
                            title='CRD - Climate Reanalysis Database',
                            locs=response)
 
+@app.route('/sql', methods=['GET', 'POST'])
+def sql():
+    form = SQLForm()
+    return render_template('sql.html', title='SQL upit', form=form)
 
 
 if __name__ == '__main__':
