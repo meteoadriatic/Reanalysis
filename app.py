@@ -9,7 +9,7 @@ Note, after pulling on gamma:
 2) Change MYSQL_HOST to 127.0.0.1
 '''
 
-#app.config['SERVER_NAME'] = 'gamma.meteoadriatic.net'
+#app.config['SERVER_NAME'] = 'crd.meteoadriatic.net'
 app.config['MYSQL_HOST'] = 'gamma.meteoadriatic.net'
 app.config['MYSQL_USER'] = 'meteoadriatic-remote'
 app.config['MYSQL_PASSWORD'] = 'Power/Off'

@@ -10,7 +10,7 @@ port: *33333*
 username with select privileges: *meteoadriatic-remote*  
 password: *Power/Off*
 
-Live current application code runs at: *http://gamma.meteoadriatic.net/crd*
+Live current application code runs at: *http://crd.meteoadriatic.net*
 
 You're free to connect, browse and use sample data in any way you want.
 
