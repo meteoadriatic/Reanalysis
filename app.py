@@ -31,8 +31,15 @@ def locations():
 @app.route('/sql', methods=['GET', 'POST'])
 def sql():
     form = SQLForm()
-    return render_template('sql.html', title='SQL upit', form=form)
+    sql_response = None
 
+    if form.is_submitted():
+        sql_query = form.sql.data
+        cur = mysql.connection.cursor()
+        cur.execute(sql_query)
+        sql_response = cur.fetchall()
+
+    return render_template('sql.html', title='SQL upit', form=form, response=sql_response)
 
 if __name__ == '__main__':
     app.run(debug=True)
