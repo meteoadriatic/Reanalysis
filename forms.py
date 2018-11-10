@@ -7,7 +7,7 @@ class SQLForm(FlaskForm):
     submit = SubmitField('Pošalji')
 
 class StatisticsForm(FlaskForm):
-    location = SelectField('locations', coerce=str)
-    parameter = SelectField('parameters', coerce=str)
+    location = SelectField('location', choices=[])
+    parameter = SelectField('parameter', choices=[])
     submit = SubmitField('Pošalji')
 

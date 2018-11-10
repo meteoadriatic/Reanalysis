@@ -46,7 +46,7 @@ def sql():
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-
+    form = StatisticsForm()
     cur = mysql.connection.cursor()
 
     cur.execute('''
@@ -65,18 +65,19 @@ def statistics():
     parameters = cur.fetchall()
     parameters = [i[0] for i in parameters]
 
-    form = StatisticsForm(locations)
+    form.location.choices = locations
+    form.parameter.choices = parameters
+    print(form.location.choices)
+    print(form.parameter.choices)
+    print(form.location.data)
+    print(form.parameter.data)
+
     if form.is_submitted():
+        print(form.location.choices)
+        print(form.parameter.choices)
         print(form.location.data)
         print(form.parameter.data)
 
-        '''
-        Ovi printovi iznad su samo radi testa tu da vidim što mi vraća (ništa očito)
-        Cilj ovoga je naravno da se ono što je odabrano u ova dva select-a proslijedi unutar
-        sql upita u bazu... naravno fali tu još input-a (npr. nešto za odabrati range datuma)
-        i onda sam planirao da mi vrati natrag statističke podatke za odabranu lokaciju (tmin, tmax, ....)
-        Možda čak bez select-a za parametar da vrati svu statistiku za lokaciju koju definiram negdje u kodu.
-        '''
 
     return render_template('statistics.html',
                            title='Statistika',
