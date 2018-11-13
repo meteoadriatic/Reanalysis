@@ -48,6 +48,7 @@ def sql():
 def statistics():
     form = StatisticsForm()
     sql_response = ''
+    sel_param = ''
     cur = mysql.connection.cursor()
 
     cur.execute('''
@@ -72,25 +73,19 @@ def statistics():
     if form.is_submitted():
         sel_loc = form.locations.data
         sel_param = form.parameters.data
-        print(sel_loc)
-        print(sel_param)
 
-        cur.execute("""SELECT %s FROM model_output WHERE location=%s;""", (sel_param, sel_loc))
+        SQL = '''SELECT datetime, {} FROM model_output WHERE location=%s'''.format(sel_param)
 
-        '''
-        Izraz dodaje single quotes oko %s i query ne prolazi. Kako to riješiti?
-        '''
-
+        cur.execute(SQL, (sel_loc,))
         sql_response = cur.fetchall()
-        print(sql_response)
 
     return render_template('statistics.html',
                            title='Statistika',
                            form=form,
                            locations=locations,
                            parameters=parameters,
-                           response=sql_response)
-
+                           response=sql_response,
+                           table_columns=['Datum i sat', sel_param])
 
 
 
