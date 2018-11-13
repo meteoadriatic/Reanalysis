@@ -50,6 +50,7 @@ def statistics():
     form = StatisticsForm()
     sql_response = ''
     sel_param = ''
+    stats = ''
     cur = mysql.connection.cursor()
 
     cur.execute('''
