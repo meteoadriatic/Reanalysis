@@ -2,16 +2,33 @@
 
 {% block content %}
 
-<h4>Popis lokacija u bazi s koordinatama i nadmorskom visinom</h4>
+<div class="content-section">
 
-<table border="1" cellpadding="5" cellspacing="5">
-    {% for row in locs %}
-        <tr>
-        {% for d in row %}
-            <td>{{ d }}</td>
-        {% endfor %}
-        </tr>
-    {% endfor %}
-</table>
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Popis lokacija u bazi s koordinatama i nadmorskom visinom</legend>
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Lokacija</td>
+                        <td>Geografska širina</td>
+                        <td>Geografska dužina</td>
+                        <td>Nadmorska visina</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in locs %}
+                        <tr>
+                        {% for d in row %}
+                            <td>{{ d }}</td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+
+</div>
 
 {% endblock %}
