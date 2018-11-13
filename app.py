@@ -55,6 +55,7 @@ def statistics():
     sel_param = ''
     sel_loc = ''
     stats = ''
+    show_plot=False
     cur = mysql.connection.cursor()
 
     cur.execute('''
@@ -102,6 +103,7 @@ def statistics():
 
         fig = df.plot(figsize=(10.0, 5.5)).get_figure()
         fig.savefig('static/images/plot.png')
+        show_plot=True
 
 
     return render_template('statistics.html',
@@ -114,7 +116,8 @@ def statistics():
                            stats=stats,
                            sel_param=sel_param,
                            sel_loc=sel_loc,
-                           plot='/static/images/plot.png')
+                           plot='/static/images/plot.png',
+                           show_plot=show_plot)
 
 
 # No caching at all for API endpoints.
