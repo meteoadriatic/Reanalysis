@@ -47,6 +47,7 @@ def sql():
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
     form = StatisticsForm()
+    sql_response = ''
     cur = mysql.connection.cursor()
 
     cur.execute('''
@@ -65,26 +66,30 @@ def statistics():
     parameters = cur.fetchall()
     parameters = [i[0] for i in parameters]
 
-    form.location.choices = locations
-    form.parameter.choices = parameters
-    print(form.location.choices)
-    print(form.parameter.choices)
-    print(form.location.data)
-    print(form.parameter.data)
+    form.locations.choices = locations
+    form.parameters.choices = parameters
 
     if form.is_submitted():
-        print(form.location.choices)
-        print(form.parameter.choices)
-        print(form.location.data)
-        print(form.parameter.data)
+        sel_loc = form.locations.data
+        sel_param = form.parameters.data
+        print(sel_loc)
+        print(sel_param)
 
+        cur.execute("""SELECT %s FROM model_output WHERE location=%s;""", (sel_param, sel_loc))
+
+        '''
+        Izraz dodaje single quotes oko %s i query ne prolazi. Kako to riješiti?
+        '''
+
+        sql_response = cur.fetchall()
+        print(sql_response)
 
     return render_template('statistics.html',
                            title='Statistika',
                            form=form,
                            locations=locations,
-                           parameters=parameters)
-
+                           parameters=parameters,
+                           response=sql_response)
 
 
 

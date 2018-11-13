@@ -4,32 +4,32 @@
 
     <div class="content-section">
 
-        <form method="POST" action="">
+        <form method="POST">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Odaberi lokaciju</legend>
                 <div class="form-group">
-                    <select name="locations" method="GET" action="/">
+                    <select name="locations">
                         {% for location in locations %}
-                        <option value= "{{location}}" SELECTED>{{location}}</option>"
+                        <option value= "{{location}}">{{location}}</option>"
                         {% endfor %}
                     </select>
                 </div>
             </fieldset>
-        </form>
-
-        <form method="POST" action="">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Odaberi parametar</legend>
                 <div class="form-group">
-                    <select name="parameters" method="GET" action="/">
+                    <select name="parameters">
                         {% for parameter in parameters %}
-                        <option value= "{{parameter}}" SELECTED>{{parameter}}</option>"
+                        <option value= "{{parameter}}">{{parameter}}</option>"
                         {% endfor %}
                     </select>
                 </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            <div class="container">
+                {{response}}
             </div>
         </form>
 
