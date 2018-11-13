@@ -50,6 +50,7 @@ def statistics():
     form = StatisticsForm()
     sql_response = ''
     sel_param = ''
+    sel_loc = ''
     stats = ''
     cur = mysql.connection.cursor()
 
@@ -104,7 +105,9 @@ def statistics():
                            parameters=parameters,
                            response=sql_response,
                            table_columns=['Datum i sat', sel_param],
-                           stats=stats)
+                           stats=stats,
+                           sel_param=sel_param,
+                           sel_loc=sel_loc)
 
 
 

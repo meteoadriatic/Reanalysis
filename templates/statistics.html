@@ -10,7 +10,11 @@
                 <div class="form-group">
                     <select name="locations">
                         {% for location in locations %}
-                        <option value= "{{location}}">{{location}}</option>"
+                            {% if location==sel_loc %}
+                                <option value="{{location}}" SELECTED>{{location}}</option>"
+                            {% else %}
+                                <option value="{{location}}">{{location}}</option>"
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
@@ -20,7 +24,11 @@
                 <div class="form-group">
                     <select name="parameters">
                         {% for parameter in parameters %}
-                        <option value= "{{parameter}}">{{parameter}}</option>"
+                            {% if parameter==sel_param %}
+                                <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
+                            {% else %}
+                                <option value="{{parameter}}">{{parameter}}</option>"
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
