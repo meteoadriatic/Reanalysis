@@ -1,7 +1,9 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 from flask_mysqldb import MySQL
 from forms import SQLForm, StatisticsForm
 import pandas as pd
+import matplotlib
+matplotlib.use("agg")
 
 app = Flask(__name__)
 
@@ -11,6 +13,7 @@ app.config['MYSQL_USER'] = 'meteoadriatic-remote'
 app.config['MYSQL_PASSWORD'] = 'Power/Off'
 app.config['MYSQL_DB'] = 'reanalysis_test'
 app.config['MYSQL_PORT'] = 33333
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 mysql = MySQL(app)
 
@@ -97,6 +100,9 @@ def statistics():
         statskeys=df.describe().index.tolist()
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
+        fig = df.plot(figsize=(10.0, 5.5)).get_figure()
+        fig.savefig('static/images/plot.png')
+
 
     return render_template('statistics.html',
                            title='Statistika',
@@ -107,9 +113,18 @@ def statistics():
                            table_columns=['Datum i sat', sel_param],
                            stats=stats,
                            sel_param=sel_param,
-                           sel_loc=sel_loc)
+                           sel_loc=sel_loc,
+                           plot='/static/images/plot.png')
 
 
+# No caching at all for API endpoints.
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 
 if __name__ == '__main__':
