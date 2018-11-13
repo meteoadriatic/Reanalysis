@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for
 from flask_mysqldb import MySQL
 from forms import SQLForm, StatisticsForm
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -73,11 +74,27 @@ def statistics():
     if form.is_submitted():
         sel_loc = form.locations.data
         sel_param = form.parameters.data
+        sel_startdate = form.startdate.data
+        sel_enddate = form.enddate.data
 
-        SQL = '''SELECT datetime, {} FROM model_output WHERE location=%s'''.format(sel_param)
+        SQL = '''   SELECT datetime, {}
+                    FROM model_output
+                    WHERE location=%s
+                    AND datetime > %s
+                    AND datetime <= %s
+            '''.format(sel_param)
 
-        cur.execute(SQL, (sel_loc,))
+        cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
         sql_response = cur.fetchall()
+
+        df = pd.DataFrame(list(sql_response))
+        df = df.set_index([0])
+        df.columns = [sel_param]
+
+        statsvalues=df.describe().values.tolist()
+        statskeys=df.describe().index.tolist()
+        stats = [list(a) for a in zip(statskeys, statsvalues)]
+
 
     return render_template('statistics.html',
                            title='Statistika',
@@ -85,7 +102,8 @@ def statistics():
                            locations=locations,
                            parameters=parameters,
                            response=sql_response,
-                           table_columns=['Datum i sat', sel_param])
+                           table_columns=['Datum i sat', sel_param],
+                           stats=stats)
 
 
 
