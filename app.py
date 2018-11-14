@@ -4,6 +4,7 @@ from forms import SQLForm, StatisticsForm
 import pandas as pd
 import matplotlib
 matplotlib.use("agg")
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -50,20 +51,25 @@ def sql():
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-    form = StatisticsForm()
+    # Initialize variables, form and mysql connection
     sql_response = ''
     sel_param = ''
     sel_loc = ''
     stats = ''
+    table_truncated = False
     show_plot=False
+    form = StatisticsForm()
     cur = mysql.connection.cursor()
 
+    # Retrieve locations and populate select field
     cur.execute('''
         SELECT * FROM locations;
     ''')
     locations = cur.fetchall()
     locations = [i[0] for i in locations]
+    form.locations.choices = locations
 
+    # Retrieve parameters and populate select field
     cur.execute('''
         SELECT COLUMN_NAME  
         FROM information_schema.COLUMNS  
@@ -73,38 +79,53 @@ def statistics():
     ''')
     parameters = cur.fetchall()
     parameters = [i[0] for i in parameters]
-
-    form.locations.choices = locations
     form.parameters.choices = parameters
 
+
     if form.is_submitted():
+        # Retrieve user choice of location and parameter from select forms
         sel_loc = form.locations.data
         sel_param = form.parameters.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
 
+        # Retrieve data from MySQL
         SQL = '''   SELECT datetime, {}
                     FROM model_output
                     WHERE location=%s
                     AND datetime > %s
                     AND datetime <= %s
             '''.format(sel_param)
-
         cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
         sql_response = cur.fetchall()
 
+        # Load MySQL response into pandas dataframe
         df = pd.DataFrame(list(sql_response))
         df = df.set_index([0])
         df.index.name = ''
         df.columns = [sel_param]
 
-        statsvalues=df.describe().values.tolist()
+        # Build statistics list from df.describe() output
         statskeys=df.describe().index.tolist()
+        statsvalues=df.describe().values.tolist()
+        statsvalues = [item for sublist in statsvalues for item in sublist]
+        statsvalues = ['%.1f' % elem for elem in statsvalues]
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
-        fig = df.plot(figsize=(12.5, 5.0)).get_figure()
+        # Create a plot from datetime (x axis) and chosen parameter (y axis)
+        fig, ax = plt.subplots()
+        df.plot(kind='line', figsize=(12.5, 5.0), grid=True, ax=ax)
+        ax.set_axisbelow(True)
+        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8)
+
+        # Save plot into file and set html trigger variable to display it
         fig.savefig('static/images/plot.png', bbox_inches = 'tight')
         show_plot=True
+
+        # Limit number of table rows if user requested large amount of data
+        if len(sql_response) > 720:
+            sql_response = sql_response[:720]
+            table_truncated = True
 
 
     return render_template('statistics.html',
@@ -118,10 +139,11 @@ def statistics():
                            sel_param=sel_param,
                            sel_loc=sel_loc,
                            plot='/static/images/plot.png',
-                           show_plot=show_plot)
+                           show_plot=show_plot,
+                           table_truncated=table_truncated)
 
 
-# No caching at all for API endpoints.
+# Request browser not to cache responses (we need this for plots and other variable static content to work reliably)
 @app.after_request
 def add_header(r):
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"

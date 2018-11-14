@@ -60,7 +60,7 @@
                                         {{ item[0] }}
                                     </td>
                                     <td>
-                                        {{ item[1][0] }}
+                                        {{ item[1] }}
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -76,6 +76,9 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Podaci</legend>
+                    {% if table_truncated == True %}
+                        <div class="alert alert-warning" role="alert">Tablica je ograničena na najviše 30 dana.</div>
+                    {% endif %}
                     <div class="container">
                         <table class="table table-striped table-hover table-sm">
                             <thead>
@@ -89,7 +92,7 @@
                                 {% for item in response %}
                                 <tr>
                                     <td>
-                                        {{ item[0] }}
+                                        {{ item[0].strftime("%Y-%m-%d %H") }}
                                     </td>
                                     <td>
                                         {{ item[1] }}
