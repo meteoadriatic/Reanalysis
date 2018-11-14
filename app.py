@@ -5,6 +5,8 @@ import pandas as pd
 import matplotlib
 matplotlib.use("agg")
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import numpy as np
 
 app = Flask(__name__)
 
@@ -95,6 +97,7 @@ def statistics():
                     WHERE location=%s
                     AND datetime > %s
                     AND datetime <= %s
+                    ORDER BY datetime
             '''.format(sel_param)
         cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
         sql_response = cur.fetchall()
@@ -114,9 +117,12 @@ def statistics():
 
         # Create a plot from datetime (x axis) and chosen parameter (y axis)
         fig, ax = plt.subplots()
-        df.plot(kind='line', figsize=(12.5, 5.0), grid=True, ax=ax)
+        fig.set_size_inches(12.5, 5.0)
+        fig.tight_layout()
+        fig.autofmt_xdate()
         ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8)
+        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8, axis='y')
+        ax.plot(df.index, df[sel_param])
 
         # Save plot into file and set html trigger variable to display it
         fig.savefig('static/images/plot.png', bbox_inches = 'tight')
