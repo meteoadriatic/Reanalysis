@@ -95,14 +95,15 @@ def statistics():
 
         df = pd.DataFrame(list(sql_response))
         df = df.set_index([0])
+        df.index.name = ''
         df.columns = [sel_param]
 
         statsvalues=df.describe().values.tolist()
         statskeys=df.describe().index.tolist()
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
-        fig = df.plot(figsize=(10.0, 5.5)).get_figure()
-        fig.savefig('static/images/plot.png')
+        fig = df.plot(figsize=(12.5, 5.0)).get_figure()
+        fig.savefig('static/images/plot.png', bbox_inches = 'tight')
         show_plot=True
 
 
