@@ -122,7 +122,7 @@ def statistics():
         fig.tight_layout()
         fig.autofmt_xdate()
         ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8, axis='y')
+        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8, axis='both')
         ax.plot(df.index, df[sel_param])
 
         # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
