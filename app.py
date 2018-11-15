@@ -126,6 +126,7 @@ def statistics():
 
         # Save plot into file and set html trigger variable to display it
         fig.savefig('static/images/plot.png', bbox_inches = 'tight')
+        plt.close(fig)
         show_plot=True
 
         # Limit number of table rows if user requested large amount of data
