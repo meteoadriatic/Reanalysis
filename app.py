@@ -6,6 +6,7 @@ import matplotlib
 matplotlib.use("agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
 import numpy as np
 
 app = Flask(__name__)
@@ -123,6 +124,10 @@ def statistics():
         ax.set_axisbelow(True)
         ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8, axis='y')
         ax.plot(df.index, df[sel_param])
+
+        # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_major_locator(ticker.AutoLocator())
 
         # Save plot into file and set html trigger variable to display it
         fig.savefig('static/images/plot.png', bbox_inches = 'tight')
