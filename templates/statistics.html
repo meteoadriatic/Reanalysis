@@ -12,23 +12,21 @@
 
         <form method="POST">
             <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Odaberi lokaciju</legend>
-                <div class="form-group">
-                    <select name="locations">
-                        {% for location in locations %}
-                            {% if location==sel_loc %}
-                                <option value="{{location}}" SELECTED>{{location}}</option>"
-                            {% else %}
-                                <option value="{{location}}">{{location}}</option>"
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-            </fieldset>
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Odaberi parametar</legend>
-                <div class="form-group">
-                    <select name="parameters">
+                <legend class="border-bottom mb-1">Odaberi lokaciju i parametar</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <select name="locations" class="form-control">
+                            {% for location in locations %}
+                                {% if location==sel_loc %}
+                                    <option value="{{location}}" SELECTED>{{location}}</option>"
+                                {% else %}
+                                    <option value="{{location}}">{{location}}</option>"
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                    <select name="parameters" class="form-control">
                         {% for parameter in parameters %}
                             {% if parameter==sel_param %}
                                 <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
@@ -37,10 +35,11 @@
                             {% endif %}
                         {% endfor %}
                     </select>
+                    </div>
                 </div>
             </fieldset>
             <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Odaberi početni i završni datum</legend>
+                <legend class="border-bottom mb-1">Odaberi početni/završni datum i opcije</legend>
                 <div class="row">
                     <div class="col-md-2">
                         {{ form.startdate(class="form-control") }}
@@ -52,30 +51,47 @@
                         <small id="laststartdate" class="form-text text-muted text-center">
                             Najkasniji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
                     </div>
-                    <div class="col-md-1">
-                        {{ form.trendline(class="form-control") }}
-                        <small id="trendline" class="form-text text-muted text-center"
-                               data-toggle="tooltip"
-                               title="Prikaži linearni trend na grafu">Trend</small>
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            <div class="d-inline-block align-middle">{{ form.trendline(class="form-control") }}</div>
+                            <small id="trendline" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži linearni trend na grafu">Trend</small>
+                        </div>
+                        <div class="checkbox">
+                            <div class="d-inline-block align-middle">{{ form.removetbllimit(class="form-control") }}</div>
+                            <small id="removetbllimit" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
+                            </div>
+                        </div>
+                    <div class="col-md-6">
+                        <div class="input-group mb-1 input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Pomični srednjak (h)</span>
+                            </div>
+                            <div class="d-inline-block align-middle">{{ form.rollingmean(class="form-control form-control-sm") }}</div>
+                            <small id="rollingmean" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Primijeni pomični srednjak na graf, prozor = x u satima (x = 0 = off)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                        </div>
+                        <div class="input-group mb-1 input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">FFT analiza (1/h)</span>
+                            </div>
+                            <div class="d-inline-block align-middle">{{ form.fftspacing(class="form-control form-control-sm") }}</div>
+                            <small id="fftspacing" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Primijeni FFT analizu, frekvencija = 1/x u satima (x = 0 = off)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                        </div>
+                        <div class="input-group mb-1 input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Ymax (graf)</span>
+                            </div>
+                            <div class="d-inline-block align-middle">{{ form.ymaxplot(class="form-control form-control-sm") }}</div>
+                            <small id="ymaxplot" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                        </div>
+                        <div class="input-group mb-1 input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Ymin (graf)</span>
+                            </div>
+                            <div class="d-inline-block align-middle">{{ form.yminplot(class="form-control form-control-sm") }}</div>
+                            <small id="yminplot" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                        </div>
                     </div>
-                    <div class="col-md-1">
-                        {{ form.removetbllimit(class="form-control") }}
-                        <small id="removetbllimit" class="form-text text-muted text-center"
-                               data-toggle="tooltip"
-                               title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
-                    </div>
-                    <div class="col-md-1">
-                        {{ form.rollingmean(class="form-control") }}
-                        <small id="rollingmean" class="form-text text-muted text-center"
-                               data-toggle="tooltip"
-                               title="Primijeni pomični srednjak na graf, prozor = x u satima (x = 0 = off)">Pomični srednjak (w=h)</small>
-                    </div>
-                    <div class="col-md-1">
-                        {{ form.fftspacing(class="form-control") }}
-                        <small id="fftspacing" class="form-text text-muted text-center"
-                               data-toggle="tooltip"
-                               title="Primijeni FFT analizu, frekvencija = 1/x u satima (x = 0 = off)">FFT analiza (f=1/x h)</small>
-                    </div>
+
                 </div>
             </fieldset>
             <div class="form-group">

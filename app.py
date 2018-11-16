@@ -120,6 +120,8 @@ def statistics():
         removetbllimit = form.removetbllimit.data
         rollingmean = int(form.rollingmean.data)
         fftspacing = int(form.fftspacing.data)
+        ymaxplot = int(form.ymaxplot.data)
+        yminplot = int(form.yminplot.data)
 
         if sel_param == 'wspd_10':
             df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
@@ -167,6 +169,15 @@ def statistics():
         ax.set_axisbelow(True)
         ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
         plt.title(sel_param)
+
+        if ymaxplot != 0:
+            ax.set_ylim(top=ymaxplot)
+        else:
+            pass
+        if yminplot != 0:
+            ax.set_ylim(bottom=yminplot)
+        else:
+            pass
 
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':

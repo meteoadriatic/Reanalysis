@@ -15,4 +15,6 @@ class StatisticsForm(FlaskForm):
     removetbllimit = BooleanField('removetbllimit')
     rollingmean = StringField('rollingmean', default='0')
     fftspacing = StringField('fftspacing', default='0')
+    ymaxplot = StringField('ymaxplot', default='0')
+    yminplot = StringField('yminplot', default='0')
     submit = SubmitField('Pošalji')
