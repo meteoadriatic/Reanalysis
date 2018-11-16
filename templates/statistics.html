@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
     <div class="content-section">
 
         <form method="POST">
@@ -36,23 +42,33 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-1">Odaberi početni i završni datum</legend>
                 <div class="row">
-                    <div class="col-md-auto">
+                    <div class="col-md-2">
                         {{ form.startdate(class="form-control") }}
-                        <small id="firststartdate" class="form-text text-muted">
+                        <small id="firststartdate" class="form-text text-muted text-center">
                             Najraniji dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-md-2">
                         {{ form.enddate(class="form-control") }}
-                        <small id="laststartdate" class="form-text text-muted">
+                        <small id="laststartdate" class="form-text text-muted text-center">
                             Najkasniji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-md-1">
                         {{ form.trendline(class="form-control") }}
-                        <small id="trendline" class="form-text text-muted">Dodaj trend na graf</small>
+                        <small id="trendline" class="form-text text-muted text-center"
+                               data-toggle="tooltip"
+                               title="Prikaži linearni trend na grafu">Trend</small>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="col-md-1">
                         {{ form.removetbllimit(class="form-control") }}
-                        <small id="removetbllimit" class="form-text text-muted">Ukloni limit tablice</small>
+                        <small id="removetbllimit" class="form-text text-muted text-center"
+                               data-toggle="tooltip"
+                               title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
+                    </div>
+                    <div class="col-md-1">
+                        {{ form.rollingmean(class="form-control") }}
+                        <small id="rollingmean" class="form-text text-muted text-center"
+                               data-toggle="tooltip"
+                               title="Primijeni rolling mean na graf, window u satima (0 = off)">Rolling mean</small>
                     </div>
                 </div>
             </fieldset>

@@ -13,4 +13,5 @@ class StatisticsForm(FlaskForm):
     enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00))
     trendline = BooleanField('trendline')
     removetbllimit = BooleanField('removetbllimit')
+    rollingmean = StringField('rollingmean', default='0')
     submit = SubmitField('Pošalji')

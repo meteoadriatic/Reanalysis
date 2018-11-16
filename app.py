@@ -119,6 +119,7 @@ def statistics():
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
         removetbllimit = form.removetbllimit.data
+        rollingmean = int(form.rollingmean.data)
 
         if sel_param == 'wspd_10':
             df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
@@ -151,6 +152,12 @@ def statistics():
         statsvalues = ['%.1f' % elem for elem in statsvalues]
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
+        # Apply rolling mean to plot data if requested by user
+        if rollingmean != 0:
+            df[sel_param] = df[sel_param].rolling(rollingmean).mean()
+        else:
+            pass
+
         # Create a plot from datetime (x axis) and selected parameter (y axis)
         fig, ax = plt.subplots()
         fig.set_size_inches(12.5, 5.0)
@@ -170,11 +177,22 @@ def statistics():
             scatsiz=max((100000/(len(df.index))),50)
             ax.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
         elif 'SWRF' in sel_param or 'LWRF' in sel_param\
-                or 'RH_' in sel_param or 'CAPE' in sel_param\
-                or 'CIN' in sel_param or 'PWAT' in sel_param or 'CLD' in sel_param:
+                or 'RH_' in sel_param or 'PWAT' in sel_param:
             ax.plot(df.index, df[sel_param])
             ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
             ax.set_ylim(bottom=0)
+        elif 'cldave' in sel_param:
+            ax.plot(df.index, df[sel_param], color='#828282')
+            ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
+            ax.set_ylim(bottom=0)
+        elif 'CAPE' in sel_param:
+            ax.plot(df.index, df[sel_param], color='red')
+            ax.fill_between(df.index, 0, df[sel_param], color='#FF9600', alpha=0.3)
+            ax.set_ylim(bottom=0)
+        elif 'CIN' in sel_param:
+            ax.plot(df.index, df[sel_param], color='#828282')
+            ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
+            ax.set_ylim(top=0)
         else:
             ax.plot(df.index, df[sel_param])
 
