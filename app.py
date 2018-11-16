@@ -155,6 +155,7 @@ def statistics():
         # Apply rolling mean to plot data if requested by user
         if rollingmean != 0:
             df[sel_param] = df[sel_param].rolling(rollingmean).mean()
+            df.dropna(inplace=True)
         else:
             pass
 
@@ -202,7 +203,7 @@ def statistics():
             y = df[sel_param]
             z = np.polyfit(x, y, 1)
             p = np.poly1d(z)
-            ax.plot(df.index, p(x), color='red')
+            ax.plot(df.index, p(x), color='black')
             plt.title("TREND SLOPE=%.6fx" % (z[0]))
 
         # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
