@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import numpy as np
+import params
 
 app = Flask(__name__)
 
@@ -59,8 +60,9 @@ def statistics():
     sel_param = ''
     sel_loc = ''
     stats = ''
+    trendline = False
     table_truncated = False
-    show_plot=False
+    show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
 
@@ -82,6 +84,11 @@ def statistics():
     ''')
     parameters = cur.fetchall()
     parameters = [i[0] for i in parameters]
+
+    # Append calculated parameters (params.py)
+    appends = ['wspd_10', 'wdir_10']
+    parameters = parameters + appends
+
     form.parameters.choices = parameters
 
 
@@ -91,41 +98,77 @@ def statistics():
         sel_param = form.parameters.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
+        trendline = form.trendline.data
 
+        if sel_param == 'wspd_10':
+            df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wspd_10']))
+        elif sel_param == 'wdir_10':
+            df = params.wdir_10(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wdir_10']))
+        else:
         # Retrieve data from MySQL
-        SQL = '''   SELECT datetime, {}
-                    FROM model_output
-                    WHERE location=%s
-                    AND datetime > %s
-                    AND datetime <= %s
-                    ORDER BY datetime
-            '''.format(sel_param)
-        cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
-        sql_response = cur.fetchall()
+            SQL = '''   SELECT datetime, {}
+                        FROM model_output
+                        WHERE location=%s
+                        AND datetime > %s
+                        AND datetime <= %s
+                        ORDER BY datetime
+                '''.format(sel_param)
+            cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+            sql_response = cur.fetchall()
 
-        # Load MySQL response into pandas dataframe
-        df = pd.DataFrame(list(sql_response))
-        df = df.set_index([0])
-        df.index.name = ''
-        df.columns = [sel_param]
+            # Load MySQL response into pandas dataframe
+            df = pd.DataFrame(list(sql_response))
+            df.set_index([0], inplace=True)
+            df.index.name = ''
+            df.columns = [sel_param]
 
         # Build statistics list from df.describe() output
-        statskeys=df.describe().index.tolist()
-        statsvalues=df.describe().values.tolist()
+        statskeys = df.describe().index.tolist()
+        statsvalues = df.describe().values.tolist()
         statsvalues = [item for sublist in statsvalues for item in sublist]
         statsvalues = ['%.1f' % elem for elem in statsvalues]
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
-        # Create a plot from datetime (x axis) and chosen parameter (y axis)
+        # Create a plot from datetime (x axis) and selected parameter (y axis)
         fig, ax = plt.subplots()
         fig.set_size_inches(12.5, 5.0)
         fig.tight_layout()
         fig.autofmt_xdate()
         ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.5', color='#41B3C5', alpha=0.8, axis='both')
-        ax.plot(df.index, df[sel_param])
+        ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.8, axis='both')
+
+        # Customize plot according to selected parameter
+        if sel_param == 'precave' or sel_param == 'precpct':
+            ax.bar(df.index, df[sel_param], alpha=0.15)
+            ax.set_ylim(bottom=0)
+        elif sel_param == 'rdrmax':
+            ax.bar(df.index, df[sel_param], alpha=0.3, color='red', width=0.2)
+            ax.set_ylim(bottom=0)
+        elif 'wdir_' in sel_param or 'VVEL' in sel_param:
+            scatsiz=max((100000/(len(df.index))),50)
+            ax.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
+        elif 'SWRF' in sel_param or 'LWRF' in sel_param\
+                or 'RH_' in sel_param or 'CAPE' in sel_param\
+                or 'CIN' in sel_param or 'PWAT' in sel_param or 'CLD' in sel_param:
+            ax.plot(df.index, df[sel_param])
+            ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
+            ax.set_ylim(bottom=0)
+        else:
+            ax.plot(df.index, df[sel_param])
+
+        # Include linear trendline
+        if trendline == True:
+            x = mdates.date2num(df.index)
+            y = df[sel_param]
+            z = np.polyfit(x, y, 1)
+            p = np.poly1d(z)
+            ax.plot(df.index, p(x), color='red')
+            plt.title("TREND SLOPE=%.6fx" % (z[0]))
 
         # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
+        plt.xlim(sel_startdate, sel_enddate)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax.xaxis.set_major_locator(ticker.AutoLocator())
 
@@ -150,6 +193,7 @@ def statistics():
                            stats=stats,
                            sel_param=sel_param,
                            sel_loc=sel_loc,
+                           trendline=trendline,
                            plot='/static/images/plot.png',
                            show_plot=show_plot,
                            table_truncated=table_truncated)
