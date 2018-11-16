@@ -9,6 +9,9 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import numpy as np
 import params
+import io
+import base64
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -61,7 +64,9 @@ def statistics():
     sel_loc = ''
     stats = ''
     trendline = False
+    removetbllimit = False
     table_truncated = False
+    plot_url = ''
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
@@ -91,6 +96,20 @@ def statistics():
 
     form.parameters.choices = parameters
 
+    # Retrieve first and last datetime from database
+    cur.execute('''
+        SELECT datetime FROM model_output ORDER BY datetime LIMIT 1;
+    ''')
+    first_date = cur.fetchall()
+    print(first_date)
+    cur.execute('''
+        SELECT datetime FROM model_output ORDER BY datetime DESC LIMIT 1;
+    ''')
+    last_date = cur.fetchall()
+    print(last_date)
+
+
+
 
     if form.is_submitted():
         # Retrieve user choice of location and parameter from select forms
@@ -99,6 +118,7 @@ def statistics():
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
+        removetbllimit = form.removetbllimit.data
 
         if sel_param == 'wspd_10':
             df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
@@ -172,15 +192,21 @@ def statistics():
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax.xaxis.set_major_locator(ticker.AutoLocator())
 
-        # Save plot into file and set html trigger variable to display it
-        fig.savefig('static/images/plot.png', bbox_inches = 'tight')
+        # Save plot into memory
+        img = io.BytesIO()
+        plt.savefig(img, bbox_inches = 'tight', format='png')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
         plt.close(fig)
         show_plot=True
 
         # Limit number of table rows if user requested large amount of data
-        if len(sql_response) > 720:
-            sql_response = sql_response[:720]
-            table_truncated = True
+        if removetbllimit == False:
+            if len(sql_response) > 720:
+                sql_response = sql_response[:720]
+                table_truncated = True
+        else:
+            pass
 
 
     return render_template('statistics.html',
@@ -188,13 +214,16 @@ def statistics():
                            form=form,
                            locations=locations,
                            parameters=parameters,
+                           first_date=first_date,
+                           last_date=last_date,
                            response=sql_response,
                            table_columns=['Datum i sat', sel_param],
                            stats=stats,
                            sel_param=sel_param,
                            sel_loc=sel_loc,
                            trendline=trendline,
-                           plot='/static/images/plot.png',
+                           removetbllimit=removetbllimit,
+                           plot=plot_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated)
 

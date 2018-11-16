@@ -38,15 +38,21 @@
                 <div class="row">
                     <div class="col-md-auto">
                         {{ form.startdate(class="form-control") }}
-                        <small id="firststartdate" class="form-text text-muted">Najraniji dostupni datum: 2018-08-01</small>
+                        <small id="firststartdate" class="form-text text-muted">
+                            Najraniji dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
                     </div>
                     <div class="col-md-auto">
                         {{ form.enddate(class="form-control") }}
-                        <small id="laststartdate" class="form-text text-muted">Najkasniji dostupni datum: 2018-10-31</small>
+                        <small id="laststartdate" class="form-text text-muted">
+                            Najkasniji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
                     </div>
                     <div class="col-md-auto">
                         {{ form.trendline(class="form-control") }}
                         <small id="trendline" class="form-text text-muted">Dodaj trend na graf</small>
+                    </div>
+                    <div class="col-md-auto">
+                        {{ form.removetbllimit(class="form-control") }}
+                        <small id="removetbllimit" class="form-text text-muted">Ukloni limit tablice</small>
                     </div>
                 </div>
             </fieldset>
@@ -77,13 +83,13 @@
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-2">Graf</legend>
                     <div class="container">
-                        <img class="img-fluid" src="{{plot}}" alt="Plot">
+                        <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-2">Podaci</legend>
                     {% if table_truncated == True %}
-                        <div class="alert alert-warning" role="alert">Tablica je ograničena na najviše 30 dana.</div>
+                        <div class="alert alert-warning" role="alert">Tablica je ograničena na 30 dana.</div>
                     {% endif %}
                     <div class="container">
                         <table class="table table-striped table-hover table-sm"
