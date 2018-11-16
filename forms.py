@@ -14,4 +14,5 @@ class StatisticsForm(FlaskForm):
     trendline = BooleanField('trendline')
     removetbllimit = BooleanField('removetbllimit')
     rollingmean = StringField('rollingmean', default='0')
+    fftspacing = StringField('fftspacing', default='0')
     submit = SubmitField('Pošalji')

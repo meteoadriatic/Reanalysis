@@ -120,6 +120,7 @@ def statistics():
         trendline = form.trendline.data
         removetbllimit = form.removetbllimit.data
         rollingmean = int(form.rollingmean.data)
+        fftspacing = int(form.fftspacing.data)
 
         if sel_param == 'wspd_10':
             df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
@@ -195,7 +196,7 @@ def statistics():
             ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
             ax.set_ylim(top=0)
         else:
-            ax.plot(df.index, df[sel_param])
+            ax.plot(df.index, df[sel_param], color='#1A74B1')
 
         # Include linear trendline
         if trendline == True:
@@ -205,6 +206,23 @@ def statistics():
             p = np.poly1d(z)
             ax.plot(df.index, p(x), color='black')
             plt.title("TREND SLOPE=%.6fx" % (z[0]))
+
+        # FFT
+        if fftspacing != 0:
+            import scipy as sp
+            import scipy.fftpack
+            y_fft = sp.fftpack.fft(df[sel_param])
+            y_psd = np.abs(y_fft) ** 2
+            fftfreq = sp.fftpack.fftfreq(len(y_psd), 1 / fftspacing)
+            i = fftfreq > 0
+            y_fft_bis = y_fft.copy()
+            y_fft_bis[np.abs(fftfreq) > 1] = 0
+            y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
+            df[sel_param].plot(ax=ax, lw=0.5)
+            ax.plot_date(df.index, y_slow, '-', color='green', lw='3')
+        else:
+            pass
+
 
         # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
         plt.xlim(sel_startdate, sel_enddate)
