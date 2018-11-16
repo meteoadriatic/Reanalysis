@@ -67,6 +67,7 @@ def statistics():
     removetbllimit = False
     table_truncated = False
     plot_url = ''
+    fft_url = ''
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
@@ -101,12 +102,10 @@ def statistics():
         SELECT datetime FROM model_output ORDER BY datetime LIMIT 1;
     ''')
     first_date = cur.fetchall()
-    print(first_date)
     cur.execute('''
         SELECT datetime FROM model_output ORDER BY datetime DESC LIMIT 1;
     ''')
     last_date = cur.fetchall()
-    print(last_date)
 
 
 
@@ -166,7 +165,8 @@ def statistics():
         fig.tight_layout()
         fig.autofmt_xdate()
         ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.8, axis='both')
+        ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+        plt.title(sel_param)
 
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
@@ -215,11 +215,28 @@ def statistics():
             y_psd = np.abs(y_fft) ** 2
             fftfreq = sp.fftpack.fftfreq(len(y_psd), 1 / fftspacing)
             i = fftfreq > 0
+
+            # Initialize separate plot for FF frequency spectrum
+            fig1, ax1 = plt.subplots(sharex=False, sharey=False, clear=True)
+            fig1.set_size_inches(12.5, 3.0)
+            fig1.tight_layout()
+            plt.title('FFT analiza frekvencije')
+            ax1.plot(fftfreq[i], y_psd[i])
+
+            # Save additional plot for FFT frequency spectrum
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            fft_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig1)
+
             y_fft_bis = y_fft.copy()
             y_fft_bis[np.abs(fftfreq) > 1] = 0
             y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
             df[sel_param].plot(ax=ax, lw=0.5)
             ax.plot_date(df.index, y_slow, '-', color='green', lw='3')
+            ax.set_axisbelow(True)
+            ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
         else:
             pass
 
@@ -261,6 +278,7 @@ def statistics():
                            trendline=trendline,
                            removetbllimit=removetbllimit,
                            plot=plot_url,
+                           fft=fft_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated)
 

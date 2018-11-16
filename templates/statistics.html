@@ -68,13 +68,13 @@
                         {{ form.rollingmean(class="form-control") }}
                         <small id="rollingmean" class="form-text text-muted text-center"
                                data-toggle="tooltip"
-                               title="Primijeni rolling mean na graf, window u satima (0 = off)">Rolling mean</small>
+                               title="Primijeni pomični srednjak na graf, prozor = x u satima (x = 0 = off)">Pomični srednjak (w=h)</small>
                     </div>
                     <div class="col-md-1">
                         {{ form.fftspacing(class="form-control") }}
                         <small id="fftspacing" class="form-text text-muted text-center"
                                data-toggle="tooltip"
-                               title="Korak u satima za FFT analizu (0 = off)">FFT analiza</small>
+                               title="Primijeni FFT analizu, frekvencija = 1/x u satima (x = 0 = off)">FFT analiza (f=1/x h)</small>
                     </div>
                 </div>
             </fieldset>
@@ -106,6 +106,9 @@
                     <legend class="border-bottom mb-2">Graf</legend>
                     <div class="container">
                         <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
+                        {% if fft != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{fft}}" alt="FFT">
+                        {% endif %}
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
