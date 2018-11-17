@@ -92,7 +92,15 @@ def statistics():
     parameters = [i[0] for i in parameters]
 
     # Append calculated parameters (params.py)
-    appends = ['wspd_10', 'wdir_10']
+    appends = ['wspd_10', 'wdir_10',
+               'wspd_850', 'wdir_850',
+               'wspd_500', 'wdir_500',
+               'wspd_300', 'wdir_300',
+               'shear_10_500',
+               'shear_850_500',
+               'shear_10_850',
+               'vtgrad_1000_850',
+               'vtgrad_850_500']
     parameters = parameters + appends
 
     form.parameters.choices = parameters
@@ -123,12 +131,46 @@ def statistics():
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
 
+        # Separate functions for parameters derived from raw sql data
         if sel_param == 'wspd_10':
             df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
             sql_response = tuple(zip(df.index, df['wspd_10']))
         elif sel_param == 'wdir_10':
             df = params.wdir_10(cur, sel_loc, sel_startdate, sel_enddate)
             sql_response = tuple(zip(df.index, df['wdir_10']))
+        elif sel_param == 'wspd_850':
+            df = params.wspd_850(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wspd_850']))
+        elif sel_param == 'wdir_850':
+            df = params.wdir_850(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wdir_850']))
+        elif sel_param == 'wspd_500':
+            df = params.wspd_500(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wspd_500']))
+        elif sel_param == 'wdir_500':
+            df = params.wdir_500(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wdir_500']))
+        elif sel_param == 'wspd_300':
+            df = params.wspd_300(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wspd_300']))
+        elif sel_param == 'wdir_300':
+            df = params.wdir_300(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['wdir_300']))
+        elif sel_param == 'shear_10_500':
+            df = params.shear_10_500(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['shear_10_500']))
+        elif sel_param == 'shear_850_500':
+            df = params.shear_850_500(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['shear_850_500']))
+        elif sel_param == 'shear_10_850':
+            df = params.shear_10_850(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['shear_10_850']))
+        elif sel_param == 'vtgrad_1000_850':
+            df = params.vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['vtgrad_1000_850']))
+        elif sel_param == 'vtgrad_850_500':
+            df = params.vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df['vtgrad_850_500']))
         else:
         # Retrieve data from MySQL
             SQL = '''   SELECT datetime, {}
@@ -198,7 +240,7 @@ def statistics():
             ax.plot(df.index, df[sel_param], color='#828282')
             ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
             ax.set_ylim(bottom=0)
-        elif 'CAPE' in sel_param:
+        elif 'CAPE' in sel_param or 'shear' in sel_param:
             ax.plot(df.index, df[sel_param], color='red')
             ax.fill_between(df.index, 0, df[sel_param], color='#FF9600', alpha=0.3)
             ax.set_ylim(bottom=0)
@@ -206,6 +248,10 @@ def statistics():
             ax.plot(df.index, df[sel_param], color='#828282')
             ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
             ax.set_ylim(top=0)
+        elif 'vtgrad' in sel_param:
+            ax.plot(df.index, df[sel_param], color='#1A74B1')
+            ax.fill_between(df.index, df[sel_param], 0, color='#1A74B1', alpha=0.13)
+            ax.set_ylim(bottom=-0.01)
         else:
             ax.plot(df.index, df[sel_param], color='#1A74B1')
 

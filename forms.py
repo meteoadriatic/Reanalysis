@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField
 from datetime import datetime
+from wtforms.validators import InputRequired
 
 class SQLForm(FlaskForm):
     sql = StringField('SQL')
@@ -9,12 +10,12 @@ class SQLForm(FlaskForm):
 class StatisticsForm(FlaskForm):
     locations = SelectField('locations', default='Zadar')
     parameters = SelectField('parameters')
-    startdate = DateField('startdate', format='%Y-%m-%d', default=datetime(2018, 9, 1, 00, 00, 00, 00))
-    enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00))
+    startdate = DateField('startdate', format='%Y-%m-%d', default=datetime(2018, 9, 1, 00, 00, 00, 00), validators=[InputRequired()])
+    enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00), validators=[InputRequired()])
     trendline = BooleanField('trendline')
     removetbllimit = BooleanField('removetbllimit')
-    rollingmean = StringField('rollingmean', default='0')
-    fftspacing = StringField('fftspacing', default='0')
-    ymaxplot = StringField('ymaxplot', default='0')
-    yminplot = StringField('yminplot', default='0')
+    rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
+    fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
+    ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])
+    yminplot = StringField('yminplot', default='0', validators=[InputRequired()])
     submit = SubmitField('Pošalji')
