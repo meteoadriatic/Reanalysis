@@ -14,6 +14,7 @@ class StatisticsForm(FlaskForm):
     enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00), validators=[InputRequired()])
     trendline = BooleanField('trendline')
     removetbllimit = BooleanField('removetbllimit')
+    largeplot = BooleanField('largeplot')
     rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
     fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
     ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])

@@ -126,6 +126,7 @@ def statistics():
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
         removetbllimit = form.removetbllimit.data
+        largeplot = form.largeplot.data
         rollingmean = int(form.rollingmean.data)
         fftspacing = int(form.fftspacing.data)
         ymaxplot = int(form.ymaxplot.data)
@@ -205,7 +206,10 @@ def statistics():
 
         # Create a plot from datetime (x axis) and selected parameter (y axis)
         fig, ax = plt.subplots()
-        fig.set_size_inches(12.5, 5.0)
+        if largeplot == True:
+            fig.set_size_inches(12.5, 10.0)
+        else:
+            fig.set_size_inches(12.5, 5.0)
         fig.tight_layout()
         fig.autofmt_xdate()
         ax.set_axisbelow(True)
@@ -275,7 +279,10 @@ def statistics():
 
             # Initialize separate plot for FF frequency spectrum
             fig1, ax1 = plt.subplots(sharex=False, sharey=False, clear=True)
-            fig1.set_size_inches(12.5, 3.0)
+            if largeplot == True:
+                fig1.set_size_inches(12.5, 6.0)
+            else:
+                fig1.set_size_inches(12.5, 3.0)
             fig1.tight_layout()
             plt.title('FFT analiza frekvencije')
             ax1.plot(fftfreq[i], y_psd[i])
