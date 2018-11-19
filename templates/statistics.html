@@ -59,6 +59,10 @@
                             <div class="form-check-input d-inline-block align-middle">{{ form.largeplot(class="form-control") }}</div>
                             <small id="largeplot" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Udvostruči visinu grafa">Veći graf</small>
                         </div>
+                        <div class="form-check">
+                            <div class="form-check-input d-inline-block align-middle">{{ form.distribution(class="form-control") }}</div>
+                            <small id="distribution" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži distribuciju podataka na histogramu">Distribucija</small>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="input-group mb-1 input-group-sm">
@@ -123,6 +127,9 @@
                         <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
                         {% if fft != '' %}
                             <img class="img-fluid" src="data:image/png;base64, {{fft}}" alt="FFT">
+                        {% endif %}
+                        {% if dist != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{dist}}" alt="FFT">
                         {% endif %}
                     </div>
                 </fieldset>

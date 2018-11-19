@@ -15,6 +15,7 @@ class StatisticsForm(FlaskForm):
     trendline = BooleanField('trendline')
     removetbllimit = BooleanField('removetbllimit')
     largeplot = BooleanField('largeplot')
+    distribution = BooleanField('distribution')
     rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
     fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
     ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])

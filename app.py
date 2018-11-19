@@ -65,9 +65,11 @@ def statistics():
     stats = ''
     trendline = False
     removetbllimit = False
+    distribution = False
     table_truncated = False
     plot_url = ''
     fft_url = ''
+    dist_url = ''
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
@@ -127,6 +129,7 @@ def statistics():
         trendline = form.trendline.data
         removetbllimit = form.removetbllimit.data
         largeplot = form.largeplot.data
+        distribution = form.distribution.data
         rollingmean = int(form.rollingmean.data)
         fftspacing = int(form.fftspacing.data)
         ymaxplot = int(form.ymaxplot.data)
@@ -260,7 +263,7 @@ def statistics():
             ax.plot(df.index, df[sel_param], color='#1A74B1')
 
         # Include linear trendline
-        if trendline == True:
+        if trendline:
             x = mdates.date2num(df.index)
             y = df[sel_param]
             z = np.polyfit(x, y, 1)
@@ -304,6 +307,28 @@ def statistics():
         else:
             pass
 
+        # Distribution histogram
+        if distribution:
+            fig2, ax2 = plt.subplots(sharex=False, sharey=False, clear=True)
+            if largeplot == True:
+                fig2.set_size_inches(12.5, 6.0)
+            else:
+                fig2.set_size_inches(12.5, 3.0)
+            fig2.tight_layout()
+            plt.title('Distribucija')
+
+            plt.hist(x=df[sel_param], color='#E88B0C', alpha=0.7, rwidth=0.9, bins=20)
+
+            # Save additional plot for distribution histogram
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            dist_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig2)
+
+        else:
+            pass
+
 
         # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
         plt.xlim(sel_startdate, sel_enddate)
@@ -343,6 +368,7 @@ def statistics():
                            removetbllimit=removetbllimit,
                            plot=plot_url,
                            fft=fft_url,
+                           dist=dist_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated)
 
