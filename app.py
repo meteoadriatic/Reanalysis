@@ -268,8 +268,10 @@ def statistics():
             y = df[sel_param]
             z = np.polyfit(x, y, 1)
             p = np.poly1d(z)
+            y_mean = [np.mean(df[sel_param])] * len(df.index)
             ax.plot(df.index, p(x), color='black')
-            plt.title("TREND SLOPE=%.6fx" % (z[0]))
+            ax.plot(df.index, y_mean, linestyle='--', color='teal')
+            plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
 
         # FFT
         if fftspacing != 0:
