@@ -49,7 +49,7 @@
                     <div class="col-md-2">
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.trendline(class="form-control") }}</div>
-                            <small id="trendline" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži linearni trend na grafu">Trend</small>
+                            <small id="trendline" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži linearni trend i srednjak na grafu">Trend</small>
                         </div>
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.removetbllimit(class="form-control") }}</div>
@@ -69,29 +69,33 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Pomični srednjak (h)</span>
                             </div>
-                            <div class="d-inline-block align-middle">{{ form.rollingmean(class="form-control form-control-sm") }}</div>
-                            <small id="rollingmean" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Primijeni pomični srednjak na graf, prozor = x u satima (x = 0 = off)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                                 title="Primijeni pomični srednjak na graf, prozor (window) = x u satima; npr. 24 za dnevne srednjake (x = 0 = off)">
+                                {{ form.rollingmean(class="form-control form-control-sm") }}</div>
                         </div>
                         <div class="input-group mb-1 input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">FFT analiza (1/h)</span>
                             </div>
-                            <div class="d-inline-block align-middle">{{ form.fftspacing(class="form-control form-control-sm") }}</div>
-                            <small id="fftspacing" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Primijeni FFT analizu, frekvencija = 1/x u satima (x = 0 = off)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                                 title="Primijeni FFT analizu, frekvencija = 1/x u satima; npr. 24 za parametar kojem se očekuje period fluktuacije od jednog dana (x = 0 = off)">
+                                {{ form.fftspacing(class="form-control form-control-sm") }}</div>
                         </div>
                         <div class="input-group mb-1 input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Ymax (graf)</span>
                             </div>
-                            <div class="d-inline-block align-middle">{{ form.ymaxplot(class="form-control form-control-sm") }}</div>
-                            <small id="ymaxplot" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                                 title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">
+                                {{ form.ymaxplot(class="form-control form-control-sm") }}</div>
                         </div>
                         <div class="input-group mb-1 input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Ymin (graf)</span>
                             </div>
-                            <div class="d-inline-block align-middle">{{ form.yminplot(class="form-control form-control-sm") }}</div>
-                            <small id="yminplot" class="d-inline-block form-text text-muted text-center" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">&nbsp&nbsp&nbsp&nbsp ?</small>
+                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                                 title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">
+                                {{ form.yminplot(class="form-control form-control-sm") }}</div>
                         </div>
                     </div>
 
