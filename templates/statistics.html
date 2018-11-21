@@ -79,6 +79,10 @@
                             <div class="form-check-input d-inline-block align-middle">{{ form.distribution(class="form-control") }}</div>
                             <small id="distribution" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži distribuciju podataka na histogramu">Distribucija</small>
                         </div>
+                        <div class="form-check">
+                            <div class="form-check-input d-inline-block align-middle">{{ form.rollcorr(class="form-control") }}</div>
+                            <small id="rollcorr" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra">Korelacija prim/sek</small>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="input-group mb-1 input-group-sm">
@@ -145,11 +149,14 @@
                     <legend class="border-bottom mb-2">Graf</legend>
                     <div class="container">
                         <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
+                        {% if rollcorr != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{rollcorr}}" alt="Rolling correlation">
+                        {% endif %}
                         {% if fft != '' %}
                             <img class="img-fluid" src="data:image/png;base64, {{fft}}" alt="FFT">
                         {% endif %}
                         {% if dist != '' %}
-                            <img class="img-fluid" src="data:image/png;base64, {{dist}}" alt="FFT">
+                            <img class="img-fluid" src="data:image/png;base64, {{dist}}" alt="Distribution">
                         {% endif %}
                     </div>
                 </fieldset>

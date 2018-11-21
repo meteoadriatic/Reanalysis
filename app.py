@@ -71,6 +71,7 @@ def statistics():
     plot_url = ''
     fft_url = ''
     dist_url = ''
+    rollcorr_url = ''
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
@@ -281,6 +282,19 @@ def statistics():
             ax.plot(df.index, y_mean, linestyle='--', color='teal')
             plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
 
+        # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
+        plt.xlim(sel_startdate, sel_enddate)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_major_locator(ticker.AutoLocator())
+
+        # Save plot into memory
+        img = io.BytesIO()
+        plt.savefig(img, bbox_inches = 'tight', format='png')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
+        plt.close(fig)
+        show_plot=True
+
         # FFT
         if fftspacing != 0:
             import scipy as sp
@@ -335,23 +349,46 @@ def statistics():
             img.seek(0)
             dist_url = base64.b64encode(img.getvalue()).decode()
             plt.close(fig2)
-
         else:
             pass
 
+        # Rolling correlation plot
+        if sel_param2 in parameters:
+            if rollingmean==0:
+                window=3
+            else:
+                window=rollingmean
+            df['rollcorr'] = df[sel_param].rolling(window).corr(df2[sel_param2])
+            fig3, ax3 = plt.subplots(sharex=False, sharey=False, clear=True)
+            if largeplot == True:
+                fig3.set_size_inches(12.5, 6.0)
+            else:
+                fig3.set_size_inches(12.5, 3.0)
+            fig3.tight_layout()
+            fig3.autofmt_xdate()
+            ax3.set_axisbelow(True)
+            ax3.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+            ax3.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
+            ax3.set_ylim(top=1)
+            ax3.set_ylim(bottom=-1)
+            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=0.4)
+            plt.title('Pomična korelacija')
 
-        # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
-        plt.xlim(sel_startdate, sel_enddate)
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(ticker.AutoLocator())
+            plt.plot(df.index, df['rollcorr'], color='#FF8B00', linewidth=3)
 
-        # Save plot into memory
-        img = io.BytesIO()
-        plt.savefig(img, bbox_inches = 'tight', format='png')
-        img.seek(0)
-        plot_url = base64.b64encode(img.getvalue()).decode()
-        plt.close(fig)
-        show_plot=True
+            plt.xlim(sel_startdate, sel_enddate)
+            ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+            ax3.xaxis.set_major_locator(ticker.AutoLocator())
+
+            # Save additional plot for distribution histogram
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            rollcorr_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig3)
+        else:
+            pass
+
 
         # Limit number of table rows if user requested large amount of data
         if removetbllimit == False:
@@ -380,6 +417,7 @@ def statistics():
                            plot=plot_url,
                            fft=fft_url,
                            dist=dist_url,
+                           rollcorr=rollcorr_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated)
 

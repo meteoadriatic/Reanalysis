@@ -18,6 +18,7 @@ class StatisticsForm(FlaskForm):
     largeplot = BooleanField('largeplot')
     distribution = BooleanField('distribution')
     samey = BooleanField('samey')
+    rollcorr = BooleanField('rollcorr')
     rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
     fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
     ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])
