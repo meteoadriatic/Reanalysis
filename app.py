@@ -135,6 +135,7 @@ def statistics():
         distribution = form.distribution.data
         samey = form.samey.data
         rollingmean = int(form.rollingmean.data)
+        rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
@@ -353,7 +354,7 @@ def statistics():
             pass
 
         # Rolling correlation plot
-        if sel_param2 in parameters:
+        if (sel_param2 in parameters) and (rollcorr == True) :
             if rollingmean==0:
                 window=3
             else:
@@ -371,10 +372,10 @@ def statistics():
             ax3.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
             ax3.set_ylim(top=1)
             ax3.set_ylim(bottom=-1)
-            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=0.4)
+            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=0.3)
             plt.title('Pomična korelacija')
 
-            plt.plot(df.index, df['rollcorr'], color='#FF8B00', linewidth=3)
+            plt.plot(df.index, df['rollcorr'], color='#FF8B00', linewidth=1.5, alpha=0.7)
 
             plt.xlim(sel_startdate, sel_enddate)
             ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
