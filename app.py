@@ -11,7 +11,6 @@ import numpy as np
 import params
 import io
 import base64
-import urllib.parse
 
 app = Flask(__name__)
 
@@ -61,10 +60,12 @@ def statistics():
     # Initialize variables, form and mysql connection
     sql_response = ''
     sel_param = ''
+    sel_param2 = ''
     sel_loc = ''
     stats = ''
     trendline = False
     removetbllimit = False
+    samey = False
     distribution = False
     table_truncated = False
     plot_url = ''
@@ -106,6 +107,7 @@ def statistics():
     parameters = parameters + appends
 
     form.parameters.choices = parameters
+    form.parameters2.choices = parameters
 
     # Retrieve first and last datetime from database
     cur.execute('''
@@ -119,62 +121,29 @@ def statistics():
 
 
 
-
     if form.is_submitted():
         # Retrieve user choice of location and parameter from select forms
         sel_loc = form.locations.data
         sel_param = form.parameters.data
+        sel_param2 = form.parameters2.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
         removetbllimit = form.removetbllimit.data
         largeplot = form.largeplot.data
         distribution = form.distribution.data
+        samey = form.samey.data
         rollingmean = int(form.rollingmean.data)
         fftspacing = int(form.fftspacing.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
 
+        # Primary parameter processing
         # Separate functions for parameters derived from raw sql data
-        if sel_param == 'wspd_10':
-            df = params.wspd_10(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wspd_10']))
-        elif sel_param == 'wdir_10':
-            df = params.wdir_10(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wdir_10']))
-        elif sel_param == 'wspd_850':
-            df = params.wspd_850(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wspd_850']))
-        elif sel_param == 'wdir_850':
-            df = params.wdir_850(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wdir_850']))
-        elif sel_param == 'wspd_500':
-            df = params.wspd_500(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wspd_500']))
-        elif sel_param == 'wdir_500':
-            df = params.wdir_500(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wdir_500']))
-        elif sel_param == 'wspd_300':
-            df = params.wspd_300(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wspd_300']))
-        elif sel_param == 'wdir_300':
-            df = params.wdir_300(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['wdir_300']))
-        elif sel_param == 'shear_10_500':
-            df = params.shear_10_500(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['shear_10_500']))
-        elif sel_param == 'shear_850_500':
-            df = params.shear_850_500(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['shear_850_500']))
-        elif sel_param == 'shear_10_850':
-            df = params.shear_10_850(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['shear_10_850']))
-        elif sel_param == 'vtgrad_1000_850':
-            df = params.vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['vtgrad_1000_850']))
-        elif sel_param == 'vtgrad_850_500':
-            df = params.vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate)
-            sql_response = tuple(zip(df.index, df['vtgrad_850_500']))
+        paramsfunc = getattr(params, sel_param, None)
+        if sel_param in appends:
+            df = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
+            sql_response = tuple(zip(df.index, df[sel_param]))
         else:
         # Retrieve data from MySQL
             SQL = '''   SELECT datetime, {}
@@ -193,6 +162,31 @@ def statistics():
             df.index.name = ''
             df.columns = [sel_param]
 
+        if sel_param2 in parameters:
+            # Secondary parameter processing
+            # Separate functions for parameters derived from raw sql data
+            paramsfunc = getattr(params, sel_param2, None)
+            if sel_param2 in appends:
+                df2 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
+                sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
+            else:
+            # Retrieve data from MySQL
+                SQL2 = '''  SELECT datetime, {}
+                            FROM model_output
+                            WHERE location=%s
+                            AND datetime > %s
+                            AND datetime <= %s
+                            ORDER BY datetime
+                    '''.format(sel_param2)
+                cur.execute(SQL2, (sel_loc, sel_startdate, sel_enddate))
+                sql_response2 = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                df2 = pd.DataFrame(list(sql_response2))
+                df2.set_index([0], inplace=True)
+                df2.index.name = ''
+                df2.columns = [sel_param2]
+
         # Build statistics list from df.describe() output
         statskeys = df.describe().index.tolist()
         statsvalues = df.describe().values.tolist()
@@ -204,6 +198,9 @@ def statistics():
         if rollingmean != 0:
             df[sel_param] = df[sel_param].rolling(rollingmean).mean()
             df.dropna(inplace=True)
+            if sel_param2 in parameters:
+                df2[sel_param2] = df2[sel_param2].rolling(rollingmean).mean()
+                df2.dropna(inplace=True)
         else:
             pass
 
@@ -217,7 +214,10 @@ def statistics():
         fig.autofmt_xdate()
         ax.set_axisbelow(True)
         ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
-        plt.title(sel_param)
+        if sel_param2 in parameters:
+            plt.title(str(sel_param) + ', ' + str(sel_param2))
+        else:
+            plt.title(sel_param)
 
         if ymaxplot != 0:
             ax.set_ylim(top=ymaxplot)
@@ -261,6 +261,14 @@ def statistics():
             ax.set_ylim(bottom=-0.01)
         else:
             ax.plot(df.index, df[sel_param], color='#1A74B1')
+
+        # Plot secondary parameter
+        if sel_param2 in parameters:
+            if samey:
+                ax.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.3)
+            else:
+                ax2 = ax.twinx()
+                ax2.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.3)
 
         # Include linear trendline
         if trendline:
@@ -365,6 +373,7 @@ def statistics():
                            table_columns=['Datum i sat', sel_param],
                            stats=stats,
                            sel_param=sel_param,
+                           sel_param2=sel_param2,
                            sel_loc=sel_loc,
                            trendline=trendline,
                            removetbllimit=removetbllimit,

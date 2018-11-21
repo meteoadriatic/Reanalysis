@@ -7,7 +7,7 @@
 
         <form method="POST">
             <fieldset class="form-group">
-                <legend class="border-bottom mb-1">Odaberi lokaciju i parametar</legend>
+                <legend class="border-bottom mb-1">Odaberi lokaciju i parametre</legend>
                 <div class="row">
                     <div class="col-md-4">
                         <select name="locations" class="form-control">
@@ -24,6 +24,18 @@
                     <select name="parameters" class="form-control">
                         {% for parameter in parameters %}
                             {% if parameter==sel_param %}
+                                <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
+                            {% else %}
+                                <option value="{{parameter}}">{{parameter}}</option>"
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="col-md-4">
+                    <select name="parameters2" class="form-control">
+                        <option value="" SELECTED>Sekundarni parametar (opcionalno)</option>"
+                        {% for parameter in parameters %}
+                            {% if parameter==sel_param2 %}
                                 <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
                             {% else %}
                                 <option value="{{parameter}}">{{parameter}}</option>"
@@ -58,6 +70,10 @@
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.largeplot(class="form-control") }}</div>
                             <small id="largeplot" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Udvostruči visinu grafa">Veći graf</small>
+                        </div>
+                        <div class="form-check">
+                            <div class="form-check-input d-inline-block align-middle">{{ form.samey(class="form-control") }}</div>
+                            <small id="samey" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Koristi istu y os za primarni i sekundarni paramtetar">Isti y</small>
                         </div>
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.distribution(class="form-control") }}</div>
