@@ -21,6 +21,7 @@ class StatisticsForm(FlaskForm):
     rollcorr = BooleanField('rollcorr')
     rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
     fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
+    fftxmax = IntegerField('fftxmax', default=12, validators=[InputRequired()])
     ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])
     yminplot = StringField('yminplot', default='0', validators=[InputRequired()])
     submit = SubmitField('Pošalji')

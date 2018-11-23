@@ -137,6 +137,7 @@ def statistics():
         rollingmean = int(form.rollingmean.data)
         rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
+        fftxmax = int(form.fftxmax.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
 
@@ -300,6 +301,7 @@ def statistics():
         if fftspacing != 0:
             import scipy as sp
             import scipy.fftpack
+            from matplotlib.ticker import EngFormatter
             y_fft = sp.fftpack.fft(df[sel_param])
             y_psd = np.abs(y_fft) ** 2
             fftfreq = sp.fftpack.fftfreq(len(y_psd), 1 / fftspacing)
@@ -312,8 +314,14 @@ def statistics():
             else:
                 fig1.set_size_inches(12.5, 3.0)
             fig1.tight_layout()
+            ax1.set_axisbelow(True)
             plt.title('FFT analiza frekvencije')
+            formatter1 = EngFormatter(places=1, sep="\N{THIN SPACE}")
+            ax1.yaxis.set_major_formatter(formatter1)
             ax1.plot(fftfreq[i], y_psd[i])
+            ax1.fill_between(fftfreq[i], 0, y_psd[i], color='#41B3C5', alpha=0.3)
+            plt.xlim(0, fftxmax)
+            plt.ylim(bottom=0)
 
             y_fft_bis = y_fft.copy()
             y_fft_bis[np.abs(fftfreq) > 1] = 0
@@ -323,6 +331,10 @@ def statistics():
             ax4.plot_date(df.index, y_slow, '-', color='green', lw='1')
             ax4.set_axisbelow(True)
             ax4.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+            plt.xlim(sel_startdate, sel_enddate)
+            plt.margins(x=0.0, y=0.3)
+            ax4.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+            ax4.xaxis.set_major_locator(ticker.AutoLocator())
 
             # Save additional plot for FFT frequency spectrum
             img = io.BytesIO()
