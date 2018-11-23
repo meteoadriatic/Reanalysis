@@ -315,6 +315,15 @@ def statistics():
             plt.title('FFT analiza frekvencije')
             ax1.plot(fftfreq[i], y_psd[i])
 
+            y_fft_bis = y_fft.copy()
+            y_fft_bis[np.abs(fftfreq) > 1] = 0
+            y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
+            df[sel_param].plot(ax=ax, lw=1)
+            ax4 = ax1.twinx().twiny()
+            ax4.plot_date(df.index, y_slow, '-', color='green', lw='1')
+            ax4.set_axisbelow(True)
+            ax4.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+
             # Save additional plot for FFT frequency spectrum
             img = io.BytesIO()
             plt.savefig(img, bbox_inches='tight', format='png')
@@ -322,13 +331,6 @@ def statistics():
             fft_url = base64.b64encode(img.getvalue()).decode()
             plt.close(fig1)
 
-            y_fft_bis = y_fft.copy()
-            y_fft_bis[np.abs(fftfreq) > 1] = 0
-            y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
-            df[sel_param].plot(ax=ax, lw=0.5)
-            ax.plot_date(df.index, y_slow, '-', color='green', lw='3')
-            ax.set_axisbelow(True)
-            ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
         else:
             pass
 
