@@ -84,12 +84,12 @@
                             <small id="rollcorr" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra">Korelacija prim/sek</small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <div class="input-group mb-1 input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Pomični srednjak (h)</span>
                             </div>
-                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                            <div class="align-middle" data-toggle="tooltip"
                                  title="Primijeni pomični srednjak na graf, prozor (window) = x u satima; npr. 24 za dnevne srednjake (x = 0 = off)">
                                 {{ form.rollingmean(class="form-control form-control-sm") }}</div>
                         </div>
@@ -97,15 +97,17 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">FFT analiza (1/h)</span>
                             </div>
-                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                            <div class="align-middle" data-toggle="tooltip"
                                  title="Primijeni FFT analizu, frekvencija = 1/x u satima; npr. 24 za parametar kojem se očekuje period fluktuacije od jednog dana (x = 0 = off)">
                                 {{ form.fftspacing(class="form-control form-control-sm") }}</div>
                         </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="input-group mb-1 input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Ymax (graf)</span>
                             </div>
-                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                            <div class="align-middle" data-toggle="tooltip"
                                  title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">
                                 {{ form.ymaxplot(class="form-control form-control-sm") }}</div>
                         </div>
@@ -113,18 +115,17 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Ymin (graf)</span>
                             </div>
-                            <div class="d-inline-block align-middle" data-toggle="tooltip"
+                            <div class="align-middle" data-toggle="tooltip"
                                  title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">
                                 {{ form.yminplot(class="form-control form-control-sm") }}</div>
                         </div>
                     </div>
-
                 </div>
             </fieldset>
+
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
-
             {% if show_plot==True %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-2">Statistika</legend>

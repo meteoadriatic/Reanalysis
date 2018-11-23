@@ -83,3 +83,7 @@ a.article-title:hover {
   -webkit-appearance: checkbox;
   -moz-appearance: none;
 }
+
+.navbar {
+    background-color: #2c3e50;
+}

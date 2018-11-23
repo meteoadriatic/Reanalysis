@@ -372,10 +372,10 @@ def statistics():
             ax3.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
             ax3.set_ylim(top=1)
             ax3.set_ylim(bottom=-1)
-            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=0.3)
+            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=1)
             plt.title('Pomična korelacija')
 
-            plt.plot(df.index, df['rollcorr'], color='#FF8B00', linewidth=1.5, alpha=0.7)
+            plt.plot(df.index, df['rollcorr'], color='#000000', linewidth=1, alpha=1)
 
             plt.xlim(sel_startdate, sel_enddate)
             ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
