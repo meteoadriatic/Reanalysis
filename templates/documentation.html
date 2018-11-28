@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="mb-5">CRD dokumentacija</h1>
+
+
+        <h2 class="mt-4">Cilj projekta</h2>
+
+        <p>Cilj projekta je izrada klimatološke baze podataka od najmanje 30 godina temeljene na reanalizi klime
+        pomoću WRF-ARW modela nad regijom jugoistočne Europe. Baza podataka bit će dostupna javnosti zajedno sa
+        statističkim alatima za analizu klimatoloških podataka.</p>
+
+
+
+        <h2 class="mt-4">Atmosferski model</h2>
+
+        <p>Za klimatološku reanalizu korišten je atmosferski model WRF-ARW [1]. Domena modela ima razmak mreže od 10
+        kilometara i veličine je 317x277 točaka, lambert projekcija sa središtem na koordinatama 45,30°N i 13,30°E.
+        Za inicijalne i bočne uvjete korišten je CFSR model, rezolucije mreže 0.5° (NCEP ds093.0 [2] i ds094.0 [3]).
+        Vremenski korak reanalize iznosi 1 sat.</p>
+
+        <p>Reanaliza je podijeljena u mjesečne izračune. Svaki izračun inicijalizirao se s početnim stanjem na 1. dan
+        u mjesecu u 00 sati UTC i završio sa 1. danom u idućem mjesecu u 00 sati UTC. U bazi, podatak koji se odnosi na
+        00 sati UTC za 1. dan u mjesecu prema tome je zadnji podatak izračuna prethodećeg mjeseca, dok je prvi podatak
+        svakog pokretanja modela u 01 sat UTC 1. dana u mjesecu.</p>
+
+        <p>Restart reanalize na prijelazu svakog mjeseca osigurava minimaliziranje efekata dugoročnih bias-a modela.
+        Isto, duljina reanalize od mjesec dana dovoljna je da se minimizira učestalost spin-up modela i moguće
+        negativne posljedice tog perioda integracije modela (u pravilu, prvih 6-12 sati od starta modela). Uslijed
+        toga, duljina neprekinutih perioda od mjesec dana uzeta je kao optimalni kompromis i konstanta je kroz
+        cijeli reanalizirani period. Uslijed restarta reanalize, odnosno reinicijalizacije stanja modela, na prijelazu
+        mjeseca moguće je primjetiti diskontinuitete pojedinih meteoroloških parametara, primjerice visine snježnog
+        pokrivača. U pravilu, ovi diskontinuiteti su beznačajno mali i ne stvaraju statistički značajne efekte.</p>
+
+
+
+        <h2 class="mt-4">Ograničenja</h2>
+
+        <p>Baza podataka ne sadrži izravna mjerenja; svi podaci su produkt reanalize klime modelom i stoga su podaci
+        u bazi podložni svim ograničenjima koja su svojstvena numeričkom modeliranju atmosfere. U prvom redu ona dolaze
+        iz nesavršenosti korištenog fizikalno/dinamičkog modela atmosfere, nedovoljno točno poznatih početnih i rubnih
+        uvjeta atmosfere kao i ograničenja koja proizlaze iz činjenice da je atmosfera kaotični sustav i ne ponaša se
+        po determinističkim načelima.</p>
+
+        <p>S obzirom na navedena ograničenja, apsolutna vrijednost podataka u bazi se ne može uzeti kao reprezentativno
+        točna. Ipak, relativni odnosi podataka, osobito na dulje razdoblje (trendovi, odstupanja od prosjeka
+        i druga statistička obilježja uzeta preko duljih razdoblja) bi trebali biti dovoljno vjerodostojni za potrebe
+        klimatskih analiza. Pri reanalizi se posebna pažnja posvetila unificiranju metodologije reanalize u smislu
+        jednakosti korištenih izvora podataka i načina njihove obrade tijekom cijelog reanaliziranog razdoblja;
+        metode i podaci korišteni za reanalizu primjerice 2018. godine identični su koliko god je to bilo moguće
+        metodama i podacima korištenim za reanalizu npr. 1990. godine. Treba naglasiti da je za period prije prosinca
+        2010. godine korišten CFSR dataset (093.0) a za period iza prosinca 2010. CFSR v2 dataset (094.0). Osim te
+        razlike, drugih značajnijih razlika u korištenim podacima i metodama nema, bez obzira na datum reanalize.</p>
+
+
+
+        <h2 class="mt-4">Sponzori projekta</h2>
+
+        <p>Autori projekta se ovim putem zahvaljuju sponzorima koji su omogućili korištenje hardverskih resursa
+        za potrebe izrade baze ili pomogli projektu na neki drugi način. Bez njihovog doprinosa ovaj projekt
+        bi bilo mnogo teže realizirati. To su, abecednim redom:</p>
+        <ul>
+            <li>Nitko</li>
+        </ul>
+
+
+
+        <h2 class="mt-4">Suradnici na razvoju open source CRD sučelja</h2>
+
+        <p>Veliko hvala svim suradnicima koji su pomogli u programiranju CRD sučelja. Abecednim redom po prezimenima
+        to su:</p>
+        <ul>
+            <li>Nino Rašić</li>
+            <li>Ivan Toman - autor i koordinator projekta</li>
+        </ul>
+
+
+
+
+        <h2 class="mt-5">Reference</h2>
+
+        <p>1. WRF-ARW - Skamarock, W. C., J. B. Klemp, J. Dudhia, D. O. Gill, D. M. Barker, M. G Duda, X.-Y. Huang,
+            W. Wang, and J. G. Powers, 2008: A Description of the Advanced Research WRF Version 3. NCAR Tech.
+            Note NCAR/TN-475+STR, 113 pp. doi:10.5065/D68S4MVH</p>
+
+        <p>2. CFSR ds093.0 - Saha, S., et al. 2010. NCEP Climate Forecast System Reanalysis (CFSR) 6-hourly Products,
+            January 1979 to December 2010. Research Data Archive at the National Center for Atmospheric Research,
+            Computational and Information Systems Laboratory. https://doi.org/10.5065/D69K487J.
+            Posjećeno 28.11.2018.</p>
+
+        <p>3. CFSR v2 ds094.0 - Saha, S., et al. 2011, updated daily. NCEP Climate Forecast System Version 2 (CFSv2)
+            6-hourly Products. Research Data Archive at the National Center for Atmospheric Research,
+            Computational and Information Systems Laboratory. https://doi.org/10.5065/D61C1TXF.
+            Posjećeno 28.11.2018.</p>
+
+    </div>
+
+{% endblock %}

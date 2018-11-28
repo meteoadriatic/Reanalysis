@@ -428,6 +428,11 @@ def statistics():
                            table_truncated=table_truncated)
 
 
+@app.route('/documentation')
+def documentation():
+    return render_template('documentation.html',
+                           title='CRD - Climate Reanalysis Database: Dokumentacija')
+
 # Request browser not to cache responses (we need this for plots and other variable static content to work reliably)
 @app.after_request
 def add_header(r):
