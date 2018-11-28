@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from config import *
+from flask import render_template
 from flask_mysqldb import MySQL
 from forms import SQLForm, StatisticsForm
 import pandas as pd
@@ -11,16 +12,6 @@ import numpy as np
 import params
 import io
 import base64
-
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = 'zMUVtqorW01Zke6F46w3U9M5QXZ6KCYY'
-app.config['MYSQL_HOST'] = 'gamma.meteoadriatic.net'
-app.config['MYSQL_USER'] = 'meteoadriatic-remote'
-app.config['MYSQL_PASSWORD'] = 'Power/Off'
-app.config['MYSQL_DB'] = 'reanalysis_test'
-app.config['MYSQL_PORT'] = 33333
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 mysql = MySQL(app)
 
