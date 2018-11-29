@@ -97,9 +97,65 @@ def statistics():
                'vtgrad_1000_850',
                'vtgrad_850_500']
     parameters = parameters + appends
+    parametersUF = parameters
 
-    form.parameters.choices = parameters
-    form.parameters2.choices = parameters
+    # Map user-friendly parameter names to parameters
+    paramsUFmap = {'vtgrad_850_500': 'V. grad. temp. 850/500hPa',
+                    'wdir_10': 'Smjer vjetra 10m',
+                    'shear_10_850': 'Smicanje vjetra 10m/850hPa',
+                    'wspd_500': 'Brzina vjetra 500hPa',
+                    'HGT_0C': 'Visina 0°C nad tlom',
+                    'wdir_300': 'Smjer vjetra 300hPa',
+                    'wspd_850': 'Brzina vjetra 850hPa',
+                    'precave': 'Satna količina oborine',
+                    'rdrmax': 'Maks. radarska reflektivnost',
+                    'VVEL_900': 'Vertikalno strujanje 900hPa',
+                    'SNOD_SF': 'Visina snježnog pokrivača',
+                    'wdir_500': 'Smjer vjetra 500hPa',
+                    'UGRD_10': 'U komponenta vjetra 10m',
+                    'VVEL_700': 'Vertikalno strujanje 700hPa',
+                    'DLWRF_SF': 'Dolazno dugovalno zračenje',
+                    'wdir_850': 'Smjer vjetra 850hPa',
+                    'wspd_300': 'Brzina vjetra 300hPa',
+                    'RH_700': 'Relativna vlažnost 700hPa',
+                    'GUST_SF': 'Brzina udara vjetra',
+                    'DSWRF_SF': 'Dolazno kratkovalno zračenje',
+                    'UGRD_300': 'U komponenta vjetra 300hPa',
+                    'TMP_1000': 'Temperatura 1000hPa',
+                    'TMP_SF': 'Temperatura površine tla',
+                    'HGT_500': 'Visina 500hPa',
+                    'HGT_1000': 'Visina 1000hPa',
+                    'shear_850_500': 'Smicanje vjetra 850/500hPa',
+                    'TMP_850': 'Temperatura 850hPa',
+                    'RH_2': 'Relativna vlažnost 2m',
+                    'UGRD_850': 'U komponenta vjetra 850hPa',
+                    'VGRD_500': 'V komponenta vjetra 500hPa',
+                    'TMP_2': 'Temperatura 2m',
+                    'CIN_180': 'Konvektivna inhibicija mixed layer',
+                    'precpct': 'Vjerojatnost pojave satne oborine',
+                    'HGT_850': 'Visina 850hPa',
+                    'MSLET_SF': 'Tlak zraka reduciran na 0m',
+                    'ULWRF_SF': 'Odlazno dugovalno zračenje',
+                    'DPT_2': 'Temperatura rosišta 2m',
+                    'VGRD_850': 'V komponenta vjetra 850hPa',
+                    'PWAT_CLM': 'Oboriva voda',
+                    'VGRD_300': 'V komponenta vjetra 300hPa',
+                    'vtgrad_1000_850': 'V. grad. temp. 1000/850hPa',
+                    'wspd_10': 'Brzina vjetra 10m',
+                    'VGRD_10': 'V komponenta vjetra 10m',
+                    'cldave': 'Postotak ukupne naoblake',
+                    'shear_10_500': 'Smicanje vjetra 10m/500hPa',
+                    'UGRD_500': 'U komponenta vjetra 500hPa',
+                    'USWRF_SF': 'Odlazno kratkovalno zračenje',
+                    'CAPE_180': 'Konv. pot. ener. mixed layer',
+                    'TMP_500': 'Temperatura 500hPa'}
+
+    for x in parametersUF:
+        if x in paramsUFmap:
+            parametersUF = [i.replace(x, paramsUFmap.get(x)) for i in parametersUF]
+
+    form.parameters.choices = parametersUF
+    form.parameters2.choices = parametersUF
 
     # Retrieve first and last datetime from database
     cur.execute('''
@@ -131,6 +187,16 @@ def statistics():
         fftxmax = int(form.fftxmax.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
+
+        if sel_param in paramsUFmap.values():
+            for key, value in paramsUFmap.items():
+                if value == sel_param:
+                    sel_param = key
+
+        if sel_param2 in paramsUFmap.values():
+            for key, value in paramsUFmap.items():
+                if value == sel_param2:
+                    sel_param2 = key
 
         # Primary parameter processing
         # Separate functions for parameters derived from raw sql data
@@ -409,7 +475,7 @@ def statistics():
                            title='Statistika',
                            form=form,
                            locations=locations,
-                           parameters=parameters,
+                           parameters=parametersUF,
                            first_date=first_date,
                            last_date=last_date,
                            response=sql_response,
