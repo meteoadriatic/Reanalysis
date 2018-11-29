@@ -12,6 +12,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
     {% if title %}
         <title>CRD - Climate Research Database - {{ title }}</title>
     {% else %}
@@ -30,7 +34,7 @@
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
                         <a class="nav-item nav-link" href="{{ url_for('locations') }}">Lokacije</a>
-                        <a class="nav-item nav-link" href="{{ url_for('sql') }}">SQL</a>
+                        <a class="nav-item nav-link" href="{{ url_for('map') }}">Karta</a>
                         <a class="nav-item nav-link" href="{{ url_for('statistics') }}">Statistike</a>
                         <a class="nav-item nav-link" href="{{ url_for('documentation') }}">Dokumentacija</a>
                     </div>

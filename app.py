@@ -1,7 +1,7 @@
 from config import *
 from flask import render_template
 from flask_mysqldb import MySQL
-from forms import SQLForm, StatisticsForm
+from forms import StatisticsForm
 import pandas as pd
 import matplotlib
 matplotlib.use("agg")
@@ -17,7 +17,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='CRD - Climate Reanalysis Database')
+    return render_template('index.html', title='CRD Početna')
 
 @app.route('/locations')
 def locations():
@@ -27,24 +27,8 @@ def locations():
     ''')
     response = cur.fetchall()
     return render_template('locations.html',
-                           title='CRD - Climate Reanalysis Database',
+                           title='Lokacije',
                            locs=response)
-
-@app.route('/sql', methods=['GET', 'POST'])
-def sql():
-    form = SQLForm()
-    sql_response = None
-
-    if form.is_submitted():
-        sql_query = form.sql.data
-        cur = mysql.connection.cursor()
-        cur.execute(sql_query)
-        sql_response = cur.fetchall()
-
-    return render_template('sql.html',
-                           title='SQL upit',
-                           form=form,
-                           response=sql_response)
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
@@ -494,10 +478,21 @@ def statistics():
                            table_truncated=table_truncated)
 
 
+@app.route('/map')
+def map():
+    cur = mysql.connection.cursor()
+    cur.execute('''
+        SELECT latitude, longitude, name FROM locations;
+    ''')
+    response = cur.fetchall()
+    return render_template('map.html',
+                           title='Karta',
+                           locs=response)
+
 @app.route('/documentation')
 def documentation():
     return render_template('documentation.html',
-                           title='CRD - Climate Reanalysis Database: Dokumentacija')
+                           title='Dokumentacija')
 
 # Request browser not to cache responses (we need this for plots and other variable static content to work reliably)
 @app.after_request
