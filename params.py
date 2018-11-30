@@ -262,7 +262,66 @@ def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate):
     df.loc[(df['vtgrad_850_500'].isnull()), 'vtgrad_850_500'] = \
         (df[2]-df[1])/(df[4]-df[3])
     df = df[['vtgrad_850_500']].round(4)
-    print(df)
+    df.index.name = ''
+
+    return df
+
+def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate):
+    SQL = '''   SELECT datetime, HGT_1000, HGT_500
+                FROM model_output
+                WHERE location=%s
+                AND datetime > %s
+                AND datetime <= %s
+                ORDER BY datetime
+        '''
+    cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+    sql_response = cur.fetchall()
+
+    df = pd.DataFrame(list(sql_response))
+    df.set_index([0], inplace=True)
+    df['thickness_1000_500'] = np.nan
+    df.loc[(df['thickness_1000_500'].isnull()), 'thickness_1000_500'] = df[2]-df[1]
+    df = df[['thickness_1000_500']].astype(int)
+    df.index.name = ''
+
+    return df
+
+def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
+    SQL = '''   SELECT datetime, HGT_1000, HGT_850
+                FROM model_output
+                WHERE location=%s
+                AND datetime > %s
+                AND datetime <= %s
+                ORDER BY datetime
+        '''
+    cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+    sql_response = cur.fetchall()
+
+    df = pd.DataFrame(list(sql_response))
+    df.set_index([0], inplace=True)
+    df['thickness_1000_850'] = np.nan
+    df.loc[(df['thickness_1000_850'].isnull()), 'thickness_1000_850'] = df[2]-df[1]
+    df = df[['thickness_1000_850']].astype(int)
+    df.index.name = ''
+
+    return df
+
+def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate):
+    SQL = '''   SELECT datetime, HGT_850, HGT_500
+                FROM model_output
+                WHERE location=%s
+                AND datetime > %s
+                AND datetime <= %s
+                ORDER BY datetime
+        '''
+    cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+    sql_response = cur.fetchall()
+
+    df = pd.DataFrame(list(sql_response))
+    df.set_index([0], inplace=True)
+    df['thickness_850_500'] = np.nan
+    df.loc[(df['thickness_850_500'].isnull()), 'thickness_850_500'] = df[2]-df[1]
+    df = df[['thickness_850_500']].astype(int)
     df.index.name = ''
 
     return df
