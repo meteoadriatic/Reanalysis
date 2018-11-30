@@ -325,3 +325,28 @@ def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate):
     df.index.name = ''
 
     return df
+
+def snow(cur, sel_loc, sel_startdate, sel_enddate):
+    SQL = '''   SELECT datetime, precave, HGT_0C, TMP_2, RH_2, TMP_850
+                FROM model_output
+                WHERE location=%s
+                AND datetime > %s
+                AND datetime <= %s
+                ORDER BY datetime
+        '''
+    cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+    sql_response = cur.fetchall()
+
+    df = pd.DataFrame(list(sql_response))
+    df.set_index([0], inplace=True)
+    df['snow'] = np.nan
+    df.loc[(df['snow'].isnull()), 'snow'] = \
+        np.clip(df[1] *  (1 - (np.clip(((np.clip(df[2],0,None)
+                                + 200 * df[3]) /2
+                                - np.clip(4 * (100 - df[4]), 0, None)
+                                + np.clip((df[5] + 1) * 100, 0, None)),
+                                0, None)) / 750), 0, 100)
+    df = df[['snow']].round(1)
+    df.index.name = ''
+
+    return df

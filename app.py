@@ -84,7 +84,8 @@ def statistics():
                'vtgrad_850_500',
                'thickness_1000_500',
                'thickness_1000_850',
-               'thickness_850_500']
+               'thickness_850_500',
+               'snow']
     parameters = parameters + appends
     parametersUF = parameters
 
@@ -140,7 +141,8 @@ def statistics():
                    'TMP_500': 'Temperatura 500hPa',
                    'thickness_1000_500': 'Rel. topografija 1000/500hPa',
                    'thickness_1000_850': 'Rel. topografija 1000/850hPa',
-                   'thickness_850_500': 'Rel. topografija 850/500hPa'}
+                   'thickness_850_500': 'Rel. topografija 850/500hPa',
+                   'snow': 'Satna količina snijega'}
 
     for x in parametersUF:
         if x in paramsUFmap:
@@ -285,7 +287,10 @@ def statistics():
 
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
-            ax.bar(df.index, df[sel_param], alpha=0.15)
+            ax.bar(df.index, df[sel_param], alpha=0.25)
+            ax.set_ylim(bottom=0)
+        elif sel_param == 'snow':
+            ax.bar(df.index, df[sel_param], alpha=0.25, color='#DC6EDC')
             ax.set_ylim(bottom=0)
         elif sel_param == 'rdrmax':
             ax.bar(df.index, df[sel_param], alpha=0.3, color='red', width=0.2)
