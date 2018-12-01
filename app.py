@@ -254,6 +254,10 @@ def statistics():
             df.index.name = ''
             df.columns = [sel_param]
 
+            # Erroneous data cleanup
+            if sel_param == 'precave':
+                df.clip(lower=0, upper=None)
+
         if sel_param2 in parameters:
             # Secondary parameter processing
             # Separate functions for parameters derived from raw sql data
@@ -278,6 +282,10 @@ def statistics():
                 df2.set_index([0], inplace=True)
                 df2.index.name = ''
                 df2.columns = [sel_param2]
+
+            # Erroneous data cleanup
+            if sel_param == 'precave':
+                df2.clip(lower=0, upper=None)
 
         # Build statistics list from df.describe() output
         statskeys = df.describe().index.tolist()
@@ -325,13 +333,13 @@ def statistics():
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
             if timespan < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.22)
+                ax.bar(df.index, df[sel_param], alpha=0.3, width=0.2)
             else:
                 ax.plot(df.index, df[sel_param])
             ax.set_ylim(bottom=0)
         elif sel_param == 'snow':
             if timespan < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.22, color='#DC6EDC')
+                ax.bar(df.index, df[sel_param], alpha=0.3, color='#DC6EDC', width=0.2)
             else:
                 ax.plot(df.index, df[sel_param], color='#DC6EDC')
             ax.set_ylim(bottom=0)
@@ -371,10 +379,10 @@ def statistics():
         # Plot secondary parameter
         if sel_param2 in parameters:
             if samey:
-                ax.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.3)
+                ax.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.28)
             else:
                 ax2 = ax.twinx()
-                ax2.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.3)
+                ax2.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.28)
 
         # Include linear trendline
         if trendline:

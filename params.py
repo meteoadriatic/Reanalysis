@@ -339,6 +339,10 @@ def snow(cur, sel_loc, sel_startdate, sel_enddate):
 
     df = pd.DataFrame(list(sql_response))
     df.set_index([0], inplace=True)
+
+    # Erroneous data cleanup
+    df.clip(lower=pd.Series({1:0}), axis=1)
+
     df['snow'] = np.nan
     df.loc[(df['snow'].isnull()), 'snow'] = \
         np.clip(df[1] *  (1 - (np.clip(((np.clip(df[2],0,None)
