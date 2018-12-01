@@ -304,7 +304,7 @@ def statistics():
             ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'cldave' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#828282')
+            ax.plot(df.index, df[sel_param], color='#828282', alpha=0.4)
             ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'CAPE' in sel_param or 'shear' in sel_param:
