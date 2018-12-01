@@ -177,6 +177,8 @@ def statistics():
         distribution = form.distribution.data
         samey = form.samey.data
         rollingmean = int(form.rollingmean.data)
+        rollingsum = int(form.rollingsum.data)
+        cumsum = form.cumsum.data
         rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
         fftxmax = int(form.fftxmax.data)
@@ -294,6 +296,16 @@ def statistics():
         statsvalues = ['%.1f' % elem for elem in statsvalues]
         stats = [list(a) for a in zip(statskeys, statsvalues)]
 
+        # Apply rolling sum to plot data if requested by user
+        if rollingsum != 0:
+            df[sel_param] = df[sel_param].rolling(rollingsum).sum()
+            df.dropna(inplace=True)
+            if sel_param2 in parameters:
+                df2[sel_param2] = df2[sel_param2].rolling(rollingsum).sum()
+                df2.dropna(inplace=True)
+        else:
+            pass
+
         # Apply rolling mean to plot data if requested by user
         if rollingmean != 0:
             df[sel_param] = df[sel_param].rolling(rollingmean).mean()
@@ -301,6 +313,14 @@ def statistics():
             if sel_param2 in parameters:
                 df2[sel_param2] = df2[sel_param2].rolling(rollingmean).mean()
                 df2.dropna(inplace=True)
+        else:
+            pass
+
+        # Apply cumulative sum to plot data if requested by user
+        if cumsum == True:
+            df[sel_param] = df[sel_param].cumsum()
+            if sel_param2 in parameters:
+                df2[sel_param2] = df2[sel_param2].cumsum()
         else:
             pass
 

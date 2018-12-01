@@ -83,6 +83,10 @@
                             <div class="form-check-input d-inline-block align-middle">{{ form.rollcorr(class="form-control") }}</div>
                             <small id="rollcorr" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra. Koristi pomični srednjak za reduciranje šuma.">Korelacija prim/sek</small>
                         </div>
+                        <div class="form-check">
+                            <div class="form-check-input d-inline-block align-middle">{{ form.cumsum(class="form-control") }}</div>
+                            <small id="cumsum" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <div class="input-group mb-1 input-group-sm">
@@ -126,6 +130,14 @@
                             <div class="align-middle" data-toggle="tooltip"
                                  title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">
                                 {{ form.yminplot(class="form-control form-control-sm") }}</div>
+                        </div>
+                        <div class="input-group mb-1 input-group-sm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Pomična suma (h)</span>
+                            </div>
+                            <div class="align-middle" data-toggle="tooltip"
+                                 title="Primijeni pomičnu sumu na graf, prozor (window) = x u satima (x = 0 = off)">
+                                {{ form.rollingsum(class="form-control form-control-sm") }}</div>
                         </div>
                     </div>
                 </div>
