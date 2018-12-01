@@ -324,28 +324,30 @@ def statistics():
         # Perform detailed statistics on dataset
         from stats import variation, gmean, hmean, kurtosis, skew
 
-        variation_pri = variation(df[sel_param].tolist()).round(3)
-        gmean_pri = gmean(df[sel_param].tolist()).round(1)
-        hmean_pri = hmean(df[sel_param].tolist()).round(1)
         max_pri = df[sel_param].max()
         min_pri = df[sel_param].min()
+        if min_pri > 0:
+            gmean_pri = gmean(df[sel_param].tolist()).round(1)
+            hmean_pri = hmean(df[sel_param].tolist()).round(1)
         mean_pri = df[sel_param].mean().round(1)
         sum_pri = df[sel_param].sum()
         std_pri = df[sel_param].std().round(2)
+        variation_pri = variation(df[sel_param].tolist()).round(3)
         kurtosis_pri = round(kurtosis(df[sel_param].tolist()), 3)
         skew_pri = round(skew(df[sel_param].tolist()), 3)
 
         #print(variation_pri, gmean_pri, hmean_pri, max_pri, min_pri, mean_pri, sum_pri, std_pri, kurtosis_pri, skew_pri)
 
         if sel_param2 in parameters:
-            variation_sec = variation(df2[sel_param2].tolist()).round(3)
-            gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
-            hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
             max_sec = df2[sel_param2].max()
             min_sec = df2[sel_param2].min()
+            if min_sec > 0:
+                gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
+                hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
             mean_sec = df2[sel_param2].mean().round(1)
             sum_sec = df2[sel_param2].sum()
             std_sec = df2[sel_param2].std().round(2)
+            variation_sec = variation(df2[sel_param2].tolist()).round(3)
             kurtosis_sec = round(kurtosis(df2[sel_param2].tolist()), 3)
             skew_sec = round(skew(df2[sel_param2].tolist()), 3)
 
