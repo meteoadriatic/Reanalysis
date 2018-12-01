@@ -53,26 +53,35 @@ def statistics():
     form = StatisticsForm()
     cur = mysql.connection.cursor()
 
-    max_pri=''
-    min_pri=''
-    mean_pri=''
-    max_sec=''
-    min_sec=''
-    mean_sec=''
-    std_pri=''
-    std_sec=''
-    gmean_pri=''
-    hmean_pri=''
-    gmean_sec=''
-    hmean_sec=''
-    variation_pri=''
-    variation_sec=''
-    sum_pri=''
-    sum_sec=''
-    kurtosis_pri=''
-    kurtosis_sec=''
-    skew_pri=''
-    skew_sec=''
+    max_pri='N/A'
+    min_pri='N/A'
+    mean_pri='N/A'
+    max_sec='N/A'
+    min_sec='N/A'
+    mean_sec='N/A'
+    std_pri='N/A'
+    std_sec='N/A'
+    gmean_pri='N/A'
+    hmean_pri='N/A'
+    gmean_sec='N/A'
+    hmean_sec='N/A'
+    variation_pri='N/A'
+    variation_sec='N/A'
+    sum_pri='N/A'
+    sum_sec='N/A'
+    kurtosis_pri='N/A'
+    kurtosis_sec='N/A'
+    skew_pri='N/A'
+    skew_sec='N/A'
+    count_pri='N/A'
+    count_sec='N/A'
+    median_pri='N/A'
+    median_sec='N/A'
+    var_pri='N/A'
+    var_sec='N/A'
+    corr_pearson='N/A'
+    corr_kendall='N/A'
+    corr_spearman='N/A'
 
     # Retrieve locations and populate select field
     cur.execute('''
@@ -335,6 +344,9 @@ def statistics():
         variation_pri = variation(df[sel_param].tolist()).round(3)
         kurtosis_pri = round(kurtosis(df[sel_param].tolist()), 3)
         skew_pri = round(skew(df[sel_param].tolist()), 3)
+        median_pri = df[sel_param].median().round(1)
+        count_pri = df[sel_param].count()
+        var_pri =  df[sel_param].var().round(1)
 
         #print(variation_pri, gmean_pri, hmean_pri, max_pri, min_pri, mean_pri, sum_pri, std_pri, kurtosis_pri, skew_pri)
 
@@ -350,6 +362,14 @@ def statistics():
             variation_sec = variation(df2[sel_param2].tolist()).round(3)
             kurtosis_sec = round(kurtosis(df2[sel_param2].tolist()), 3)
             skew_sec = round(skew(df2[sel_param2].tolist()), 3)
+            median_sec = df2[sel_param2].median().round(1)
+            count_sec = df2[sel_param2].count()
+            var_sec = df2[sel_param2].var().round(1)
+
+            corr_pearson = df[sel_param].corr(df2[sel_param2], method='pearson').round(3)
+            corr_kendall = df[sel_param].corr(df2[sel_param2], method='kendall').round(3)
+            corr_spearman = df[sel_param].corr(df2[sel_param2], method='spearman').round(3)
+
 
 
         # Apply rolling sum to plot data if requested by user
@@ -637,7 +657,16 @@ def statistics():
                            kurtosis_pri=kurtosis_pri,
                            kurtosis_sec=kurtosis_sec,
                            skew_pri=skew_pri,
-                           skew_sec=skew_sec)
+                           skew_sec=skew_sec,
+                           count_pri=count_pri,
+                           count_sec=count_sec,
+                           median_pri=median_pri,
+                           median_sec=median_sec,
+                           var_pri=var_pri,
+                           var_sec=var_sec,
+                           corr_pearson=corr_pearson,
+                           corr_kendall=corr_kendall,
+                           corr_spearman=corr_spearman)
 
 
 @app.route('/map')

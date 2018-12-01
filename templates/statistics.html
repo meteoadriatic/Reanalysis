@@ -167,13 +167,19 @@
                     <div class="container">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                           <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#stats1" role="tab" aria-controls="stats1" aria-selected="true">Statistika (1)</a>
+                            <a class="nav-link active" id="stats1-tab" data-toggle="tab" href="#stats1" role="tab" aria-controls="stats1" aria-selected="true">1. Osnovno</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#stats2" role="tab" aria-controls="stats2" aria-selected="false">Statistika (2)</a>
+                            <a class="nav-link" id="stats2-tab" data-toggle="tab" href="#stats2" role="tab" aria-controls="stats2" aria-selected="false">2. Srednje vrijednosti</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#stats3" role="tab" aria-controls="stats3" aria-selected="false">Statistika (3)</a>
+                            <a class="nav-link" id="stats3-tab" data-toggle="tab" href="#stats3" role="tab" aria-controls="stats3" aria-selected="false">3. Pokazatelji promjenjivosti</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats4-tab" data-toggle="tab" href="#stats4" role="tab" aria-controls="stats4" aria-selected="false">4. Ostalo</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats5-tab" data-toggle="tab" href="#stats5" role="tab" aria-controls="stats5" aria-selected="false">5. Korelacije Pri/Sek</a>
                           </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -187,6 +193,11 @@
                                 </tr>
                               </thead>
                               <tbody>
+                                <tr>
+                                  <th scope="row">Broj zapisa</th>
+                                  <td>{{ count_pri }}</td>
+                                  <td>{{ count_sec }}</td>
+                                </tr>
                                 <tr>
                                   <th scope="row">Maksimalna vrijednost</th>
                                   <td>{{ max_pri }}</td>
@@ -226,6 +237,16 @@
                               </thead>
                               <tbody>
                                 <tr>
+                                  <th scope="row">Aritmetička sredina</th>
+                                  <td>{{ mean_pri }}</td>
+                                  <td>{{ mean_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Median</th>
+                                  <td>{{ median_pri }}</td>
+                                  <td>{{ median_sec }}</td>
+                                </tr>
+                                <tr>
                                   <th scope="row">Geometrijska sredina</th>
                                   <td>{{ gmean_pri }}</td>
                                   <td>{{ gmean_sec }}</td>
@@ -235,15 +256,38 @@
                                   <td>{{ hmean_pri }}</td>
                                   <td>{{ hmean_sec }}</td>
                                 </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats3" role="tabpanel" aria-labelledby="Statistika(3)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }}</th>
+                                  <th scope="col">{{ sel_param2 }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Standardna devijacija</th>
+                                  <td>{{ std_pri }}</td>
+                                  <td>{{ std_sec }}</td>
+                                </tr>
                                 <tr>
                                   <th scope="row">Koeficijent promjenjivosti</th>
                                   <td>{{ variation_pri }}</td>
                                   <td>{{ variation_sec }}</td>
                                 </tr>
+                                <tr>
+                                  <th scope="row">Varijanca</th>
+                                  <td>{{ var_pri }}</td>
+                                  <td>{{ var_sec }}</td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>
-                          <div class="tab-pane fade" id="stats3" role="tabpanel" aria-labelledby="Statistika(3)">
+                          <div class="tab-pane fade" id="stats4" role="tabpanel" aria-labelledby="Statistika(4)">
                             <table class="table">
                               <thead>
                                 <tr>
@@ -262,6 +306,30 @@
                                   <th scope="row">Mjera asimetrije</th>
                                   <td>{{ skew_pri }}</td>
                                   <td>{{ skew_sec }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats5" role="tabpanel" aria-labelledby="Statistika(5)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }} / {{ sel_param2 }}  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Pearson korelacija</th>
+                                  <td>{{ corr_pearson }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Kendall korelacija</th>
+                                  <td>{{ corr_kendall }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Spearman korelacija</th>
+                                  <td>{{ corr_spearman }}</td>
                                 </tr>
                               </tbody>
                             </table>
