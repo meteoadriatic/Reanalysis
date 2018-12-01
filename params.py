@@ -340,12 +340,9 @@ def snow(cur, sel_loc, sel_startdate, sel_enddate):
     df = pd.DataFrame(list(sql_response))
     df.set_index([0], inplace=True)
 
-    # Erroneous data cleanup
-    df[1].where(df[1] < 0.0, 0.0)
-
     df['snow'] = np.nan
     df.loc[(df['snow'].isnull()), 'snow'] = \
-        np.clip(df[1] *  (1 - (np.clip(((np.clip(df[2],0,None)
+        np.clip(np.clip(df[1],0,None) *  (1 - (np.clip(((np.clip(df[2],0,None)
                                 + 200 * df[3]) /2
                                 - np.clip(4 * (100 - df[4]), 0, None)
                                 + np.clip((df[5] + 1) * 100, 0, None)),
