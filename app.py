@@ -285,15 +285,26 @@ def statistics():
         else:
             pass
 
+        timespan=(sel_enddate-sel_startdate).days
+        bigdata = 180
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
-            ax.bar(df.index, df[sel_param], alpha=0.25)
+            if timespan < bigdata:
+                ax.bar(df.index, df[sel_param], alpha=0.22)
+            else:
+                ax.plot(df.index, df[sel_param])
             ax.set_ylim(bottom=0)
         elif sel_param == 'snow':
-            ax.bar(df.index, df[sel_param], alpha=0.25, color='#DC6EDC')
+            if timespan < bigdata:
+                ax.bar(df.index, df[sel_param], alpha=0.22, color='#DC6EDC')
+            else:
+                ax.plot(df.index, df[sel_param], color='#DC6EDC')
             ax.set_ylim(bottom=0)
         elif sel_param == 'rdrmax':
-            ax.bar(df.index, df[sel_param], alpha=0.3, color='red', width=0.2)
+            if timespan < bigdata:
+                ax.bar(df.index, df[sel_param], alpha=0.3, color='red', width=0.2)
+            else:
+                ax.plot(df.index, df[sel_param], color='red')
             ax.set_ylim(bottom=0)
         elif 'wdir_' in sel_param or 'VVEL' in sel_param:
             scatsiz=max((100000/(len(df.index))),50)
@@ -304,7 +315,7 @@ def statistics():
             ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'cldave' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#828282', alpha=0.4)
+            ax.plot(df.index, df[sel_param], color='#828282', alpha=0.31)
             ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'CAPE' in sel_param or 'shear' in sel_param:

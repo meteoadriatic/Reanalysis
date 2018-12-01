@@ -11,8 +11,8 @@
         <h2 class="mt-4">Cilj projekta</h2>
 
         <p>Cilj projekta je izrada klimatološke baze podataka od najmanje 30 godina temeljene na reanalizi klime
-        pomoću WRF-ARW modela nad regijom jugoistočne Europe. Baza podataka bit će dostupna javnosti zajedno sa
-        statističkim alatima za analizu klimatoloških podataka.</p>
+        pomoću WRF-ARW modela nad regijom jugoistočne Europe. Baza podataka je u cjelosti dostupna javnosti zajedno sa
+        setom statističkih alata za analizu klimatoloških podataka.</p>
 
 
 
@@ -20,21 +20,41 @@
 
         <p>Za klimatološku reanalizu korišten je atmosferski model WRF-ARW [1]. Domena modela ima razmak mreže od 10
         kilometara i veličine je 317x277 točaka, lambert projekcija sa središtem na koordinatama 45,30°N i 13,30°E.
-        Za inicijalne i bočne uvjete korišten je CFSR model, rezolucije mreže 0.5° (NCEP ds093.0 [2] i ds094.0 [3]).
-        Vremenski korak reanalize iznosi 1 sat.</p>
+        Vertikalni broj nivoa modela je 42. Za inicijalne i bočne uvjete korišten je CFSR model, rezolucije mreže 0.5°
+        (NCEP ds093.0 [2] i ds094.0 [3]). Vremenski korak reanalize iznosi 1 sat.</p>
 
-        <p>Reanaliza je podijeljena u mjesečne izračune. Svaki izračun inicijalizirao se s početnim stanjem na 1. dan
-        u mjesecu u 00 sati UTC i završio sa 1. danom u idućem mjesecu u 00 sati UTC. U bazi, podatak koji se odnosi na
-        00 sati UTC za 1. dan u mjesecu prema tome je zadnji podatak izračuna prethodećeg mjeseca, dok je prvi podatak
-        svakog pokretanja modela u 01 sat UTC 1. dana u mjesecu.</p>
+        <p>Korištena jezgra modela je Advanced Research WRF (ARW) u verziji 3.9.1.1. Preprocessing WPS alati su verzije
+        3.9.1.</p>
+
+        <div class="card-body">
+            <h6 class="card-title">Temeljni fizikalni setup modela</h6>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item py-2">Microphysics: <i>WRF Single-Moment 5-class scheme</i></li>
+                <li class="list-group-item py-2">Longwave Radiation: <i>New Goddard scheme</i></li>
+                <li class="list-group-item py-2">Shortwave Radiation: <i>New Goddard scheme</i></li>
+                <li class="list-group-item py-2">Surface Layer: <i>MM5 similarity</i></li>
+                <li class="list-group-item py-2">Land Surface: <i>Noah Land Surface Model</i></li>
+                <li class="list-group-item py-2">Planetary Boundary layer: <i>Yonsei University scheme</i></li>
+                <li class="list-group-item py-2">Cumulus Parameterization: <i>Kain-Fritsch scheme</i></li>
+            </ul>
+        </div>
+
+
+        <p>Proces reanalize je podijeljen u mjesečne izračune. Svaki pojedinačni izračun inicijaliziran je s početnim
+        stanjem na 1. dan u mjesecu u 00 sati UTC i završava sa 1. danom u idućem mjesecu u 00 sati UTC. U bazi,
+        podatak koji se odnosi na 00 sati UTC za 1. dan u mjesecu je zadnji podatak izračuna prethodećeg mjeseca,
+        dok je prvi podatak svakog novog pokretanja modela u 01 sat UTC 1. dana u mjesecu.</p>
 
         <p>Restart reanalize na prijelazu svakog mjeseca osigurava minimaliziranje efekata dugoročnih bias-a modela.
-        Isto, duljina reanalize od mjesec dana dovoljna je da se minimizira učestalost spin-up modela i moguće
-        negativne posljedice tog perioda integracije modela (u pravilu, prvih 6-12 sati od starta modela). Uslijed
-        toga, duljina neprekinutih perioda od mjesec dana uzeta je kao optimalni kompromis i konstanta je kroz
-        cijeli reanalizirani period. Uslijed restarta reanalize, odnosno reinicijalizacije stanja modela, na prijelazu
+        Duljina reanalize od mjesec dana dovoljna je da se minimizira učestalost spin-up modela i moguće
+        negativne posljedice tog perioda integracije modela (u pravilu, prvih 6-12 sati od starta modela). Periodi od
+        mjesec dana uzeti su kao optimalni kompromis i konstanta su kroz
+        cijeli reanalizirani period.</p>
+
+        <p>Uslijed restarta reanalize, odnosno reinicijalizacije stanja modela, na prijelazu
         mjeseca moguće je primjetiti diskontinuitete pojedinih meteoroloških parametara, primjerice visine snježnog
-        pokrivača. U pravilu, ovi diskontinuiteti su beznačajno mali i ne stvaraju statistički značajne efekte.</p>
+        pokrivača. Ako nije drugačije naglašeno (vidi poglavlje Ograničenja), ovi diskontinuiteti ne stvaraju
+        statistički značajne efekte.</p>
 
 
 
@@ -48,15 +68,17 @@
 
         <p>S obzirom na navedena ograničenja, apsolutna vrijednost podataka u bazi se ne može uzeti kao reprezentativno
         točna. Ipak, relativni odnosi podataka, osobito na dulje razdoblje (trendovi, odstupanja od prosjeka
-        i druga statistička obilježja uzeta preko duljih razdoblja) bi trebali biti dovoljno vjerodostojni za potrebe
-        klimatskih analiza. Pri reanalizi se posebna pažnja posvetila unificiranju metodologije reanalize u smislu
+        i druga statistička obilježja uzeta preko duljih razdoblja) se mogu uzeti kao dovoljno vjerodostojni za potrebe
+        klimatskih analiza. Pri reanalizi je posebna pažnja posvećena unificiranju metodologije u smislu
         jednakosti korištenih izvora podataka i načina njihove obrade tijekom cijelog reanaliziranog razdoblja;
         metode i podaci korišteni za reanalizu primjerice 2018. godine identični su koliko god je to bilo moguće
-        metodama i podacima korištenim za reanalizu npr. 1990. godine. Treba naglasiti da je za period prije prosinca
-        2010. godine korišten CFSR dataset (093.0) a za period iza prosinca 2010. CFSR v2 dataset (094.0). Osim te
+        metodama i podacima korištenim za reanalizu npr. 1990. godine.</p>
+
+        <p>Treba naglasiti da je za period do travnja
+        2011. godine korišten CFSR dataset (093.0) a za period od travnja 2011. CFSR v2 dataset (094.0). Osim te
         razlike, drugih značajnijih razlika u korištenim podacima i metodama nema, bez obzira na datum reanalize.</p>
 
-        <p>U cilju maksimalnog reduciranja zauzeća diskovnog prostora SQL baze i grib datoteka, numerička preciznost
+        <p>U cilju maksimalnog optimiziranja zauzeća diskovnog prostora SQL baze i grib datoteka, numerička preciznost
         podataka je reducirana u odnosu na standardne vrijednosti. Nastojalo se postići da preciznost podataka ne
         bude značajno veća od njihove točnosti s obzirom da povećana preciznost ima za posljedicu veći utrošak diskovnog
         prostora. Neki podaci su time postali ponešto grubljih prijelaza između susjednih veličina (na primjer,
@@ -67,12 +89,12 @@
                 <h5 class="card-title">Naročitu pažnju potrebno je obratiti na sljedeća ograničenja:</h5>
                 <ul class="list-group list-group-flush">
                 <li class="list-group-item">Inicijalna <strong>visina snježnog pokrivača</strong> na početku mjeseca dolazi iz grube prostorne rezolucije
-                ulaznih podataka od 0.5°x0.5° i stoga je u pravilu dosta loša. Time i dobar dio razdoblja iza početka mjeseca,
-                ako je riječ o području pod snijegom (u stvarnosti i/ili u modelu), može imati znatna odstupanja visine snijega
+                ulaznih podataka od 0.5°x0.5° i stoga je u pravilu vrlo nereprezentativna. Time i dobar dio razdoblja iza početka mjeseca,
+                ako je riječ o području pod snijegom (u stvarnosti i/ili u modelu), ima znatna odstupanja visine snijega
                 od realnosti. Ni ostatak mjeseca ne može se smatrati naročito pouzdanijim po tom parametru, stoga visinu
                 snježnog pokrivača u bazi <u>nije uputno uzimati u obzir za bilo kakve ozbiljne analize</u>.</li>
 
-                <li class="list-group-item"><strong>Brzina vjetra i brzina udara vjetra</strong> mogu značajno odstupati od stvarnosti na lokacijama
+                <li class="list-group-item"><strong>Brzina vjetra i brzina udara vjetra</strong> može značajno odstupati od stvarnosti na lokacijama
                 koje se nalaze u blizini kompleksnog reljefa.</li>
 
                 <li class="list-group-item"><strong>Temperatura zraka i rosišta te relativna vlažnost</strong> može značajno odstupati od stvarnosti
@@ -130,7 +152,6 @@
                         Posjećeno 28.11.2018.</li>
 
                 </ul>
-
             </div>
         </div>
 
