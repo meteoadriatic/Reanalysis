@@ -8,6 +8,7 @@ matplotlib.use("agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
+from matplotlib.dates import HourLocator, DayLocator, MonthLocator, YearLocator
 import numpy as np
 import params
 import io
@@ -182,6 +183,40 @@ def statistics():
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
 
+        def myxticks(sel_startdate, sel_enddate):
+            timespan = (sel_enddate - sel_startdate).days
+            plt.xlim(sel_startdate, sel_enddate)
+            if timespan < 5:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d    '))
+                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%H'))
+                ax.xaxis.set_major_locator(DayLocator())
+                ax.xaxis.set_minor_locator(HourLocator(interval=6))
+            elif timespan < 20:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+                ax.xaxis.set_major_locator(DayLocator())
+            elif timespan < 50:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+                ax.xaxis.set_major_locator(DayLocator(interval=2))
+            elif timespan < 180:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m   '))
+                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
+                ax.xaxis.set_major_locator(MonthLocator())
+                ax.xaxis.set_minor_locator(DayLocator(interval=4))
+            elif timespan < 700:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+                ax.xaxis.set_major_locator(MonthLocator())
+            elif timespan < 2000:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y     '))
+                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%m'))
+                ax.xaxis.set_major_locator(YearLocator())
+                ax.xaxis.set_minor_locator(MonthLocator(interval=2))
+            elif timespan < 10000:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+                ax.xaxis.set_major_locator(YearLocator())
+            else:
+                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+                ax.xaxis.set_major_locator(ticker.AutoLocator())
+
         sel_param_bak = sel_param
         sel_param2_bak = sel_param2
 
@@ -268,7 +303,7 @@ def statistics():
         else:
             fig.set_size_inches(12.5, 5.0)
         fig.tight_layout()
-        fig.autofmt_xdate()
+        fig.autofmt_xdate(rotation=50, ha='center', which='both')
         ax.set_axisbelow(True)
         ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
         if sel_param2 in parameters:
@@ -352,10 +387,7 @@ def statistics():
             ax.plot(df.index, y_mean, linestyle='--', color='teal')
             plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
 
-        # Make x-axis ticks evenly spaced - auto spacing doesn't look nice on matplotib v3
-        plt.xlim(sel_startdate, sel_enddate)
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_major_locator(ticker.AutoLocator())
+        myxticks(sel_startdate, sel_enddate)
 
         # Save plot into memory
         img = io.BytesIO()
@@ -448,7 +480,7 @@ def statistics():
             else:
                 fig3.set_size_inches(12.5, 3.0)
             fig3.tight_layout()
-            fig3.autofmt_xdate()
+            fig3.autofmt_xdate(rotation=50, ha='center', which='both')
             ax3.set_axisbelow(True)
             ax3.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
             ax3.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
