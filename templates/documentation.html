@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div class="content-section">
+
     <div class="container">
         <h1 class="mb-5">CRD dokumentacija</h1>
 
@@ -60,26 +62,30 @@
         prostora. Neki podaci su time postali ponešto grubljih prijelaza između susjednih veličina (na primjer,
         temperature su zaokružene na najbližu cjelobrojnu vrijednost što je lako uočiti na grafovima).</p>
 
-        <h5>Naročitu pažnju potrebno je obratiti na sljedeća ograničenja:</h5>
+        <div class="card border-danger">
+            <div class="card-body">
+                <h5 class="card-title">Naročitu pažnju potrebno je obratiti na sljedeća ograničenja:</h5>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">Inicijalna <strong>visina snježnog pokrivača</strong> na početku mjeseca dolazi iz grube prostorne rezolucije
+                ulaznih podataka od 0.5°x0.5° i stoga je u pravilu dosta loša. Time i dobar dio razdoblja iza početka mjeseca,
+                ako je riječ o području pod snijegom (u stvarnosti i/ili u modelu), može imati znatna odstupanja visine snijega
+                od realnosti. Ni ostatak mjeseca ne može se smatrati naročito pouzdanijim po tom parametru, stoga visinu
+                snježnog pokrivača u bazi <u>nije uputno uzimati u obzir za bilo kakve ozbiljne analize</u>.</li>
 
-        <p>Inicijalna <strong>visina snježnog pokrivača</strong> na početku mjeseca dolazi iz grube prostorne rezolucije
-        ulaznih podataka od 0.5°x0.5° i stoga je u pravilu dosta loša. Time i dobar dio razdoblja iza početka mjeseca,
-        ako je riječ o području pod snijegom (u stvarnosti i/ili u modelu), može imati znatna odstupanja visine snijega
-        od realnosti. Ni ostatak mjeseca ne može se smatrati naročito pouzdanijim po tom parametru, stoga visinu
-        snježnog pokrivača u bazi <u>nije uputno uzimati u obzir za bilo kakve ozbiljne analize</u>.</p>
+                <li class="list-group-item"><strong>Brzina vjetra i brzina udara vjetra</strong> mogu značajno odstupati od stvarnosti na lokacijama
+                koje se nalaze u blizini kompleksnog reljefa.</li>
 
-        <p><strong>Brzina vjetra i brzina udara vjetra</strong> mogu značajno odstupati od stvarnosti na lokacijama
-        koje se nalaze u blizini kompleksnog reljefa.</p>
+                <li class="list-group-item"><strong>Temperatura zraka i rosišta te relativna vlažnost</strong> može značajno odstupati od stvarnosti
+                u područjima izraženih terenskih ulegnuća, kao i na otočnim lokacijama ili lokacijama na obali. Pokazalo se
+                također da model ne daje zadovoljavajuće rezultate relativne vlažnosti u uvjetima magle noćnog hlađenja
+                (radijacijska magla) te je u područjima gdje je noćna magla česta pojava potrebno očekvati značajnija
+                odstupanja ova tri parametra od stvarnosti.</li>
 
-        <p><strong>Temperatura zraka i rosišta te relativna vlažnost</strong> može značajno odstupati od stvarnosti
-        u područjima izraženih terenskih ulegnuća, kao i na otočnim lokacijama ili lokacijama na obali. Pokazalo se
-        također da model ne daje zadovoljavajuće rezultate relativne vlažnosti u uvjetima magle noćnog hlađenja
-        (radijacijska magla) te je u područjima gdje je noćna magla česta pojava potrebno očekvati značajnija
-        odstupanja ova tri parametra od stvarnosti.</p>
-
-        <p><strong>Količina oborine</strong> može značajno odstupati od stvarnosti u uvjetima konvektivnih procesa te
-        u planinskim područjima.</p>
-
+                <li class="list-group-item"><strong>Količina oborine</strong> može značajno odstupati od stvarnosti u uvjetima konvektivnih procesa te
+                u planinskim područjima.</li>
+                </ul>
+            </div>
+        </div>
 
 
         <h2 class="mt-4">Sponzori projekta</h2>
@@ -104,23 +110,32 @@
 
 
 
+        <div class="card mt-5">
+            <div class="card-body">
+                <h2 class="card-title">Popis referenci</h2>
+                <ul class="list-group list-group-flush">
 
-        <h2 class="mt-5">Reference</h2>
+                    <li class="list-group-item">1. WRF-ARW - Skamarock, W. C., J. B. Klemp, J. Dudhia, D. O. Gill, D. M. Barker, M. G Duda, X.-Y. Huang,
+                        W. Wang, and J. G. Powers, 2008: A Description of the Advanced Research WRF Version 3. NCAR Tech.
+                        Note NCAR/TN-475+STR, 113 pp. doi:10.5065/D68S4MVH</li>
 
-        <p>1. WRF-ARW - Skamarock, W. C., J. B. Klemp, J. Dudhia, D. O. Gill, D. M. Barker, M. G Duda, X.-Y. Huang,
-            W. Wang, and J. G. Powers, 2008: A Description of the Advanced Research WRF Version 3. NCAR Tech.
-            Note NCAR/TN-475+STR, 113 pp. doi:10.5065/D68S4MVH</p>
+                    <li class="list-group-item">2. CFSR ds093.0 - Saha, S., et al. 2010. NCEP Climate Forecast System Reanalysis (CFSR) 6-hourly Products,
+                        January 1979 to December 2010. Research Data Archive at the National Center for Atmospheric Research,
+                        Computational and Information Systems Laboratory. https://doi.org/10.5065/D69K487J.
+                        Posjećeno 28.11.2018.</li>
 
-        <p>2. CFSR ds093.0 - Saha, S., et al. 2010. NCEP Climate Forecast System Reanalysis (CFSR) 6-hourly Products,
-            January 1979 to December 2010. Research Data Archive at the National Center for Atmospheric Research,
-            Computational and Information Systems Laboratory. https://doi.org/10.5065/D69K487J.
-            Posjećeno 28.11.2018.</p>
+                    <li class="list-group-item">3. CFSR v2 ds094.0 - Saha, S., et al. 2011, updated daily. NCEP Climate Forecast System Version 2 (CFSv2)
+                        6-hourly Products. Research Data Archive at the National Center for Atmospheric Research,
+                        Computational and Information Systems Laboratory. https://doi.org/10.5065/D61C1TXF.
+                        Posjećeno 28.11.2018.</li>
 
-        <p>3. CFSR v2 ds094.0 - Saha, S., et al. 2011, updated daily. NCEP Climate Forecast System Version 2 (CFSv2)
-            6-hourly Products. Research Data Archive at the National Center for Atmospheric Research,
-            Computational and Information Systems Laboratory. https://doi.org/10.5065/D61C1TXF.
-            Posjećeno 28.11.2018.</p>
+                </ul>
+
+            </div>
+        </div>
 
     </div>
+
+</div>
 
 {% endblock %}
