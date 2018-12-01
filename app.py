@@ -40,7 +40,6 @@ def statistics():
     sel_param_bak = ''
     sel_param2_bak = ''
     sel_loc = ''
-    stats = ''
     trendline = False
     removetbllimit = False
     samey = False
@@ -53,6 +52,27 @@ def statistics():
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
+
+    max_pri=''
+    min_pri=''
+    mean_pri=''
+    max_sec=''
+    min_sec=''
+    mean_sec=''
+    std_pri=''
+    std_sec=''
+    gmean_pri=''
+    hmean_pri=''
+    gmean_sec=''
+    hmean_sec=''
+    variation_pri=''
+    variation_sec=''
+    sum_pri=''
+    sum_sec=''
+    kurtosis_pri=''
+    kurtosis_sec=''
+    skew_pri=''
+    skew_sec=''
 
     # Retrieve locations and populate select field
     cur.execute('''
@@ -185,6 +205,7 @@ def statistics():
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
 
+        # Define optimal xticks relative to requested time range
         def myxticks(sel_startdate, sel_enddate):
             timespan = (sel_enddate - sel_startdate).days
             plt.xlim(sel_startdate, sel_enddate)
@@ -289,12 +310,45 @@ def statistics():
             if sel_param == 'precave':
                 df2.clip(lower=0, upper=None, inplace=True)
 
+        '''
+        Old statistics based on pandas df.describe(), not used anymore:
+        
         # Build statistics list from df.describe() output
         statskeys = df.describe().index.tolist()
         statsvalues = df.describe().values.tolist()
         statsvalues = [item for sublist in statsvalues for item in sublist]
         statsvalues = ['%.1f' % elem for elem in statsvalues]
         stats = [list(a) for a in zip(statskeys, statsvalues)]
+        '''
+
+        # Perform detailed statistics on dataset
+        from stats import variation, gmean, hmean, kurtosis, skew
+
+        variation_pri = variation(df[sel_param].tolist()).round(3)
+        gmean_pri = gmean(df[sel_param].tolist()).round(1)
+        hmean_pri = hmean(df[sel_param].tolist()).round(1)
+        max_pri = df[sel_param].max()
+        min_pri = df[sel_param].min()
+        mean_pri = df[sel_param].mean().round(1)
+        sum_pri = df[sel_param].sum()
+        std_pri = df[sel_param].std().round(2)
+        kurtosis_pri = round(kurtosis(df[sel_param].tolist()), 3)
+        skew_pri = round(skew(df[sel_param].tolist()), 3)
+
+        #print(variation_pri, gmean_pri, hmean_pri, max_pri, min_pri, mean_pri, sum_pri, std_pri, kurtosis_pri, skew_pri)
+
+        if sel_param2 in parameters:
+            variation_sec = variation(df2[sel_param2].tolist()).round(3)
+            gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
+            hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
+            max_sec = df2[sel_param2].max()
+            min_sec = df2[sel_param2].min()
+            mean_sec = df2[sel_param2].mean().round(1)
+            sum_sec = df2[sel_param2].sum()
+            std_sec = df2[sel_param2].std().round(2)
+            kurtosis_sec = round(kurtosis(df2[sel_param2].tolist()), 3)
+            skew_sec = round(skew(df2[sel_param2].tolist()), 3)
+
 
         # Apply rolling sum to plot data if requested by user
         if rollingsum != 0:
@@ -551,7 +605,6 @@ def statistics():
                            last_date=last_date,
                            response=sql_response,
                            table_columns=['Datum i sat', sel_param],
-                           stats=stats,
                            sel_param=sel_param_bak,
                            sel_param2=sel_param2_bak,
                            sel_loc=sel_loc,
@@ -562,7 +615,27 @@ def statistics():
                            dist=dist_url,
                            rollcorr=rollcorr_url,
                            show_plot=show_plot,
-                           table_truncated=table_truncated)
+                           table_truncated=table_truncated,
+                           max_pri=max_pri,
+                           min_pri=min_pri,
+                           mean_pri=mean_pri,
+                           max_sec=max_sec,
+                           min_sec=min_sec,
+                           mean_sec=mean_sec,
+                           std_pri=std_pri,
+                           std_sec=std_sec,
+                           gmean_pri=gmean_pri,
+                           gmean_sec=gmean_sec,
+                           hmean_pri=hmean_pri,
+                           hmean_sec=hmean_sec,
+                           variation_pri=variation_pri,
+                           variation_sec=variation_sec,
+                           sum_pri=sum_pri,
+                           sum_sec=sum_sec,
+                           kurtosis_pri=kurtosis_pri,
+                           kurtosis_sec=kurtosis_sec,
+                           skew_pri=skew_pri,
+                           skew_sec=skew_sec)
 
 
 @app.route('/map')
