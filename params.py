@@ -341,7 +341,7 @@ def snow(cur, sel_loc, sel_startdate, sel_enddate):
     df.set_index([0], inplace=True)
 
     # Erroneous data cleanup
-    df.clip(lower=pd.Series({1:0}), axis=1)
+    df[1].where(df[1] < 0.0, 0.0)
 
     df['snow'] = np.nan
     df.loc[(df['snow'].isnull()), 'snow'] = \

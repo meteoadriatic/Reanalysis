@@ -256,7 +256,7 @@ def statistics():
 
             # Erroneous data cleanup
             if sel_param == 'precave':
-                df.clip(lower=0, upper=None)
+                df.clip(lower=0, upper=None, inplace=True)
 
         if sel_param2 in parameters:
             # Secondary parameter processing
@@ -285,7 +285,7 @@ def statistics():
 
             # Erroneous data cleanup
             if sel_param == 'precave':
-                df2.clip(lower=0, upper=None)
+                df2.clip(lower=0, upper=None, inplace=True)
 
         # Build statistics list from df.describe() output
         statskeys = df.describe().index.tolist()
