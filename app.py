@@ -617,6 +617,11 @@ def statistics():
         else:
             pass
 
+    # Join sql response tuples for primary and secondary parameter into one
+    if sel_param2 in parameters:
+        response = tuple(x + y for x, y in zip(sql_response, sql_response2))
+    else:
+        response = sql_response
 
     return render_template('statistics.html',
                            title='Statistika',
@@ -625,8 +630,8 @@ def statistics():
                            parameters=parametersUF,
                            first_date=first_date,
                            last_date=last_date,
-                           response=sql_response,
-                           table_columns=['Datum i sat', sel_param],
+                           response=response,
+                           table_columns=['Datum i sat', sel_param_bak, sel_param2_bak],
                            sel_param=sel_param_bak,
                            sel_param2=sel_param2_bak,
                            sel_loc=sel_loc,
