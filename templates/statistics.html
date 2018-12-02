@@ -73,11 +73,11 @@
                         </div>
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.samey(class="form-control") }}</div>
-                            <small id="samey" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Koristi istu y os za primarni i sekundarni paramtetar">Isti y</small>
+                            <small id="samey" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Koristi zajedničku y os za primarni i sekundarni paramtetar">Zajednička y os</small>
                         </div>
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.distribution(class="form-control") }}</div>
-                            <small id="distribution" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži distribuciju podataka na histogramu">Distribucija</small>
+                            <small id="distribution" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži razdiobu podataka na histogramu">Razdioba</small>
                         </div>
                         <div class="form-check">
                             <div class="form-check-input d-inline-block align-middle">{{ form.rollcorr(class="form-control") }}</div>
@@ -223,6 +223,10 @@
                                   <td>{{ sum_pri }}</td>
                                   <td>{{ sum_sec }}</td>
                                 </tr>
+                                  <th scope="row">Trend</th>
+                                  <td>{{ slope_pri }}</td>
+                                  <td>{{ slope_sec }}</td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>
@@ -273,6 +277,11 @@
                                   <th scope="row">Standardna devijacija</th>
                                   <td>{{ std_pri }}</td>
                                   <td>{{ std_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Standardna pogreška</th>
+                                  <td>{{ std_err_pri }}</td>
+                                  <td>{{ std_err_sec }}</td>
                                 </tr>
                                 <tr>
                                   <th scope="row">Koeficijent promjenjivosti</th>

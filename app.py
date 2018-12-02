@@ -82,6 +82,16 @@ def statistics():
     corr_pearson='N/A'
     corr_kendall='N/A'
     corr_spearman='N/A'
+    slope_pri='N/A'
+    intercept_pri='N/A' 
+    r_value_pri='N/A'
+    p_value_pri='N/A'
+    std_err_pri='N/A'
+    slope_sec='N/A'
+    intercept_sec='N/A' 
+    r_value_sec='N/A'
+    p_value_sec='N/A'
+    std_err_sec='N/A'
 
     # Retrieve locations and populate select field
     cur.execute('''
@@ -332,6 +342,7 @@ def statistics():
 
         # Perform detailed statistics on dataset
         from stats import variation, gmean, hmean, kurtosis, skew
+        from scipy.stats import linregress
 
         max_pri = df[sel_param].max()
         min_pri = df[sel_param].min()
@@ -347,6 +358,12 @@ def statistics():
         median_pri = df[sel_param].median().round(1)
         count_pri = df[sel_param].count()
         var_pri =  df[sel_param].var().round(1)
+
+        x = mdates.date2num(df.index)
+        y = df[sel_param]
+        slope_pri, intercept_pri, r_value_pri, p_value_pri, std_err_pri = linregress(x, y)
+        slope_pri=round(slope_pri, 6)
+        std_err_pri=round(std_err_pri, 5)
 
         #print(variation_pri, gmean_pri, hmean_pri, max_pri, min_pri, mean_pri, sum_pri, std_pri, kurtosis_pri, skew_pri)
 
@@ -365,6 +382,12 @@ def statistics():
             median_sec = df2[sel_param2].median().round(1)
             count_sec = df2[sel_param2].count()
             var_sec = df2[sel_param2].var().round(1)
+
+            x = mdates.date2num(df2.index)
+            y = df2[sel_param2]
+            slope_sec, intercept_sec, r_value_sec, p_value_sec, std_err_sec = linregress(x, y)
+            slope_sec=round(slope_sec, 6)
+            std_err_sec = round(std_err_sec, 5)
 
             corr_pearson = df[sel_param].corr(df2[sel_param2], method='pearson').round(3)
             corr_kendall = df[sel_param].corr(df2[sel_param2], method='kendall').round(3)
@@ -671,7 +694,11 @@ def statistics():
                            var_sec=var_sec,
                            corr_pearson=corr_pearson,
                            corr_kendall=corr_kendall,
-                           corr_spearman=corr_spearman)
+                           corr_spearman=corr_spearman,
+                           slope_pri=slope_pri,
+                           slope_sec=slope_sec,
+                           std_err_pri=std_err_pri,
+                           std_err_sec=std_err_sec)
 
 
 @app.route('/map')
