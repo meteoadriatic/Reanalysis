@@ -11,6 +11,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <select name="locations" class="form-control">
+                            <option value="Zagreb" SELECTED>Zagreb</option>"
                             {% for location in locations %}
                                 {% if location==sel_loc %}
                                     <option value="{{location}}" SELECTED>{{location}}</option>"
@@ -107,63 +108,47 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Pomični srednjak (h)</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Primijeni pomični srednjak na graf, prozor (window) = x u satima; npr. 24 za dnevne srednjake (x = 0 = off)">
-                                {{ form.rollingmean(class="form-control form-control-sm") }}</div>
-                        </div>
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">FFT analiza (1/h)</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Primijeni FFT analizu, frekvencija = 1/x u satima; npr. 24 za parametar kojem se očekuje period fluktuacije od jednog dana (x = 0 = off)">
-                                {{ form.fftspacing(class="form-control form-control-sm") }}</div>
-                        </div>
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">FFT xmax</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Ograniči x os grafa FFT analize (FFT frekvencija), zadano i maksimum = 12">
-                                {{ form.fftxmax(class="form-control form-control-sm") }}</div>
+                    <div class="col-md-3">
+                        <div class="card-body card-no-padding">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="rollingmean" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Primijeni pomični srednjak na graf, prozor (window) = x u satima; npr. 24 za dnevne srednjake (x = 0 = off)">Pomični srednjak (h)</small>
+                                    {{ form.rollingmean(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="rollingsum" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Primijeni pomičnu sumu na graf, prozor (window) = x u satima (x = 0 = off)">Pomična suma (h)</small>
+                                    {{ form.rollingsum(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="fftspacing" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Primijeni FFT analizu, frekvencija = 1/x u satima; npr. 24 za parametar kojem se očekuje period fluktuacije od jednog dana (x = 0 = off)">FFT analiza (1/h)</small>
+                                    {{ form.fftspacing(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="fftxmax" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči x os grafa FFT analize (FFT frekvencija), zadano i maksimum = 12">FFT x<sub>max</sub></small>
+                                    {{ form.fftxmax(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Ymax (graf)</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">
-                                {{ form.ymaxplot(class="form-control form-control-sm") }}</div>
-                        </div>
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Ymin (graf)</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">
-                                {{ form.yminplot(class="form-control form-control-sm") }}</div>
-                        </div>
-                        <div class="input-group mb-1 input-group-sm">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Pomična suma (h)</span>
-                            </div>
-                            <div class="align-middle" data-toggle="tooltip"
-                                 title="Primijeni pomičnu sumu na graf, prozor (window) = x u satima (x = 0 = off)">
-                                {{ form.rollingsum(class="form-control form-control-sm") }}</div>
+                        <div class="card-body card-no-padding">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="ymaxplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">y<sub>max</sub></small>
+                                    {{ form.ymaxplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="yminplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">y<sub>min</sub></small>
+                                    {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </fieldset>
 
             <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-outline-primary") }}
             </div>
             {% if show_plot==True %}
                 <fieldset class="form-group">

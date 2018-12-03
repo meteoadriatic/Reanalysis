@@ -431,7 +431,7 @@ def statistics():
         fig.tight_layout()
         fig.autofmt_xdate(rotation=50, ha='center', which='both')
         ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+        ax.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
         if sel_param2 in parameters:
             plt.title(str(sel_param) + ', ' + str(sel_param2))
         else:
@@ -451,9 +451,9 @@ def statistics():
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
             if timespan < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.3, width=0.2)
+                ax.bar(df.index, df[sel_param], alpha=0.3, width=0.2, color='#772953')
             else:
-                ax.plot(df.index, df[sel_param])
+                ax.plot(df.index, df[sel_param], color='#772953')
             ax.set_ylim(bottom=0)
         elif sel_param == 'snow':
             if timespan < bigdata:
@@ -463,9 +463,9 @@ def statistics():
             ax.set_ylim(bottom=0)
         elif sel_param == 'rdrmax':
             if timespan < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.3, color='red', width=0.2)
+                ax.bar(df.index, df[sel_param], alpha=0.3, color='#E95420', width=0.2)
             else:
-                ax.plot(df.index, df[sel_param], color='red')
+                ax.plot(df.index, df[sel_param], color='#E95420')
             ax.set_ylim(bottom=0)
         elif 'wdir_' in sel_param or 'VVEL' in sel_param:
             scatsiz=max((100000/(len(df.index))),50)
@@ -480,27 +480,27 @@ def statistics():
             ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'CAPE' in sel_param or 'shear' in sel_param:
-            ax.plot(df.index, df[sel_param], color='red')
-            ax.fill_between(df.index, 0, df[sel_param], color='#FF9600', alpha=0.3)
+            ax.plot(df.index, df[sel_param], color='#E95420')
+            ax.fill_between(df.index, 0, df[sel_param], color='#E95420', alpha=0.3)
             ax.set_ylim(bottom=0)
         elif 'CIN' in sel_param:
             ax.plot(df.index, df[sel_param], color='#828282')
             ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
             ax.set_ylim(top=0)
         elif 'vtgrad' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#1A74B1')
-            ax.fill_between(df.index, df[sel_param], 0, color='#1A74B1', alpha=0.13)
+            ax.plot(df.index, df[sel_param], color='#77216F')
+            ax.fill_between(df.index, df[sel_param], 0, color='#77216F', alpha=0.13)
             ax.set_ylim(bottom=-0.01)
         else:
-            ax.plot(df.index, df[sel_param], color='#1A74B1')
+            ax.plot(df.index, df[sel_param], color='#77216F')
 
         # Plot secondary parameter
         if sel_param2 in parameters:
             if samey:
-                ax.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.28)
+                ax.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
             else:
                 ax2 = ax.twinx()
-                ax2.plot(df.index, df2[sel_param2], color='#000000', linewidth=0.28)
+                ax2.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
 
         # Include linear trendline
         if trendline:
@@ -509,8 +509,8 @@ def statistics():
             z = np.polyfit(x, y, 1)
             p = np.poly1d(z)
             y_mean = [np.mean(df[sel_param])] * len(df.index)
-            ax.plot(df.index, p(x), color='black')
-            ax.plot(df.index, y_mean, linestyle='--', color='teal')
+            ax.plot(df.index, p(x), color='#2C001E')
+            ax.plot(df.index, y_mean, linestyle='--', color='#AEA79F')
             plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
 
         myxticks(sel_startdate, sel_enddate)
@@ -544,8 +544,8 @@ def statistics():
             plt.title('FFT analiza frekvencije')
             formatter1 = EngFormatter(places=1, sep="\N{THIN SPACE}")
             ax1.yaxis.set_major_formatter(formatter1)
-            ax1.plot(fftfreq[i], y_psd[i])
-            ax1.fill_between(fftfreq[i], 0, y_psd[i], color='#41B3C5', alpha=0.3)
+            ax1.plot(fftfreq[i], y_psd[i], color='#5E2750')
+            ax1.fill_between(fftfreq[i], 0, y_psd[i], color='#77216F', alpha=0.3)
             plt.xlim(0, fftxmax)
             plt.ylim(bottom=0)
 
@@ -554,9 +554,9 @@ def statistics():
             y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
             df[sel_param].plot(ax=ax, lw=1)
             ax4 = ax1.twinx().twiny()
-            ax4.plot_date(df.index, y_slow, '-', color='green', lw='1')
+            ax4.plot_date(df.index, y_slow, '-', color='#AEA79F', lw='1')
             ax4.set_axisbelow(True)
-            ax4.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+            ax4.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
             plt.xlim(sel_startdate, sel_enddate)
             plt.margins(x=0.0, y=0.3)
             ax4.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))

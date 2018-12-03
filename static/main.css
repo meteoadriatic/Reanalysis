@@ -95,6 +95,11 @@ a.article-title:hover {
     padding: 0;
 }
 
+.narrow-form-control-fr {
+    width: 60px;
+    float: right;
+}
+
 /*
 .navbar {
     background-color: #2c3e50;
