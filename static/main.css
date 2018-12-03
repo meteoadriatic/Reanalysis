@@ -8,6 +8,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+/*
 .bg-steel {
   background-color: #5f788a;
 }
@@ -23,6 +24,7 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+*/
 
 .content-section {
   background: #ffffff;
@@ -79,11 +81,22 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
-.form-check-input {
+
+.form-check {
   -webkit-appearance: checkbox;
   -moz-appearance: none;
 }
 
+.li-no-padding {
+    padding-left: 0;
+}
+
+.card-no-padding {
+    padding: 0;
+}
+
+/*
 .navbar {
     background-color: #2c3e50;
 }
+*/

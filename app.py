@@ -218,6 +218,7 @@ def statistics():
         rollingmean = int(form.rollingmean.data)
         rollingsum = int(form.rollingsum.data)
         cumsum = form.cumsum.data
+        disablestats = form.disablestats.data
         rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
         fftxmax = int(form.fftxmax.data)
@@ -340,59 +341,57 @@ def statistics():
         stats = [list(a) for a in zip(statskeys, statsvalues)]
         '''
 
-        # Perform detailed statistics on dataset
-        from stats import variation, gmean, hmean, kurtosis, skew
-        from scipy.stats import linregress
+        if disablestats == False:
+            # Perform detailed statistics on dataset
+            from stats import variation, gmean, hmean, kurtosis, skew
+            from scipy.stats import linregress
 
-        max_pri = df[sel_param].max()
-        min_pri = df[sel_param].min()
-        if min_pri > 0:
-            gmean_pri = gmean(df[sel_param].tolist()).round(1)
-            hmean_pri = hmean(df[sel_param].tolist()).round(1)
-        mean_pri = df[sel_param].mean().round(1)
-        sum_pri = df[sel_param].sum().round(1)
-        std_pri = df[sel_param].std().round(2)
-        variation_pri = variation(df[sel_param].tolist()).round(3)
-        kurtosis_pri = round(kurtosis(df[sel_param].tolist()), 3)
-        skew_pri = round(skew(df[sel_param].tolist()), 3)
-        median_pri = df[sel_param].median().round(1)
-        count_pri = df[sel_param].count()
-        var_pri =  df[sel_param].var().round(1)
+            max_pri = df[sel_param].max()
+            min_pri = df[sel_param].min()
+            if min_pri > 0:
+                gmean_pri = gmean(df[sel_param].tolist()).round(1)
+                hmean_pri = hmean(df[sel_param].tolist()).round(1)
+            mean_pri = df[sel_param].mean().round(1)
+            sum_pri = df[sel_param].sum().round(1)
+            std_pri = df[sel_param].std().round(2)
+            variation_pri = variation(df[sel_param].tolist()).round(3)
+            kurtosis_pri = round(kurtosis(df[sel_param].tolist()), 3)
+            skew_pri = round(skew(df[sel_param].tolist()), 3)
+            median_pri = df[sel_param].median().round(1)
+            count_pri = df[sel_param].count()
+            var_pri =  df[sel_param].var().round(2)
 
-        x = mdates.date2num(df.index)
-        y = df[sel_param]
-        slope_pri, intercept_pri, r_value_pri, p_value_pri, std_err_pri = linregress(x, y)
-        slope_pri=round(slope_pri, 6)
-        std_err_pri=round(std_err_pri, 5)
+            x = mdates.date2num(df.index)
+            y = df[sel_param]
+            slope_pri, intercept_pri, r_value_pri, p_value_pri, std_err_pri = linregress(x, y)
+            slope_pri=round(slope_pri, 6)
+            std_err_pri=round(std_err_pri, 5)
 
-        #print(variation_pri, gmean_pri, hmean_pri, max_pri, min_pri, mean_pri, sum_pri, std_pri, kurtosis_pri, skew_pri)
+            if sel_param2 in parameters:
+                max_sec = df2[sel_param2].max()
+                min_sec = df2[sel_param2].min()
+                if min_sec > 0:
+                    gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
+                    hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
+                mean_sec = df2[sel_param2].mean().round(1)
+                sum_sec = df2[sel_param2].sum().round(1)
+                std_sec = df2[sel_param2].std().round(2)
+                variation_sec = variation(df2[sel_param2].tolist()).round(3)
+                kurtosis_sec = round(kurtosis(df2[sel_param2].tolist()), 3)
+                skew_sec = round(skew(df2[sel_param2].tolist()), 3)
+                median_sec = df2[sel_param2].median().round(1)
+                count_sec = df2[sel_param2].count()
+                var_sec = df2[sel_param2].var().round(2)
 
-        if sel_param2 in parameters:
-            max_sec = df2[sel_param2].max()
-            min_sec = df2[sel_param2].min()
-            if min_sec > 0:
-                gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
-                hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
-            mean_sec = df2[sel_param2].mean().round(1)
-            sum_sec = df2[sel_param2].sum().round(1)
-            std_sec = df2[sel_param2].std().round(2)
-            variation_sec = variation(df2[sel_param2].tolist()).round(3)
-            kurtosis_sec = round(kurtosis(df2[sel_param2].tolist()), 3)
-            skew_sec = round(skew(df2[sel_param2].tolist()), 3)
-            median_sec = df2[sel_param2].median().round(1)
-            count_sec = df2[sel_param2].count()
-            var_sec = df2[sel_param2].var().round(1)
+                x = mdates.date2num(df2.index)
+                y = df2[sel_param2]
+                slope_sec, intercept_sec, r_value_sec, p_value_sec, std_err_sec = linregress(x, y)
+                slope_sec=round(slope_sec, 6)
+                std_err_sec = round(std_err_sec, 5)
 
-            x = mdates.date2num(df2.index)
-            y = df2[sel_param2]
-            slope_sec, intercept_sec, r_value_sec, p_value_sec, std_err_sec = linregress(x, y)
-            slope_sec=round(slope_sec, 6)
-            std_err_sec = round(std_err_sec, 5)
-
-            corr_pearson = df[sel_param].corr(df2[sel_param2], method='pearson').round(3)
-            corr_kendall = df[sel_param].corr(df2[sel_param2], method='kendall').round(3)
-            corr_spearman = df[sel_param].corr(df2[sel_param2], method='spearman').round(3)
-
+                corr_pearson = df[sel_param].corr(df2[sel_param2], method='pearson').round(3)
+                corr_kendall = df[sel_param].corr(df2[sel_param2], method='kendall').round(3)
+                corr_spearman = df[sel_param].corr(df2[sel_param2], method='spearman').round(3)
 
 
         # Apply rolling sum to plot data if requested by user

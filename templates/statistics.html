@@ -51,41 +51,60 @@
                     <div class="col-md-2">
                         {{ form.startdate(class="form-control") }}
                         <small id="firststartdate" class="form-text text-muted text-center">
-                            Najraniji dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
+                            Prvi dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
+                        <div class="card-body card-no-padding mt-3">
+                            <h7 class="card-title">Opcije tablice:</h7>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-2 li-no-padding">
+                                    {{ form.removetbllimit }}
+                                    <small id="removetbllimit" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         {{ form.enddate(class="form-control") }}
                         <small id="laststartdate" class="form-text text-muted text-center">
-                            Najkasniji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
+                            Zadnji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
+                        <div class="card-body card-no-padding mt-3">
+                            <h7 class="card-title">Opcije statistike:</h7>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-2 li-no-padding">
+                                    {{ form.disablestats }}
+                                    <small id="disablestats" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Isključi računanje statističkih elemenata (brže?)">Isključi statistiku</small>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.trendline(class="form-control") }}</div>
-                            <small id="trendline" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži linearni trend i srednjak na grafu">Trend</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.removetbllimit(class="form-control") }}</div>
-                            <small id="removetbllimit" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.largeplot(class="form-control") }}</div>
-                            <small id="largeplot" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Udvostruči visinu grafa">Veći graf</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.samey(class="form-control") }}</div>
-                            <small id="samey" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Koristi zajedničku y os za primarni i sekundarni paramtetar">Zajednička y os</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.distribution(class="form-control") }}</div>
-                            <small id="distribution" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži razdiobu podataka na histogramu">Razdioba</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.rollcorr(class="form-control") }}</div>
-                            <small id="rollcorr" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra. Koristi pomični srednjak za reduciranje šuma.">Korelacija prim/sek</small>
-                        </div>
-                        <div class="form-check">
-                            <div class="form-check-input d-inline-block align-middle">{{ form.cumsum(class="form-control") }}</div>
-                            <small id="cumsum" class="d-inline-block form-text text-muted" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
+                        <div class="card-body card-no-padding">
+                            <h7 class="card-title">Opcije grafa:</h7>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.trendline }}
+                                    <small id="trendline" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži linearni trend i srednjak na grafu">Trend</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.largeplot }}
+                                    <small id="largeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Udvostruči visinu grafa">Veći grafovi</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.samey }}
+                                    <small id="samey" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Koristi zajedničku y os za primarni i sekundarni paramtetar">Zajednička y os</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.distribution }}
+                                    <small id="distribution" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka na histogramu">Razdioba</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.rollcorr }}
+                                    <small id="rollcorr" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra. Napomena: koristi pomični srednjak za reduciranje šuma.">Korelacija prim/sek</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.cumsum }}
+                                    <small id="cumsum" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-md-2">
