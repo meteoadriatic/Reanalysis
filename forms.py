@@ -20,6 +20,8 @@ class StatisticsForm(FlaskForm):
     samey = BooleanField('samey')
     rollcorr = BooleanField('rollcorr')
     cumsum = BooleanField('cumsum')
+    relativeplot = BooleanField('relativeplot')
+    relativekde = BooleanField('relativekde')
     disablestats = BooleanField('disablestats')
     rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
     rollingsum = IntegerField('rollingsum', default=0, validators=[InputRequired()])

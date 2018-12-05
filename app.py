@@ -48,6 +48,7 @@ def statistics():
     plot_url = ''
     fft_url = ''
     dist_url = ''
+    relplot_url = ''
     rollcorr_url = ''
     show_plot = False
     form = StatisticsForm()
@@ -218,6 +219,8 @@ def statistics():
         rollingmean = int(form.rollingmean.data)
         rollingsum = int(form.rollingsum.data)
         cumsum = form.cumsum.data
+        relativeplot = form.relativeplot.data
+        relativekde = form.relativekde.data
         disablestats = form.disablestats.data
         rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
@@ -502,6 +505,7 @@ def statistics():
                 ax2 = ax.twinx()
                 ax2.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
 
+
         # Include linear trendline
         if trendline:
             x = mdates.date2num(df.index)
@@ -522,6 +526,47 @@ def statistics():
         plot_url = base64.b64encode(img.getvalue()).decode()
         plt.close(fig)
         show_plot=True
+
+        # Relative plot
+        if (sel_param2 in parameters) and (relativeplot == True):
+
+            if relativekde == False:
+                fig_rel, ax_rel = plt.subplots(sharex=False, sharey=False, clear=True)
+                if largeplot == True:
+                    fig_rel.set_size_inches(12.5, 10.0)
+                else:
+                    fig_rel.set_size_inches(12.5, 5.0)
+                fig_rel.tight_layout()
+
+                ax_rel.set_axisbelow(True)
+                plt.title('Odnos primarnog i sekundarnog parametra')
+                ax_rel.scatter(df[sel_param], df2[sel_param2], color='#E95420', alpha=0.4, s=100)
+                plt.xlabel(sel_param)
+                plt.ylabel(sel_param2)
+                ax_rel.set_axisbelow(True)
+                ax_rel.grid(linestyle='--', linewidth='0.4', color='#77216F', alpha=0.5, axis='both')
+            else:
+                import seaborn as sns
+                from matplotlib import rcParams
+                if largeplot == True:
+                    rcParams['figure.figsize'] = 12.5, 10.0
+                else:
+                    rcParams['figure.figsize'] = 12.5, 5.0
+                x = df[sel_param]
+                y = df2[sel_param2]
+                cmap = sns.cubehelix_palette(light=1, as_cmap=True)
+                kdeplot = sns.kdeplot(x, y,
+                                      cmap=cmap,
+                                      shade=True,
+                                      shade_lowest=False).set_title('Odnos primarnog i sekundarnog parametra')
+                fig_rel = kdeplot.get_figure()
+
+            # Save plot into memory
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            relplot_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig_rel)
 
         # FFT
         if fftspacing != 0:
@@ -662,6 +707,7 @@ def statistics():
                            plot=plot_url,
                            fft=fft_url,
                            dist=dist_url,
+                           relplot=relplot_url,
                            rollcorr=rollcorr_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated,
