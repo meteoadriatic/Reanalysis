@@ -13,6 +13,8 @@ import numpy as np
 import params
 import io
 import base64
+import seaborn as sns
+sns.set_style("white")
 
 mysql = MySQL(app)
 
@@ -47,6 +49,9 @@ def statistics():
     samey = False
     distribution = False
     table_truncated = False
+    limit3d = False
+    min3d = ''
+    max3d = ''
     plot_url = ''
     fft_url = ''
     dist_url = ''
@@ -232,6 +237,9 @@ def statistics():
         fftxmax = int(form.fftxmax.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
+        limit3d = int(form.limit3d.data)
+        min3d = int(form.min3d.data)
+        max3d = int(form.max3d.data)
         elevation3d = int(form.elevation3d.data)
         azimuth3d = int(form.azimuth3d.data)
 
@@ -595,6 +603,9 @@ def statistics():
             ax_3d.set_axisbelow(True)
             plt.title('3D graf zavisnosti trećeg parametra o primarnom i sekundarnom parametru')
 
+            if limit3d == True:
+                df3.mask((df3 < min3d) | (df3 > max3d), inplace=True)
+
             ax_3d.scatter(df[sel_param], df2[sel_param2], df3[sel_param3], c=scalarMap.to_rgba(df3[sel_param3]))
             ax_3d.set_xlabel(sel_param)
             ax_3d.set_ylabel(sel_param2)
@@ -737,7 +748,6 @@ def statistics():
                 ax_rel.set_axisbelow(True)
                 ax_rel.grid(linestyle='--', linewidth='0.4', color='#77216F', alpha=0.5, axis='both')
             else:
-                import seaborn as sns
                 sns.set_style("whitegrid", {'grid.linestyle': '--'})
                 from matplotlib import rcParams
                 if largeplot == True:

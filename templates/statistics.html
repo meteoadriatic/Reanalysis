@@ -137,20 +137,25 @@
                                     <small id="fftxmax" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči x os grafa FFT analize (FFT frekvencija), zadano i maksimum = 12">FFT x<sub>max</sub></small>
                                     {{ form.fftxmax(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.relativeplot }}
+                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao scatter plot.">Primarni/Sekundarni</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.relativekde }}
+                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim/Sek KDE</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.limit3d }}
+                                    <small id="limit3d" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Ograniči prikaz 3D parametra po minimalnoj i maksimalnoj vrijednosti. Potrebno je postaviti granične vrijednosti u poljima 3Dmin i 3Dmax.">Ograniči 3D parametar</small>
+                                </li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="card-body card-no-padding">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.relativeplot }}
-                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao scatter plot.">Primarni/Sekund.</small>
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.relativekde }}
-                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim/Sek KDE</small>
-                                </li>
+
                                 <li class="list-group-item py-1 li-no-padding">
                                     <small id="ymaxplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">y<sub>max</sub></small>
                                     {{ form.ymaxplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
@@ -166,6 +171,14 @@
                                 <li class="list-group-item py-1 li-no-padding">
                                     <small id="azimuth3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi azimut 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D azimut</small>
                                     {{ form.azimuth3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="max3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra do maksimalne vrijednosti">3D<sub>max</sub></small>
+                                    {{ form.max3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    <small id="min3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra od minimalne vrijednosti">3D<sub>min</sub></small>
+                                    {{ form.min3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
                             </ul>
                         </div>

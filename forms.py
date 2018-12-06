@@ -32,4 +32,7 @@ class StatisticsForm(FlaskForm):
     yminplot = StringField('yminplot', default='0', validators=[InputRequired()])
     elevation3d = StringField('elevation3d', default='45', validators=[InputRequired()])
     azimuth3d = StringField('azimuth3d', default='45', validators=[InputRequired()])
+    limit3d = BooleanField('limit3d')
+    min3d = StringField('min3d', default='0', validators=[InputRequired()])
+    max3d = StringField('max3d', default='0', validators=[InputRequired()])
     submit = SubmitField('Pošalji')
