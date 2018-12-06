@@ -37,8 +37,10 @@ def statistics():
     sql_response = ''
     sel_param = ''
     sel_param2 = ''
+    sel_param3 = ''
     sel_param_bak = ''
     sel_param2_bak = ''
+    sel_param3_bak = ''
     sel_loc = ''
     trendline = False
     removetbllimit = False
@@ -50,6 +52,7 @@ def statistics():
     dist_url = ''
     relplot_url = ''
     rollcorr_url = ''
+    plot3d_url = ''
     show_plot = False
     form = StatisticsForm()
     cur = mysql.connection.cursor()
@@ -191,6 +194,7 @@ def statistics():
 
     form.parameters.choices = parametersUF
     form.parameters2.choices = parametersUF
+    form.parameters3.choices = parametersUF
 
     # Retrieve first and last datetime from database
     cur.execute('''
@@ -209,6 +213,7 @@ def statistics():
         sel_loc = form.locations.data
         sel_param = form.parameters.data
         sel_param2 = form.parameters2.data
+        sel_param3 = form.parameters3.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
@@ -227,6 +232,8 @@ def statistics():
         fftxmax = int(form.fftxmax.data)
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
+        elevation3d = int(form.elevation3d.data)
+        azimuth3d = int(form.azimuth3d.data)
 
         # Define optimal xticks relative to requested time range
         def myxticks(sel_startdate, sel_enddate):
@@ -265,6 +272,7 @@ def statistics():
 
         sel_param_bak = sel_param
         sel_param2_bak = sel_param2
+        sel_param3_bak = sel_param3
 
         if sel_param in paramsUFmap.values():
             for key, value in paramsUFmap.items():
@@ -275,6 +283,11 @@ def statistics():
             for key, value in paramsUFmap.items():
                 if value == sel_param2:
                     sel_param2 = key
+
+        if sel_param3 in paramsUFmap.values():
+            for key, value in paramsUFmap.items():
+                if value == sel_param3:
+                    sel_param3 = key
 
         # Primary parameter processing
         # Separate functions for parameters derived from raw sql data
@@ -330,8 +343,37 @@ def statistics():
                 df2.columns = [sel_param2]
 
             # Erroneous data cleanup
-            if sel_param == 'precave':
+            if sel_param2 == 'precave':
                 df2.clip(lower=0, upper=None, inplace=True)
+
+        if sel_param3 in parameters:
+            # Secondary parameter processing
+            # Separate functions for parameters derived from raw sql data
+            paramsfunc = getattr(params, sel_param3, None)
+            if sel_param3 in appends:
+                df3 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
+                sql_response3 = tuple(zip(df3.index, df3[sel_param3]))
+            else:
+            # Retrieve data from MySQL
+                SQL3 = '''  SELECT datetime, {}
+                            FROM model_output
+                            WHERE location=%s
+                            AND datetime > %s
+                            AND datetime <= %s
+                            ORDER BY datetime
+                    '''.format(sel_param3)
+                cur.execute(SQL3, (sel_loc, sel_startdate, sel_enddate))
+                sql_response3 = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                df3 = pd.DataFrame(list(sql_response3))
+                df3.set_index([0], inplace=True)
+                df3.index.name = ''
+                df3.columns = [sel_param3]
+
+            # Erroneous data cleanup
+            if sel_param3 == 'precave':
+                df3.clip(lower=0, upper=None, inplace=True)
 
         '''
         Old statistics based on pandas df.describe(), not used anymore:
@@ -527,46 +569,46 @@ def statistics():
         plt.close(fig)
         show_plot=True
 
-        # Relative plot
-        if (sel_param2 in parameters) and (relativeplot == True):
 
-            if relativekde == False:
-                fig_rel, ax_rel = plt.subplots(sharex=False, sharey=False, clear=True)
-                if largeplot == True:
-                    fig_rel.set_size_inches(12.5, 10.0)
-                else:
-                    fig_rel.set_size_inches(12.5, 5.0)
-                fig_rel.tight_layout()
 
-                ax_rel.set_axisbelow(True)
-                plt.title('Odnos primarnog i sekundarnog parametra')
-                ax_rel.scatter(df[sel_param], df2[sel_param2], color='#E95420', alpha=0.4, s=100)
-                plt.xlabel(sel_param)
-                plt.ylabel(sel_param2)
-                ax_rel.set_axisbelow(True)
-                ax_rel.grid(linestyle='--', linewidth='0.4', color='#77216F', alpha=0.5, axis='both')
+
+        # 3D plot
+        if (sel_param2 in parameters) and (sel_param3 in parameters):
+            # This import registers the 3D projection, but is otherwise unused.
+            from mpl_toolkits import mplot3d
+            import matplotlib.cm as cmx
+            from matplotlib import rcParams
+            if largeplot == True:
+                rcParams['figure.figsize'] = 12.5, 11.0
             else:
-                import seaborn as sns
-                from matplotlib import rcParams
-                if largeplot == True:
-                    rcParams['figure.figsize'] = 12.5, 10.0
-                else:
-                    rcParams['figure.figsize'] = 12.5, 5.0
-                x = df[sel_param]
-                y = df2[sel_param2]
-                cmap = sns.cubehelix_palette(light=1, as_cmap=True)
-                kdeplot = sns.kdeplot(x, y,
-                                      cmap=cmap,
-                                      shade=True,
-                                      shade_lowest=False).set_title('Odnos primarnog i sekundarnog parametra')
-                fig_rel = kdeplot.get_figure()
+                rcParams['figure.figsize'] = 12.5, 7.0
+
+            cm = plt.get_cmap('jet')
+            cNorm = matplotlib.colors.Normalize(vmin=min(df3[sel_param3]), vmax=max(df3[sel_param3]))
+            scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=cm)
+
+            fig_3d = plt.figure()
+            ax_3d = plt.axes(projection='3d')
+            ax_3d.view_init(elevation3d, azimuth3d)
+
+            fig_3d.tight_layout()
+            ax_3d.set_axisbelow(True)
+            plt.title('3D graf zavisnosti trećeg parametra o primarnom i sekundarnom parametru')
+
+            ax_3d.scatter(df[sel_param], df2[sel_param2], df3[sel_param3], c=scalarMap.to_rgba(df3[sel_param3]))
+            ax_3d.set_xlabel(sel_param)
+            ax_3d.set_ylabel(sel_param2)
+            ax_3d.set_zlabel(sel_param3)
+            scalarMap.set_array(df3[sel_param3])
+            fig_3d.colorbar(scalarMap, shrink=0.5, aspect=5)
 
             # Save plot into memory
             img = io.BytesIO()
             plt.savefig(img, bbox_inches='tight', format='png')
             img.seek(0)
-            relplot_url = base64.b64encode(img.getvalue()).decode()
-            plt.close(fig_rel)
+            plot3d_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig_3d)
+
 
         # FFT
         if fftspacing != 0:
@@ -676,6 +718,49 @@ def statistics():
             pass
 
 
+        # Relative plot
+        if (sel_param2 in parameters) and (relativeplot == True):
+
+            if relativekde == False:
+                fig_rel, ax_rel = plt.subplots(sharex=False, sharey=False, clear=True)
+                if largeplot == True:
+                    fig_rel.set_size_inches(12.5, 10.0)
+                else:
+                    fig_rel.set_size_inches(12.5, 5.0)
+                fig_rel.tight_layout()
+
+                ax_rel.set_axisbelow(True)
+                plt.title('Odnos primarnog i sekundarnog parametra')
+                ax_rel.scatter(df[sel_param], df2[sel_param2], color='#E95420', alpha=0.4, s=100)
+                plt.xlabel(sel_param)
+                plt.ylabel(sel_param2)
+                ax_rel.set_axisbelow(True)
+                ax_rel.grid(linestyle='--', linewidth='0.4', color='#77216F', alpha=0.5, axis='both')
+            else:
+                import seaborn as sns
+                sns.set_style("whitegrid", {'grid.linestyle': '--'})
+                from matplotlib import rcParams
+                if largeplot == True:
+                    rcParams['figure.figsize'] = 12.5, 10.0
+                else:
+                    rcParams['figure.figsize'] = 12.5, 5.0
+                x = df[sel_param]
+                y = df2[sel_param2]
+                cmap = sns.cubehelix_palette(light=1, as_cmap=True)
+                kdeplot = sns.kdeplot(x, y,
+                                      cmap=cmap,
+                                      shade=True,
+                                      shade_lowest=False).set_title('Odnos primarnog i sekundarnog parametra')
+                fig_rel = kdeplot.get_figure()
+
+            # Save plot into memory
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            relplot_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig_rel)
+
+
         # Limit number of table rows if user requested large amount of data
         if removetbllimit == False:
             if len(sql_response) > 720:
@@ -701,6 +786,7 @@ def statistics():
                            table_columns=['Datum i sat', sel_param_bak, sel_param2_bak],
                            sel_param=sel_param_bak,
                            sel_param2=sel_param2_bak,
+                           sel_param3=sel_param3_bak,
                            sel_loc=sel_loc,
                            trendline=trendline,
                            removetbllimit=removetbllimit,
@@ -708,6 +794,7 @@ def statistics():
                            fft=fft_url,
                            dist=dist_url,
                            relplot=relplot_url,
+                           plot3d=plot3d_url,
                            rollcorr=rollcorr_url,
                            show_plot=show_plot,
                            table_truncated=table_truncated,

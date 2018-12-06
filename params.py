@@ -239,8 +239,8 @@ def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
     df.set_index([0], inplace=True)
     df['vtgrad_1000_850'] = np.nan
     df.loc[(df['vtgrad_1000_850'].isnull()), 'vtgrad_1000_850'] = \
-        (df[2]-df[1])/(df[4]-df[3]).round(4)
-    df = df[['vtgrad_1000_850']]
+        (df[2]-df[1])/(df[4]-df[3])
+    df = df[['vtgrad_1000_850']].round(4)
     df.index.name = ''
 
     return df

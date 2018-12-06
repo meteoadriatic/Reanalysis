@@ -43,6 +43,16 @@
                             {% endif %}
                         {% endfor %}
                     </select>
+                    <select name="parameters3" class="form-control">
+                        <option value="" SELECTED>3D parametar (opcionalno)</option>"
+                        {% for parameter in parameters %}
+                            {% if parameter==sel_param3 %}
+                                <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
+                            {% else %}
+                                <option value="{{parameter}}">{{parameter}}</option>"
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                     </div>
                 </div>
             </fieldset>
@@ -134,6 +144,14 @@
                         <div class="card-body card-no-padding">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.relativeplot }}
+                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao scatter plot.">Primarni/Sekund.</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.relativekde }}
+                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim/Sek KDE</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
                                     <small id="ymaxplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">y<sub>max</sub></small>
                                     {{ form.ymaxplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
@@ -142,12 +160,12 @@
                                     {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.relativeplot }}
-                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao scatter plot.">Primarni/Sekund.</small>
+                                    <small id="elevation3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi nagib 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D nagib</small>
+                                    {{ form.elevation3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.relativekde }}
-                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim/Sek KDE</small>
+                                    <small id="azimuth3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi azimut 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D azimut</small>
+                                    {{ form.azimuth3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                 </li>
                             </ul>
                         </div>
@@ -165,6 +183,9 @@
                         <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
                         {% if relplot != '' %}
                         <img class="img-fluid" src="data:image/png;base64, {{relplot}}" alt="Relative plot">
+                        {% endif %}
+                        {% if plot3d != '' %}
+                        <img class="img-fluid" src="data:image/png;base64, {{plot3d}}" alt="3D plot">
                         {% endif %}
                         {% if rollcorr != '' %}
                             <img class="img-fluid" src="data:image/png;base64, {{rollcorr}}" alt="Rolling correlation">
