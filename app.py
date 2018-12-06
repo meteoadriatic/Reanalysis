@@ -50,6 +50,7 @@ def statistics():
     distribution = False
     table_truncated = False
     limit3d = False
+    plot3dbar = False
     min3d = ''
     max3d = ''
     plot_url = ''
@@ -238,6 +239,7 @@ def statistics():
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
         limit3d = form.limit3d.data
+        plot3dbar = form.plot3dbar.data
         min3d = float(form.min3d.data)
         max3d = float(form.max3d.data)
         elevation3d = int(form.elevation3d.data)
@@ -587,9 +589,9 @@ def statistics():
             import matplotlib.cm as cmx
             from matplotlib import rcParams
             if largeplot == True:
-                rcParams['figure.figsize'] = 12.5, 11.0
+                rcParams['figure.figsize'] = 12.5, 10.0
             else:
-                rcParams['figure.figsize'] = 12.5, 7.0
+                rcParams['figure.figsize'] = 12.5, 6.0
 
             cm = plt.get_cmap('jet')
             cNorm = matplotlib.colors.Normalize(vmin=min(df3[sel_param3]), vmax=max(df3[sel_param3]))
@@ -606,12 +608,29 @@ def statistics():
             if limit3d == True:
                 df3.mask((df3 < min3d) | (df3 > max3d), inplace=True)
 
-            ax_3d.scatter(df[sel_param], df2[sel_param2], df3[sel_param3], c=scalarMap.to_rgba(df3[sel_param3]))
+            if plot3dbar == False:
+                ax_3d.scatter(df[sel_param], df2[sel_param2], df3[sel_param3],
+                            c=scalarMap.to_rgba(df3[sel_param3]))
+            else:
+                dataset_length = df[sel_param].size
+                datarange_sel_param = df[sel_param].max() - df[sel_param].min()
+                datarange_sel_param2 = df2[sel_param2].max() - df2[sel_param2].min()
+                datarange_sel_param3 = df3[sel_param3].max() - df3[sel_param3].min()
+                #dx = (datarange_sel_param / 35) * np.ones(dataset_length) * (df3[sel_param3]/datarange_sel_param3)
+                #dy = (datarange_sel_param2 / 35) * np.ones(dataset_length) * (df3[sel_param3]/datarange_sel_param3)
+                dx = (datarange_sel_param / 60) * np.ones(dataset_length)
+                dy = (datarange_sel_param2 / 60) * np.ones(dataset_length)
+                ax_3d.bar3d(df[sel_param], df2[sel_param2], np.zeros(dataset_length), dx, dy, df3[sel_param3],
+                            color=scalarMap.to_rgba(df3[sel_param3]))
+
             ax_3d.set_xlabel(sel_param)
             ax_3d.set_ylabel(sel_param2)
             ax_3d.set_zlabel(sel_param3)
             scalarMap.set_array(df3[sel_param3])
-            fig_3d.colorbar(scalarMap, shrink=0.5, aspect=5)
+            if plot3dbar == False:
+                fig_3d.colorbar(scalarMap, shrink=0.5, aspect=5)
+            else:
+                fig_3d.colorbar(scalarMap, shrink=0.5, aspect=15)
 
             # Save plot into memory
             img = io.BytesIO()

@@ -139,48 +139,65 @@
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativeplot }}
-                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao scatter plot.">Primarni/Sekundarni</small>
+                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao raspršni graf (scatter plot).">Odnos primarni/sekundarni</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativekde }}
-                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim/Sek KDE</small>
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.limit3d }}
-                                    <small id="limit3d" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Ograniči prikaz 3D parametra po minimalnoj i maksimalnoj vrijednosti. Potrebno je postaviti granične vrijednosti u poljima 3Dmin i 3Dmax.">Ograniči 3D parametar</small>
+                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Primarni/sekundarni KDE</small>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="card-body card-no-padding">
-                            <ul class="list-group list-group-flush">
-
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="ymaxplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">y<sub>max</sub></small>
-                                    {{ form.ymaxplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="yminplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">y<sub>min</sub></small>
-                                    {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="elevation3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi nagib 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D nagib</small>
-                                    {{ form.elevation3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="azimuth3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi azimut 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D azimut</small>
-                                    {{ form.azimuth3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="max3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra do maksimalne vrijednosti">3D<sub>max</sub></small>
-                                    {{ form.max3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    <small id="min3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra od minimalne vrijednosti">3D<sub>min</sub></small>
-                                    {{ form.min3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                </li>
-                            </ul>
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-basic" role="tabpanel" aria-labelledby="v-pills-basic-tab">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="ymaxplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os grafa (x = 0 = automatski prema maksimumu iz podataka)">y<sub>max</sub></small>
+                                            {{ form.ymaxplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="yminplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">y<sub>min</sub></small>
+                                            {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade show" id="v-pills-advanced" role="tabpanel" aria-labelledby="v-pills-advanced-tab">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.limit3d }}
+                                            <small id="limit3d" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Ograniči prikaz 3D parametra po minimalnoj i maksimalnoj vrijednosti. Potrebno je postaviti granične vrijednosti u poljima 3Dmin i 3Dmax.">Ograniči 3D</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.plot3dbar }}
+                                            <small id="plot3dbar" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Koristi stupčani (bar) 3D graf - vizualno jasniji prikaz u većini slučajeva, ali mnogo sporije nego raspršni (scatter).">Stupčani 3D, sporo</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="elevation3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi nagib 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D nagib</small>
+                                            {{ form.elevation3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="azimuth3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Postavi azimut 3D grafa na ovu vrijednost u stupnjevima (zadano = 45)">3D azimut</small>
+                                            {{ form.azimuth3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="max3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra do maksimalne vrijednosti">3D<sub>max</sub></small>
+                                            {{ form.max3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="min3d" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči prikaz 3D parametra od minimalne vrijednosti">3D<sub>min</sub></small>
+                                            {{ form.min3d(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-plot-options">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                          <a class="nav-link active micro-text" id="v-pills-basic-tab" data-toggle="pill" href="#v-pills-basic" role="tab" aria-controls="v-pills-basic" aria-selected="true">Osnovno</a>
+                          <a class="nav-link micro-text" id="v-pills-advanced-tab" data-toggle="pill" href="#v-pills-advanced" role="tab" aria-controls="v-pills-advanced" aria-selected="false">3D opcije</a>
                         </div>
                     </div>
                 </div>
