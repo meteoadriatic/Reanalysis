@@ -238,8 +238,8 @@ def statistics():
         ymaxplot = int(form.ymaxplot.data)
         yminplot = int(form.yminplot.data)
         limit3d = form.limit3d.data
-        min3d = form.min3d.data
-        max3d = form.max3d.data
+        min3d = float(form.min3d.data)
+        max3d = float(form.max3d.data)
         elevation3d = int(form.elevation3d.data)
         azimuth3d = int(form.azimuth3d.data)
 
