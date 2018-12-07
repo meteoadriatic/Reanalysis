@@ -35,184 +35,47 @@ def locations():
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-    # Initialize variables, form and mysql connection
-    sql_response = ''
-    sel_param = ''
-    sel_param2 = ''
-    sel_param3 = ''
-    sel_param_bak = ''
-    sel_param2_bak = ''
-    sel_param3_bak = ''
-    sel_loc = ''
-    trendline = False
-    removetbllimit = False
-    samey = False
-    distribution = False
-    table_truncated = False
-    limit3d = False
-    plot3dbar = False
-    min3d = ''
-    max3d = ''
-    plot_url = ''
-    fft_url = ''
-    dist_url = ''
-    relplot_url = ''
-    rollcorr_url = ''
-    plot3d_url = ''
-    show_plot = False
-    form = StatisticsForm()
     cur = mysql.connection.cursor()
+    form = StatisticsForm()
 
-    max_pri='N/A'
-    min_pri='N/A'
-    mean_pri='N/A'
-    max_sec='N/A'
-    min_sec='N/A'
-    mean_sec='N/A'
-    std_pri='N/A'
-    std_sec='N/A'
-    gmean_pri='N/A'
-    hmean_pri='N/A'
-    gmean_sec='N/A'
-    hmean_sec='N/A'
-    variation_pri='N/A'
-    variation_sec='N/A'
-    sum_pri='N/A'
-    sum_sec='N/A'
-    kurtosis_pri='N/A'
-    kurtosis_sec='N/A'
-    skew_pri='N/A'
-    skew_sec='N/A'
-    count_pri='N/A'
-    count_sec='N/A'
-    median_pri='N/A'
-    median_sec='N/A'
-    var_pri='N/A'
-    var_sec='N/A'
-    corr_pearson='N/A'
-    corr_kendall='N/A'
-    corr_spearman='N/A'
-    slope_pri='N/A'
-    intercept_pri='N/A' 
-    r_value_pri='N/A'
-    p_value_pri='N/A'
-    std_err_pri='N/A'
-    slope_sec='N/A'
-    intercept_sec='N/A' 
-    r_value_sec='N/A'
-    p_value_sec='N/A'
-    std_err_sec='N/A'
+    # Set variables' defaults
+    sql_response = sel_param = sel_param2 = sel_param3 = sel_param_bak = sel_param2_bak = sel_param3_bak = sel_loc = ''
+    min3d =  max3d = plot_url = fft_url = dist_url = relplot_url = rollcorr_url = plot3d_url = ''
+    trendline = removetbllimit = samey = distribution = table_truncated = limit3d = plot3dbar = show_plot = False
+    max_pri = min_pri = mean_pri = max_sec = min_sec = mean_sec = std_pri = std_sec = gmean_pri = hmean_pri = 'N/A'
+    gmean_sec = hmean_sec = variation_pri = variation_sec = sum_pri = sum_sec = kurtosis_pri = kurtosis_sec = 'N/A'
+    skew_pri = skew_sec = count_pri = count_sec = median_pri = median_sec = var_pri = var_sec = corr_pearson = 'N/A'
+    corr_kendall = corr_spearman = slope_pri = intercept_pri = r_value_pri = p_value_pri = std_err_pri = 'N/A'
+    slope_sec = intercept_sec = r_value_sec = p_value_sec = std_err_sec = 'N/A'
 
     # Retrieve locations and populate select field
-    cur.execute('''
-        SELECT * FROM locations;
-    ''')
-    locations = cur.fetchall()
-    locations = [i[0] for i in locations]
+    from functions import retrieve_locations
+    locations = retrieve_locations(cur=cur)
     form.locations.choices = locations
 
     # Retrieve parameters and populate select field
-    cur.execute('''
-        SELECT COLUMN_NAME  
-        FROM information_schema.COLUMNS  
-        WHERE TABLE_SCHEMA='reanalysis_test'    
-        AND TABLE_NAME='model_output'    
-        AND IS_NULLABLE='YES';
-    ''')
-    parameters = cur.fetchall()
-    parameters = [i[0] for i in parameters]
+    from functions import retrieve_parameters
+    parameters = retrieve_parameters(cur)
 
     # Append calculated parameters (params.py)
-    appends = ['wspd_10', 'wdir_10',
-               'wspd_850', 'wdir_850',
-               'wspd_500', 'wdir_500',
-               'wspd_300', 'wdir_300',
-               'shear_10_500',
-               'shear_850_500',
-               'shear_10_850',
-               'vtgrad_1000_850',
-               'vtgrad_850_500',
-               'thickness_1000_500',
-               'thickness_1000_850',
-               'thickness_850_500',
-               'snow']
-    parameters = parameters + appends
+    from functions import append_calculates
+    parameters, appends = append_calculates(parameters)
     parametersUF = parameters
 
     # Map user-friendly parameter names to parameters
-    paramsUFmap = {'vtgrad_850_500': 'Vert. grad. temp. 850/500hPa',
-                   'wdir_10': 'Smjer vjetra 10m',
-                   'shear_10_850': 'Smicanje vjetra 10m/850hPa',
-                   'wspd_500': 'Brzina vjetra 500hPa',
-                   'HGT_0C': 'Visina 0°C nad tlom',
-                   'wdir_300': 'Smjer vjetra 300hPa',
-                   'wspd_850': 'Brzina vjetra 850hPa',
-                   'precave': 'Satna količina oborine',
-                   'rdrmax': 'Maks. radarska reflektivnost',
-                   'VVEL_900': 'Vertikalno strujanje 900hPa',
-                   'SNOD_SF': 'Visina snježnog pokrivača',
-                   'wdir_500': 'Smjer vjetra 500hPa',
-                   'UGRD_10': 'U komponenta vjetra 10m',
-                   'VVEL_700': 'Vertikalno strujanje 700hPa',
-                   'DLWRF_SF': 'Dolazno dugovalno zračenje',
-                   'wdir_850': 'Smjer vjetra 850hPa',
-                   'wspd_300': 'Brzina vjetra 300hPa',
-                   'RH_700': 'Relativna vlažnost 700hPa',
-                   'GUST_SF': 'Brzina udara vjetra',
-                   'DSWRF_SF': 'Dolazno kratkovalno zračenje',
-                   'UGRD_300': 'U komponenta vjetra 300hPa',
-                   'TMP_1000': 'Temperatura 1000hPa',
-                   'TMP_SF': 'Temperatura površine tla',
-                   'HGT_500': 'Visina 500hPa',
-                   'HGT_1000': 'Visina 1000hPa',
-                   'shear_850_500': 'Smicanje vjetra 850/500hPa',
-                   'TMP_850': 'Temperatura 850hPa',
-                   'RH_2': 'Relativna vlažnost 2m',
-                   'UGRD_850': 'U komponenta vjetra 850hPa',
-                   'VGRD_500': 'V komponenta vjetra 500hPa',
-                   'TMP_2': 'Temperatura 2m',
-                   'CIN_180': 'Konvektivna inhibicija mixed layer',
-                   'precpct': 'Vjerojatnost pojave satne oborine',
-                   'HGT_850': 'Visina 850hPa',
-                   'MSLET_SF': 'Tlak zraka reduciran na 0m',
-                   'ULWRF_SF': 'Odlazno dugovalno zračenje',
-                   'DPT_2': 'Temperatura rosišta 2m',
-                   'VGRD_850': 'V komponenta vjetra 850hPa',
-                   'PWAT_CLM': 'Oboriva voda',
-                   'VGRD_300': 'V komponenta vjetra 300hPa',
-                   'vtgrad_1000_850': 'Vert. grad. temp. 1000/850hPa',
-                   'wspd_10': 'Brzina vjetra 10m',
-                   'VGRD_10': 'V komponenta vjetra 10m',
-                   'cldave': 'Postotak ukupne naoblake',
-                   'shear_10_500': 'Smicanje vjetra 10m/500hPa',
-                   'UGRD_500': 'U komponenta vjetra 500hPa',
-                   'USWRF_SF': 'Odlazno kratkovalno zračenje',
-                   'CAPE_180': 'Konv. pot. ener. mixed layer',
-                   'TMP_500': 'Temperatura 500hPa',
-                   'thickness_1000_500': 'Rel. topografija 1000/500hPa',
-                   'thickness_1000_850': 'Rel. topografija 1000/850hPa',
-                   'thickness_850_500': 'Rel. topografija 850/500hPa',
-                   'snow': 'Satna količina snijega'}
-
+    from functions import user_friendly_paramnames
+    paramsUFmap = user_friendly_paramnames()
     for x in parametersUF:
         if x in paramsUFmap:
             parametersUF = [i.replace(x, paramsUFmap.get(x)) for i in parametersUF]
-
     form.parameters.choices = parametersUF
     form.parameters2.choices = parametersUF
     form.parameters3.choices = parametersUF
 
     # Retrieve first and last datetime from database
-    cur.execute('''
-        SELECT datetime FROM model_output ORDER BY datetime LIMIT 1;
-    ''')
-    first_date = cur.fetchall()
-    cur.execute('''
-        SELECT datetime FROM model_output ORDER BY datetime DESC LIMIT 1;
-    ''')
-    last_date = cur.fetchall()
-
-
+    from functions import first_available_date, last_available_date
+    first_date = first_available_date(cur)
+    last_date = last_available_date(cur)
 
     if form.is_submitted():
         # Retrieve user choice of location and parameter from select forms
@@ -872,6 +735,62 @@ def map():
     return render_template('map.html',
                            title='Karta',
                            locs=response)
+
+
+@app.route('/compare_locations')
+def compare_locations():
+    cur = mysql.connection.cursor()
+    form = StatisticsForm()
+
+    # Set variables' defaults
+    sql_response = sel_param = sel_param_bak = sel_loc = ''
+
+    # Retrieve locations and populate select field
+    from functions import retrieve_locations
+    locations = retrieve_locations(cur=cur)
+    form.locations.choices = locations
+
+    # Retrieve parameters and populate select field
+    from functions import retrieve_parameters
+    parameters = retrieve_parameters(cur)
+
+    # Append calculated parameters (params.py)
+    from functions import append_calculates
+    parameters, appends = append_calculates(parameters)
+    parametersUF = parameters
+
+    # Map user-friendly parameter names to parameters
+    from functions import user_friendly_paramnames
+    paramsUFmap = user_friendly_paramnames()
+    for x in parametersUF:
+        if x in paramsUFmap:
+            parametersUF = [i.replace(x, paramsUFmap.get(x)) for i in parametersUF]
+    form.parameters.choices = parametersUF
+
+    # Retrieve first and last datetime from database
+    from functions import first_available_date, last_available_date
+    first_date = first_available_date(cur)
+    last_date = last_available_date(cur)
+
+    if form.is_submitted():
+        # Retrieve user choice of location and parameter from select forms
+        sel_loc = form.locations.data
+        sel_param = form.parameters.data
+        sel_startdate = form.startdate.data
+        sel_enddate = form.enddate.data
+
+    return render_template('compare_locations.html',
+                           title='Usporedba lokacija',
+                           form=form,
+                           locations=locations,
+                           parameters=parametersUF,
+                           first_date=first_date,
+                           last_date=last_date,
+                           table_columns=['Datum i sat', sel_param_bak],
+                           sel_param=sel_param_bak,
+                           sel_loc=sel_loc
+                           )
+
 
 @app.route('/documentation')
 def documentation():

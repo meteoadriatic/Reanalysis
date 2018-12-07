@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <div class="content-section">
+
+        <form method="POST">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-1">Odaberi lokacije i parametar</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        <select name="locations" class="form-control">
+                            <option value="Zagreb" SELECTED>Zagreb</option>"
+                            {% for location in locations %}
+                                {% if location==sel_loc %}
+                                    <option value="{{location}}" SELECTED>{{location}}</option>"
+                                {% else %}
+                                    <option value="{{location}}">{{location}}</option>"
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                    <select name="parameters" class="form-control">
+                        {% for parameter in parameters %}
+                            {% if parameter==sel_param %}
+                                <option value="{{parameter}}" SELECTED>{{parameter}}</option>"
+                            {% else %}
+                                <option value="{{parameter}}">{{parameter}}</option>"
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-1">Odaberi početni/završni datum i opcije</legend>
+                <div class="row">
+                    <div class="col-md-2">
+                        {{ form.startdate(class="form-control") }}
+                        <small id="firststartdate" class="form-text text-muted text-center">
+                            Prvi dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.enddate(class="form-control") }}
+                        <small id="laststartdate" class="form-text text-muted text-center">
+                            Zadnji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-primary") }}
+            </div>
+            {% if show_plot==True %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-2">Grafički prikaz</legend>
+                    <div class="container">
+                        <img class="img-fluid" src="data:image/png;base64, {{plot}}" alt="Plot">
+                        {% if relplot != '' %}
+                        <img class="img-fluid" src="data:image/png;base64, {{relplot}}" alt="Relative plot">
+                        {% endif %}
+                        {% if plot3d != '' %}
+                        <img class="img-fluid" src="data:image/png;base64, {{plot3d}}" alt="3D plot">
+                        {% endif %}
+                        {% if rollcorr != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{rollcorr}}" alt="Rolling correlation">
+                        {% endif %}
+                        {% if fft != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{fft}}" alt="FFT">
+                        {% endif %}
+                        {% if dist != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{dist}}" alt="Distribution">
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-2">Statistički podaci</legend>
+                    <div class="container">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                          <li class="nav-item">
+                            <a class="nav-link active" id="stats1-tab" data-toggle="tab" href="#stats1" role="tab" aria-controls="stats1" aria-selected="true">Osnovno</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats2-tab" data-toggle="tab" href="#stats2" role="tab" aria-controls="stats2" aria-selected="false">Srednje vrijednosti</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats3-tab" data-toggle="tab" href="#stats3" role="tab" aria-controls="stats3" aria-selected="false">Pokazatelji promjenjivosti</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats4-tab" data-toggle="tab" href="#stats4" role="tab" aria-controls="stats4" aria-selected="false">Ostalo</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="stats5-tab" data-toggle="tab" href="#stats5" role="tab" aria-controls="stats5" aria-selected="false">Korelacije Pri/Sek</a>
+                          </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                          <div class="tab-pane fade show active" id="stats1" role="tabpanel" aria-labelledby="Statistika(1)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }}</th>
+                                  <th scope="col">{{ sel_param2 }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Broj zapisa</th>
+                                  <td>{{ count_pri }}</td>
+                                  <td>{{ count_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Maksimalna vrijednost</th>
+                                  <td>{{ max_pri }}</td>
+                                  <td>{{ max_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Minimalna vrijednost</th>
+                                  <td>{{ min_pri }}</td>
+                                  <td>{{ min_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Aritmetička sredina</th>
+                                  <td>{{ mean_pri }}</td>
+                                  <td>{{ mean_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Standardna devijacija</th>
+                                  <td>{{ std_pri }}</td>
+                                  <td>{{ std_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Suma</th>
+                                  <td>{{ sum_pri }}</td>
+                                  <td>{{ sum_sec }}</td>
+                                </tr>
+                                  <th scope="row">Trend</th>
+                                  <td>{{ slope_pri }}</td>
+                                  <td>{{ slope_sec }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats2" role="tabpanel" aria-labelledby="Statistika(2)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }}</th>
+                                  <th scope="col">{{ sel_param2 }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Aritmetička sredina</th>
+                                  <td>{{ mean_pri }}</td>
+                                  <td>{{ mean_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Median</th>
+                                  <td>{{ median_pri }}</td>
+                                  <td>{{ median_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Geometrijska sredina</th>
+                                  <td>{{ gmean_pri }}</td>
+                                  <td>{{ gmean_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Harmonijska sredina</th>
+                                  <td>{{ hmean_pri }}</td>
+                                  <td>{{ hmean_sec }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats3" role="tabpanel" aria-labelledby="Statistika(3)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }}</th>
+                                  <th scope="col">{{ sel_param2 }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Standardna devijacija</th>
+                                  <td>{{ std_pri }}</td>
+                                  <td>{{ std_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Standardna pogreška</th>
+                                  <td>{{ std_err_pri }}</td>
+                                  <td>{{ std_err_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Koeficijent promjenjivosti</th>
+                                  <td>{{ variation_pri }}</td>
+                                  <td>{{ variation_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Varijanca</th>
+                                  <td>{{ var_pri }}</td>
+                                  <td>{{ var_sec }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats4" role="tabpanel" aria-labelledby="Statistika(4)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }}</th>
+                                  <th scope="col">{{ sel_param2 }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Koeficijent zaobljenosti</th>
+                                  <td>{{ kurtosis_pri }}</td>
+                                  <td>{{ kurtosis_sec }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Mjera asimetrije</th>
+                                  <td>{{ skew_pri }}</td>
+                                  <td>{{ skew_sec }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="stats5" role="tabpanel" aria-labelledby="Statistika(5)">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Statistički element</th>
+                                  <th scope="col">{{ sel_param }} / {{ sel_param2 }}  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Pearson korelacija</th>
+                                  <td>{{ corr_pearson }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Kendall korelacija</th>
+                                  <td>{{ corr_kendall }}</td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Spearman korelacija</th>
+                                  <td>{{ corr_spearman }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-2">Tablični ispis podataka</legend>
+                    {% if table_truncated == True %}
+                        <div class="alert alert-warning" role="alert">Tablica je ograničena na 30 dana.</div>
+                    {% endif %}
+                    <div class="container">
+                        <table class="table table-striped table-hover table-sm"
+                               data-pagination="true"
+                               data-search="true"
+                               data-toggle="table"
+                               data-page-size="50"
+                               data-page-list="[10, 50, 100, 500, 1000]">
+                            <thead>
+                                <tr>
+                                    {% for item in table_columns %}
+                                    <th scope="col" data-sortable="true">{{ item }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in response %}
+                                <tr>
+                                    <td>
+                                        {{ item[0].strftime("%Y-%m-%d %H") }}
+                                    </td>
+                                    <td>
+                                        {{ item[1] }}
+                                    </td>
+                                    <td>
+                                        {{ item[3] }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            {% endif %}
+        </form>
+
+    </div>
+
+
+
+
+
+
+{% endblock %}
