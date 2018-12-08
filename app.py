@@ -744,6 +744,7 @@ def compare_locations():
 
     # Set variables' defaults
     sql_response = sel_param = sel_param_bak = sel_loc = sel_loc2 = sel_loc3 = sel_loc4 = sel_loc5 = ''
+    compareplot_url = ''
     show_plot = False
 
     # Retrieve locations and populate select field
