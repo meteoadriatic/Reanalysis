@@ -737,13 +737,14 @@ def map():
                            locs=response)
 
 
-@app.route('/compare_locations')
+@app.route('/compare_locations', methods=['GET', 'POST'])
 def compare_locations():
     cur = mysql.connection.cursor()
     form = StatisticsForm()
 
     # Set variables' defaults
-    sql_response = sel_param = sel_param_bak = sel_loc = ''
+    sql_response = sel_param = sel_param_bak = sel_loc = sel_loc2 = sel_loc3 = sel_loc4 = sel_loc5 = ''
+    show_plot = False
 
     # Retrieve locations and populate select field
     from functions import retrieve_locations
@@ -775,9 +776,127 @@ def compare_locations():
     if form.is_submitted():
         # Retrieve user choice of location and parameter from select forms
         sel_loc = form.locations.data
+        sel_loc2 = form.locations2.data
+        sel_loc3 = form.locations3.data
+        sel_loc4 = form.locations4.data
+        sel_loc5 = form.locations5.data
         sel_param = form.parameters.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
+
+        sel_param_bak = sel_param
+
+        if sel_param in paramsUFmap.values():
+            for key, value in paramsUFmap.items():
+                if value == sel_param:
+                    sel_param = key
+
+        if sel_loc in locations:
+            # Retrieve data from MySQL
+            SQL = '''   SELECT datetime, {}
+                        FROM model_output
+                        WHERE location=%s
+                        AND datetime > %s
+                        AND datetime <= %s
+                        ORDER BY datetime
+                '''.format(sel_param)
+            cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
+            sql_response = cur.fetchall()
+
+            # Load MySQL response into pandas dataframe
+            df = pd.DataFrame(list(sql_response))
+            df.set_index([0], inplace=True)
+            df.index.name = ''
+            df.columns = [sel_loc]
+
+        if sel_loc2 in locations:
+            # Retrieve data from MySQL
+            SQL = '''   SELECT datetime, {}
+                        FROM model_output
+                        WHERE location=%s
+                        AND datetime > %s
+                        AND datetime <= %s
+                        ORDER BY datetime
+                '''.format(sel_param)
+            cur.execute(SQL, (sel_loc2, sel_startdate, sel_enddate))
+            sql_response = cur.fetchall()
+
+            # Load MySQL response into pandas dataframe
+            dfB = pd.DataFrame(list(sql_response))
+            dfB.set_index([0], inplace=True)
+            dfB.index.name = ''
+            dfB.columns = [sel_loc2]
+            df = pd.merge(df, dfB, left_index=True, right_index=True)
+
+            if sel_loc3 in locations:
+                # Retrieve data from MySQL
+                SQL = '''   SELECT datetime, {}
+                            FROM model_output
+                            WHERE location=%s
+                            AND datetime > %s
+                            AND datetime <= %s
+                            ORDER BY datetime
+                    '''.format(sel_param)
+                cur.execute(SQL, (sel_loc3, sel_startdate, sel_enddate))
+                sql_response = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                dfB = pd.DataFrame(list(sql_response))
+                dfB.set_index([0], inplace=True)
+                dfB.index.name = ''
+                dfB.columns = [sel_loc3]
+                df = pd.merge(df, dfB, left_index=True, right_index=True)
+
+            if sel_loc4 in locations:
+                # Retrieve data from MySQL
+                SQL = '''   SELECT datetime, {}
+                            FROM model_output
+                            WHERE location=%s
+                            AND datetime > %s
+                            AND datetime <= %s
+                            ORDER BY datetime
+                    '''.format(sel_param)
+                cur.execute(SQL, (sel_loc4, sel_startdate, sel_enddate))
+                sql_response = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                dfB = pd.DataFrame(list(sql_response))
+                dfB.set_index([0], inplace=True)
+                dfB.index.name = ''
+                dfB.columns = [sel_loc4]
+                df = pd.merge(df, dfB, left_index=True, right_index=True)
+
+            if sel_loc5 in locations:
+                # Retrieve data from MySQL
+                SQL = '''   SELECT datetime, {}
+                            FROM model_output
+                            WHERE location=%s
+                            AND datetime > %s
+                            AND datetime <= %s
+                            ORDER BY datetime
+                    '''.format(sel_param)
+                cur.execute(SQL, (sel_loc5, sel_startdate, sel_enddate))
+                sql_response = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                dfB = pd.DataFrame(list(sql_response))
+                dfB.set_index([0], inplace=True)
+                dfB.index.name = ''
+                dfB.columns = [sel_loc5]
+                df = pd.merge(df, dfB, left_index=True, right_index=True)
+
+            ax = df.plot(figsize=(12.5, 10), title='Grafička usporedba lokacija po odabranom parametru')
+            fig = ax.get_figure()
+            ax.set_ylabel(sel_param_bak)
+
+            # Save plot into memory
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            compareplot_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig)
+            show_plot = True
+
 
     return render_template('compare_locations.html',
                            title='Usporedba lokacija',
@@ -788,7 +907,13 @@ def compare_locations():
                            last_date=last_date,
                            table_columns=['Datum i sat', sel_param_bak],
                            sel_param=sel_param_bak,
-                           sel_loc=sel_loc
+                           sel_loc=sel_loc,
+                           sel_loc2=sel_loc2,
+                           sel_loc3=sel_loc3,
+                           sel_loc4=sel_loc4,
+                           sel_loc5=sel_loc5,
+                           compareplot=compareplot_url,
+                           show_plot=show_plot
                            )
 
 

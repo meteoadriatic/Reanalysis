@@ -8,7 +8,11 @@ class SQLForm(FlaskForm):
     submit = SubmitField('Pošalji')
 
 class StatisticsForm(FlaskForm):
-    locations = SelectField('locations', default='Zadar')
+    locations = SelectField('locations')
+    locations2 = SelectField('locations2')
+    locations3 = SelectField('locations3')
+    locations4 = SelectField('locations4')
+    locations5 = SelectField('locations5')
     parameters = SelectField('parameters')
     parameters2 = SelectField('parameters2')
     parameters3 = SelectField('parameters3')
