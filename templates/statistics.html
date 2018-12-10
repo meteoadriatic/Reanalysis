@@ -64,11 +64,13 @@
                         <small id="firststartdate" class="form-text text-muted text-center">
                             Prvi dostupni datum: {{first_date[0][0].strftime("%Y-%m-%d")}}</small>
                         <div class="card-body card-no-padding mt-3">
-                            <h7 class="card-title">Opcije tablice:</h7>
+                            <h7 class="card-title">Definicija uzorka:</h7>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item py-2 li-no-padding">
-                                    {{ form.removetbllimit }}
-                                    <small id="removetbllimit" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
+                                    {{ form.resampleperiod(class="li-no-padding small") }}
+                                </li>
+                                <li class="list-group-item py-2 li-no-padding">
+                                    {{ form.resamplehow(class="li-no-padding small") }}
                                 </li>
                             </ul>
                         </div>
@@ -77,6 +79,15 @@
                         {{ form.enddate(class="form-control") }}
                         <small id="laststartdate" class="form-text text-muted text-center">
                             Zadnji dostupni datum: {{last_date[0][0].strftime("%Y-%m-%d")}}</small>
+                        <div class="card-body card-no-padding mt-3">
+                            <h7 class="card-title">Opcije tablice:</h7>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item py-2 li-no-padding">
+                                    {{ form.removetbllimit }}
+                                    <small id="removetbllimit" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Omogući prikazivanje cijele tablice bez limita">Tablica bez limita</small>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="card-body card-no-padding mt-3">
                             <h7 class="card-title">Opcije statistike:</h7>
                             <ul class="list-group list-group-flush">

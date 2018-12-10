@@ -107,6 +107,8 @@ def statistics():
         max3d = float(form.max3d.data)
         elevation3d = int(form.elevation3d.data)
         azimuth3d = int(form.azimuth3d.data)
+        resampleperiod = form.resampleperiod.data
+        resamplehow = form.resamplehow.data
 
         # Define optimal xticks relative to requested time range
         def myxticks(sel_startdate, sel_enddate):
@@ -163,7 +165,7 @@ def statistics():
                     sel_param3 = key
 
         # Primary parameter processing
-        # Separate functions for parameters derived from raw sql data
+        # Functions for additional parameters derived from raw sql data in params.py
         paramsfunc = getattr(params, sel_param, None)
         if sel_param in appends:
             df = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
@@ -189,10 +191,17 @@ def statistics():
             # Erroneous data cleanup
             if sel_param == 'precave':
                 df.clip(lower=0, upper=None, inplace=True)
+                sql_response = tuple(zip(df.index, df[sel_param]))
+
+        # Resample data if requested
+        if resampleperiod != 'Off':
+            df = df.groupby(pd.TimeGrouper(resampleperiod))[sel_param].agg([resamplehow]).round(1)
+            df.columns = [sel_param]
+            sql_response = tuple(zip(df.index, df[sel_param]))
 
         if sel_param2 in parameters:
             # Secondary parameter processing
-            # Separate functions for parameters derived from raw sql data
+            # Functions for additional parameters derived from raw sql data in params.py
             paramsfunc = getattr(params, sel_param2, None)
             if sel_param2 in appends:
                 df2 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
@@ -215,17 +224,23 @@ def statistics():
                 df2.index.name = ''
                 df2.columns = [sel_param2]
 
-            # Erroneous data cleanup
-            if sel_param2 == 'precave':
-                df2.clip(lower=0, upper=None, inplace=True)
+                # Erroneous data cleanup
+                if sel_param2 == 'precave':
+                    df2.clip(lower=0, upper=None, inplace=True)
+                    sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
+
+            # Resample data if requested
+            if resampleperiod != 'Off':
+                df2 = df2.groupby(pd.TimeGrouper(resampleperiod))[sel_param2].agg([resamplehow]).round(1)
+                df2.columns = [sel_param2]
+                sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
 
         if sel_param3 in parameters:
-            # Secondary parameter processing
-            # Separate functions for parameters derived from raw sql data
+            # 3D parameter processing
+            # Functions for additional parameters derived from raw sql data in params.py
             paramsfunc = getattr(params, sel_param3, None)
             if sel_param3 in appends:
                 df3 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
-                sql_response3 = tuple(zip(df3.index, df3[sel_param3]))
             else:
             # Retrieve data from MySQL
                 SQL3 = '''  SELECT datetime, {}
@@ -244,9 +259,14 @@ def statistics():
                 df3.index.name = ''
                 df3.columns = [sel_param3]
 
-            # Erroneous data cleanup
-            if sel_param3 == 'precave':
-                df3.clip(lower=0, upper=None, inplace=True)
+                # Erroneous data cleanup
+                if sel_param3 == 'precave':
+                    df3.clip(lower=0, upper=None, inplace=True)
+
+            # Resample data if requested
+            if resampleperiod != 'Off':
+                df3 = df3.groupby(pd.TimeGrouper(resampleperiod))[sel_param3].agg([resamplehow]).round(1)
+                df3.columns = [sel_param3]
 
         '''
         Old statistics based on pandas df.describe(), not used anymore:

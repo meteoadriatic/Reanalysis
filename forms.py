@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField
+from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField, RadioField
 from datetime import datetime
 from wtforms.validators import InputRequired
 
@@ -40,4 +40,8 @@ class StatisticsForm(FlaskForm):
     plot3dbar = BooleanField('plot3dbar')
     min3d = StringField('min3d', default='0', validators=[InputRequired()])
     max3d = StringField('max3d', default='0', validators=[InputRequired()])
+    resampleperiod = SelectField(choices=[('Off','Satni'),('D','Dnevni'),('M','Mjesečni'),('Y','Godišnji')],
+                                 default='Satni')
+    resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma')],
+                              default='mean')
     submit = SubmitField('Pošalji')
