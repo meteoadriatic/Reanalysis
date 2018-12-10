@@ -45,7 +45,7 @@ def user_friendly_paramnames():
                    'HGT_0C': 'Visina 0°C nad tlom',
                    'wdir_300': 'Smjer vjetra 300hPa',
                    'wspd_850': 'Brzina vjetra 850hPa',
-                   'precave': 'Satna količina oborine',
+                   'precave': 'Akumulirana količina oborine',
                    'rdrmax': 'Maks. radarska reflektivnost',
                    'VVEL_900': 'Vertikalno strujanje 900hPa',
                    'SNOD_SF': 'Visina snježnog pokrivača',
@@ -90,7 +90,7 @@ def user_friendly_paramnames():
                    'thickness_1000_500': 'Rel. topografija 1000/500hPa',
                    'thickness_1000_850': 'Rel. topografija 1000/850hPa',
                    'thickness_850_500': 'Rel. topografija 850/500hPa',
-                   'snow': 'Satna količina snijega'}
+                   'snow': 'Akumulirana količina snijega'}
     return paramsUFmap
 
 def first_available_date(cur):

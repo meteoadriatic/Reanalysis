@@ -384,23 +384,24 @@ def statistics():
         else:
             pass
 
-        timespan=(sel_enddate-sel_startdate).days
-        bigdata = 180
+        df_rows = df.shape[0]
+        #timespan=(sel_enddate-sel_startdate).days
+        bigdata = 100
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
-            if timespan < bigdata:
+            if df_rows < bigdata:
                 ax.bar(df.index, df[sel_param], alpha=0.3, width=0.2, color='#772953')
             else:
                 ax.plot(df.index, df[sel_param], color='#772953')
             ax.set_ylim(bottom=0)
         elif sel_param == 'snow':
-            if timespan < bigdata:
+            if df_rows < bigdata:
                 ax.bar(df.index, df[sel_param], alpha=0.3, color='#DC6EDC', width=0.2)
             else:
                 ax.plot(df.index, df[sel_param], color='#DC6EDC')
             ax.set_ylim(bottom=0)
         elif sel_param == 'rdrmax':
-            if timespan < bigdata:
+            if df_rows < bigdata:
                 ax.bar(df.index, df[sel_param], alpha=0.3, color='#E95420', width=0.2)
             else:
                 ax.plot(df.index, df[sel_param], color='#E95420')
