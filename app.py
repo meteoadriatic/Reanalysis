@@ -195,7 +195,7 @@ def statistics():
 
         # Resample data if requested
         if resampleperiod != 'Off':
-            df = df.groupby(pd.TimeGrouper(resampleperiod))[sel_param].agg([resamplehow]).round(1)
+            df = df.groupby(pd.Grouper(freq=resampleperiod))[sel_param].agg([resamplehow]).round(1)
             df.columns = [sel_param]
             sql_response = tuple(zip(df.index, df[sel_param]))
 
@@ -231,7 +231,7 @@ def statistics():
 
             # Resample data if requested
             if resampleperiod != 'Off':
-                df2 = df2.groupby(pd.TimeGrouper(resampleperiod))[sel_param2].agg([resamplehow]).round(1)
+                df2 = df2.groupby(pd.Grouper(freq=resampleperiod))[sel_param2].agg([resamplehow]).round(1)
                 df2.columns = [sel_param2]
                 sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
 
@@ -265,7 +265,7 @@ def statistics():
 
             # Resample data if requested
             if resampleperiod != 'Off':
-                df3 = df3.groupby(pd.TimeGrouper(resampleperiod))[sel_param3].agg([resamplehow]).round(1)
+                df3 = df3.groupby(pd.Grouper(freq=resampleperiod))[sel_param3].agg([resamplehow]).round(1)
                 df3.columns = [sel_param3]
 
         '''
@@ -386,23 +386,29 @@ def statistics():
 
         df_rows = df.shape[0]
         #timespan=(sel_enddate-sel_startdate).days
-        bigdata = 125
+        bigdata = 150
+        if resampleperiod == 'M':
+            barwidthfactor=28
+        elif resampleperiod == 'Y':
+            barwidthfactor=330
+        else:
+            barwidthfactor=0.9
         # Customize plot according to selected parameter
         if sel_param == 'precave' or sel_param == 'precpct':
             if df_rows < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.5, color='#772953')
+                ax.bar(df.index, df[sel_param], alpha=0.7, color='#772953', width=barwidthfactor)
             else:
                 ax.plot(df.index, df[sel_param], color='#772953')
             ax.set_ylim(bottom=0)
         elif sel_param == 'snow':
             if df_rows < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.5, color='#DC6EDC')
+                ax.bar(df.index, df[sel_param], alpha=0.7, color='#DC6EDC', width=barwidthfactor)
             else:
                 ax.plot(df.index, df[sel_param], color='#DC6EDC')
             ax.set_ylim(bottom=0)
         elif sel_param == 'rdrmax':
             if df_rows < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.5, color='#E95420')
+                ax.scatter(df.index, df[sel_param], alpha=0.9, color='#E95420')
             else:
                 ax.plot(df.index, df[sel_param], color='#E95420')
             ax.set_ylim(bottom=0)
