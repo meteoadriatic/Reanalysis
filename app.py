@@ -375,15 +375,6 @@ def statistics():
         else:
             plt.title(sel_param)
 
-        if ymaxplot != 0:
-            ax.set_ylim(top=ymaxplot)
-        else:
-            pass
-        if yminplot != 0:
-            ax.set_ylim(bottom=yminplot)
-        else:
-            pass
-
         df_rows = df.shape[0]
         #timespan=(sel_enddate-sel_startdate).days
         bigdata = 150
@@ -438,6 +429,15 @@ def statistics():
             ax.set_ylim(bottom=-0.01)
         else:
             ax.plot(df.index, df[sel_param], color='#77216F')
+
+        if ymaxplot != 0:
+            ax.set_ylim(top=ymaxplot)
+        else:
+            pass
+        if yminplot != 0:
+            ax.set_ylim(bottom=yminplot)
+        else:
+            pass
 
         # Plot secondary parameter
         if sel_param2 in parameters:
