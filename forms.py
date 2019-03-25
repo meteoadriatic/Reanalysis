@@ -28,8 +28,10 @@ class StatisticsForm(FlaskForm):
     relativeplot = BooleanField('relativeplot')
     relativekde = BooleanField('relativekde')
     disablestats = BooleanField('disablestats')
-    rollingmean = IntegerField('rollingmean', default=0, validators=[InputRequired()])
-    rollingsum = IntegerField('rollingsum', default=0, validators=[InputRequired()])
+    rollingwindow = IntegerField('rollingwindow', default=24, validators=[InputRequired()])
+    rollingmean = BooleanField('rollingmean')
+    rollingsum = BooleanField('rollingsum')
+    rollingstdev = BooleanField('rollingstdev')
     fftspacing = IntegerField('fftspacing', default=0, validators=[InputRequired()])
     fftxmax = IntegerField('fftxmax', default=12, validators=[InputRequired()])
     ymaxplot = StringField('ymaxplot', default='0', validators=[InputRequired()])
@@ -41,7 +43,7 @@ class StatisticsForm(FlaskForm):
     min3d = StringField('min3d', default='0', validators=[InputRequired()])
     max3d = StringField('max3d', default='0', validators=[InputRequired()])
     resampleperiod = SelectField(choices=[('Off','Satni'),('D','Dnevni'),('M','Mjesečni'),('Y','Godišnji')],
-                                 default='Satni')
+                                 default='D')
     resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma')],
                               default='mean')
     submit = SubmitField('Pošalji')

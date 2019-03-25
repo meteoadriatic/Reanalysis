@@ -90,8 +90,10 @@ def statistics():
         largeplot = form.largeplot.data
         distribution = form.distribution.data
         samey = form.samey.data
-        rollingmean = int(form.rollingmean.data)
-        rollingsum = int(form.rollingsum.data)
+        rollingwindow = int(form.rollingwindow.data)
+        rollingmean = form.rollingmean.data
+        rollingsum = form.rollingsum.data
+        rollingstdev = form.rollingstdev.data
         cumsum = form.cumsum.data
         relativeplot = form.relativeplot.data
         relativekde = form.relativekde.data
@@ -333,21 +335,31 @@ def statistics():
 
 
         # Apply rolling sum to plot data if requested by user
-        if rollingsum != 0:
-            df[sel_param] = df[sel_param].rolling(rollingsum).sum()
+        if rollingsum == True:
+            df[sel_param] = df[sel_param].rolling(rollingwindow).sum()
             df.dropna(inplace=True)
             if sel_param2 in parameters:
-                df2[sel_param2] = df2[sel_param2].rolling(rollingsum).sum()
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).sum()
                 df2.dropna(inplace=True)
         else:
             pass
 
         # Apply rolling mean to plot data if requested by user
-        if rollingmean != 0:
-            df[sel_param] = df[sel_param].rolling(rollingmean).mean()
+        if rollingmean == True:
+            df[sel_param] = df[sel_param].rolling(rollingwindow).mean()
             df.dropna(inplace=True)
             if sel_param2 in parameters:
-                df2[sel_param2] = df2[sel_param2].rolling(rollingmean).mean()
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).mean()
+                df2.dropna(inplace=True)
+        else:
+            pass
+
+        # Apply rolling standard deviation to plot data if requested by user
+        if rollingstdev == True:
+            df[sel_param] = df[sel_param].rolling(rollingwindow).std()
+            df.dropna(inplace=True)
+            if sel_param2 in parameters:
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).std()
                 df2.dropna(inplace=True)
         else:
             pass
