@@ -693,11 +693,21 @@ def statistics():
             plt.close(fig_rel)
 
 
-
         # Seasonal decompose plot
-        if decompose:
+        timespan = (sel_enddate - sel_startdate).days
+        if decompose and (timespan > 365):
+            dcmpsf=None
             import statsmodels.api as sm
-            dcmps = sm.tsa.seasonal_decompose(df[sel_param])
+            if resampleperiod == 'Off':
+                dcmpsf = 8760
+            if resampleperiod == 'D':
+                dcmpsf = 365
+            if resampleperiod == 'M':
+                dcmpsf = 12
+            if resampleperiod == 'Y':
+                dcmpsf = 1
+            print(dcmpsf)
+            dcmps = sm.tsa.seasonal_decompose(df[sel_param], freq=dcmpsf)
             fig_dcmps = dcmps.plot()
             fig_dcmps.set_size_inches(12.5, 10.0)
 
