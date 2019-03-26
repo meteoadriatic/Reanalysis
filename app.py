@@ -95,6 +95,7 @@ def statistics():
         rollingsum = form.rollingsum.data
         rollingstdev = form.rollingstdev.data
         cumsum = form.cumsum.data
+        decompose = form.decompose.data
         relativeplot = form.relativeplot.data
         relativekde = form.relativekde.data
         disablestats = form.disablestats.data
@@ -690,6 +691,25 @@ def statistics():
             img.seek(0)
             relplot_url = base64.b64encode(img.getvalue()).decode()
             plt.close(fig_rel)
+
+
+
+        # Seasonal decompose plot
+        if decompose:
+            import statsmodels.api as sm
+            dcmps = sm.tsa.seasonal_decompose(df[sel_param])
+            fig_dcmps = dcmps.plot()
+            fig_dcmps.set_size_inches(12.5, 10.0)
+
+            # Save plot into memory
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            relplot_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig_dcmps)
+
+        else:
+            pass
 
 
         # Limit number of table rows if user requested large amount of data

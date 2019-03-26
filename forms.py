@@ -25,6 +25,7 @@ class StatisticsForm(FlaskForm):
     samey = BooleanField('samey')
     rollcorr = BooleanField('rollcorr')
     cumsum = BooleanField('cumsum')
+    decompose = BooleanField('decompose')
     relativeplot = BooleanField('relativeplot')
     relativekde = BooleanField('relativekde')
     disablestats = BooleanField('disablestats')
