@@ -24,6 +24,7 @@ class StatisticsForm(FlaskForm):
     distribution = BooleanField('distribution')
     samey = BooleanField('samey')
     scatterplot = BooleanField('scatterplot')
+    scatteralpha = StringField('scatteralpha', default='1.0', validators=[InputRequired()])
     rollcorr = BooleanField('rollcorr')
     cumsum = BooleanField('cumsum')
     decompose = BooleanField('decompose')

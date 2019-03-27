@@ -91,6 +91,7 @@ def statistics():
         distribution = form.distribution.data
         samey = form.samey.data
         scatter_plot = form.scatterplot.data
+        scatter_alpha = float(form.scatteralpha.data)
         rollingwindow = int(form.rollingwindow.data)
         rollingmean = form.rollingmean.data
         rollingsum = form.rollingsum.data
@@ -402,7 +403,7 @@ def statistics():
             barwidthfactor=0.9
         # Customize plot according to selected parameter
         if custom_filter or scatter_plot:
-            ax.plot(df.index, df[sel_param], '.', color='#77216F')
+            ax.plot(df.index, df[sel_param], '.', color='#77216F', alpha=scatter_alpha)
         else:
             if sel_param == 'precave' or sel_param == 'precpct':
                 if df_rows < bigdata:
