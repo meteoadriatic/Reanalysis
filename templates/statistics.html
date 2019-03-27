@@ -222,6 +222,13 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="tab-pane fade show" id="v-pills-customfilter" role="tabpanel" aria-labelledby="v-pills-customfilter-tab">
+                                    <ul class="list-group list-group-flush">
+                                        {{ form.customfilter(class="form-control") }}
+                                        <small id="customfilter" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan SQL filter, dodatno na standardni upit definiran odabranim parametrima forme sučelja. NAPOMENA: Mnoge funkcije sustava neće biti moguće, zavisno o odabranom dodatnom filtriranju podataka. Ako se sustav sruši, pokušajte odabrati satno uzrokovanje i/ili isključivanje statistike.">
+                                            Primjer:  AND PWAT_CLM > 30</small>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,6 +238,7 @@
                           <a class="nav-link micro-text" id="v-pills-moving-tab" data-toggle="pill" href="#v-pills-moving" role="tab" aria-controls="v-pills-moving" aria-selected="false" data-toggle="tooltip" title="Pomične statistike (moving/rolling statistics)">Pomič. s.</a>
                           <a class="nav-link micro-text" id="v-pills-3d-tab" data-toggle="pill" href="#v-pills-3d" role="tab" aria-controls="v-pills-3d" aria-selected="false" data-toggle="tooltip" title="Opcije 3D grafičkog prikaza (potrebno odabrati uz primarni i sekundarni, dodatno i 3D paramatar)">3D opcije</a>
                           <a class="nav-link micro-text" id="v-pills-fft-tab" data-toggle="pill" href="#v-pills-fft" role="tab" aria-controls="v-pills-fft" aria-selected="false" data-toggle="tooltip" title="Opcije za Fast Fourier analizu">FFT an.</a>
+                          <a class="nav-link micro-text" id="v-pills-customfilter-tab" data-toggle="pill" href="#v-pills-customfilter" role="tab" aria-controls="v-pills-customfilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje">P. filter</a>
                         </div>
                     </div>
                 </div>

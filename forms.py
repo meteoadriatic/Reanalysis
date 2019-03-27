@@ -48,3 +48,4 @@ class StatisticsForm(FlaskForm):
     resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma')],
                               default='mean')
     submit = SubmitField('Pošalji')
+    customfilter = StringField('customfilter')

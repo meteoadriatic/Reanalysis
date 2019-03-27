@@ -112,6 +112,7 @@ def statistics():
         azimuth3d = int(form.azimuth3d.data)
         resampleperiod = form.resampleperiod.data
         resamplehow = form.resamplehow.data
+        custom_filter = form.customfilter.data
 
         # Define optimal xticks relative to requested time range
         def myxticks(sel_startdate, sel_enddate):
@@ -180,8 +181,9 @@ def statistics():
                         WHERE location=%s
                         AND datetime > %s
                         AND datetime <= %s
+                        {}
                         ORDER BY datetime
-                '''.format(sel_param)
+                '''.format(sel_param, custom_filter)
             cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
             sql_response = cur.fetchall()
 
@@ -398,50 +400,53 @@ def statistics():
         else:
             barwidthfactor=0.9
         # Customize plot according to selected parameter
-        if sel_param == 'precave' or sel_param == 'precpct':
-            if df_rows < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.7, color='#772953', width=barwidthfactor)
-            else:
-                ax.plot(df.index, df[sel_param], color='#772953')
-            ax.set_ylim(bottom=0)
-        elif sel_param == 'snow':
-            if df_rows < bigdata:
-                ax.bar(df.index, df[sel_param], alpha=0.7, color='#DC6EDC', width=barwidthfactor)
-            else:
-                ax.plot(df.index, df[sel_param], color='#DC6EDC')
-            ax.set_ylim(bottom=0)
-        elif sel_param == 'rdrmax':
-            if df_rows < bigdata:
-                ax.scatter(df.index, df[sel_param], alpha=0.9, color='#E95420')
-            else:
-                ax.plot(df.index, df[sel_param], color='#E95420')
-            ax.set_ylim(bottom=0)
-        elif 'wdir_' in sel_param or 'VVEL' in sel_param:
-            scatsiz=max((100000/(len(df.index))),50)
-            ax.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
-        elif 'SWRF' in sel_param or 'LWRF' in sel_param\
-                or 'RH_' in sel_param or 'PWAT' in sel_param:
-            ax.plot(df.index, df[sel_param])
-            ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
-            ax.set_ylim(bottom=0)
-        elif 'cldave' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#828282', alpha=0.31)
-            ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
-            ax.set_ylim(bottom=0)
-        elif 'CAPE' in sel_param or 'shear' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#E95420')
-            ax.fill_between(df.index, 0, df[sel_param], color='#E95420', alpha=0.3)
-            ax.set_ylim(bottom=0)
-        elif 'CIN' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#828282')
-            ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
-            ax.set_ylim(top=0)
-        elif 'vtgrad' in sel_param:
-            ax.plot(df.index, df[sel_param], color='#77216F')
-            ax.fill_between(df.index, df[sel_param], 0, color='#77216F', alpha=0.13)
-            ax.set_ylim(bottom=-0.01)
+        if custom_filter:
+            ax.plot(df.index, df[sel_param], '.', color='#77216F')
         else:
-            ax.plot(df.index, df[sel_param], color='#77216F')
+            if sel_param == 'precave' or sel_param == 'precpct':
+                if df_rows < bigdata:
+                    ax.bar(df.index, df[sel_param], alpha=0.7, color='#772953', width=barwidthfactor)
+                else:
+                    ax.plot(df.index, df[sel_param], color='#772953')
+                ax.set_ylim(bottom=0)
+            elif sel_param == 'snow':
+                if df_rows < bigdata:
+                    ax.bar(df.index, df[sel_param], alpha=0.7, color='#DC6EDC', width=barwidthfactor)
+                else:
+                    ax.plot(df.index, df[sel_param], color='#DC6EDC')
+                ax.set_ylim(bottom=0)
+            elif sel_param == 'rdrmax':
+                if df_rows < bigdata:
+                    ax.scatter(df.index, df[sel_param], alpha=0.9, color='#E95420')
+                else:
+                    ax.plot(df.index, df[sel_param], color='#E95420')
+                ax.set_ylim(bottom=0)
+            elif 'wdir_' in sel_param or 'VVEL' in sel_param:
+                scatsiz=max((100000/(len(df.index))),50)
+                ax.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
+            elif 'SWRF' in sel_param or 'LWRF' in sel_param\
+                    or 'RH_' in sel_param or 'PWAT' in sel_param:
+                ax.plot(df.index, df[sel_param])
+                ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
+                ax.set_ylim(bottom=0)
+            elif 'cldave' in sel_param:
+                ax.plot(df.index, df[sel_param], color='#828282', alpha=0.31)
+                ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
+                ax.set_ylim(bottom=0)
+            elif 'CAPE' in sel_param or 'shear' in sel_param:
+                ax.plot(df.index, df[sel_param], color='#E95420')
+                ax.fill_between(df.index, 0, df[sel_param], color='#E95420', alpha=0.3)
+                ax.set_ylim(bottom=0)
+            elif 'CIN' in sel_param:
+                ax.plot(df.index, df[sel_param], color='#828282')
+                ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
+                ax.set_ylim(top=0)
+            elif 'vtgrad' in sel_param:
+                ax.plot(df.index, df[sel_param], color='#77216F')
+                ax.fill_between(df.index, df[sel_param], 0, color='#77216F', alpha=0.13)
+                ax.set_ylim(bottom=-0.01)
+            else:
+                ax.plot(df.index, df[sel_param], color='#77216F')
 
         if ymaxplot != 0:
             ax.set_ylim(top=ymaxplot)
