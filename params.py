@@ -1,14 +1,15 @@
 import pandas as pd
 import numpy as np
 
-def wspd_10(cur, sel_loc, sel_startdate, sel_enddate):
+def wspd_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -21,14 +22,15 @@ def wspd_10(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wdir_10(cur, sel_loc, sel_startdate, sel_enddate):
+def wdir_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -41,14 +43,15 @@ def wdir_10(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wspd_850(cur, sel_loc, sel_startdate, sel_enddate):
+def wspd_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -61,14 +64,15 @@ def wspd_850(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wdir_850(cur, sel_loc, sel_startdate, sel_enddate):
+def wdir_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -81,14 +85,15 @@ def wdir_850(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wspd_500(cur, sel_loc, sel_startdate, sel_enddate):
+def wspd_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -101,14 +106,15 @@ def wspd_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wdir_500(cur, sel_loc, sel_startdate, sel_enddate):
+def wdir_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -121,14 +127,15 @@ def wdir_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wspd_300(cur, sel_loc, sel_startdate, sel_enddate):
+def wspd_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_300, VGRD_300
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -141,14 +148,15 @@ def wspd_300(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def wdir_300(cur, sel_loc, sel_startdate, sel_enddate):
+def wdir_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_300, VGRD_300
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -161,14 +169,15 @@ def wdir_300(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate):
+def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -182,14 +191,15 @@ def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate):
+def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -203,14 +213,15 @@ def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate):
+def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -224,14 +235,15 @@ def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
+def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, TMP_1000, TMP_850, HGT_1000, HGT_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -245,14 +257,15 @@ def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate):
+def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, TMP_850, TMP_500, HGT_850, HGT_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -266,14 +279,15 @@ def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate):
+def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, HGT_1000, HGT_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -286,14 +300,15 @@ def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
+def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, HGT_1000, HGT_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -306,14 +321,15 @@ def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate):
+def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, HGT_850, HGT_500
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -326,14 +342,15 @@ def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate):
 
     return df
 
-def snow(cur, sel_loc, sel_startdate, sel_enddate):
+def snow(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
     SQL = '''   SELECT datetime, precave, HGT_0C, TMP_2, RH_2, TMP_850
                 FROM model_output
                 WHERE location=%s
                 AND datetime > %s
                 AND datetime <= %s
+                {}
                 ORDER BY datetime
-        '''
+        '''.format(custom_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
