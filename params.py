@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def wspd_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wspd_10(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10
                 FROM model_output
                 WHERE location=%s
@@ -22,7 +22,7 @@ def wspd_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wdir_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wdir_10(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10
                 FROM model_output
                 WHERE location=%s
@@ -43,7 +43,7 @@ def wdir_10(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wspd_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wspd_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
@@ -64,7 +64,7 @@ def wspd_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wdir_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wdir_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
@@ -85,7 +85,7 @@ def wdir_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wspd_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wspd_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
@@ -106,7 +106,7 @@ def wspd_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wdir_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wdir_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
@@ -127,7 +127,7 @@ def wdir_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wspd_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wspd_300(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_300, VGRD_300
                 FROM model_output
                 WHERE location=%s
@@ -148,7 +148,7 @@ def wspd_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def wdir_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def wdir_300(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_300, VGRD_300
                 FROM model_output
                 WHERE location=%s
@@ -169,7 +169,7 @@ def wdir_300(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
@@ -191,7 +191,7 @@ def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_850, VGRD_850, UGRD_500, VGRD_500
                 FROM model_output
                 WHERE location=%s
@@ -213,7 +213,7 @@ def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, UGRD_10, VGRD_10, UGRD_850, VGRD_850
                 FROM model_output
                 WHERE location=%s
@@ -235,7 +235,7 @@ def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, TMP_1000, TMP_850, HGT_1000, HGT_850
                 FROM model_output
                 WHERE location=%s
@@ -257,7 +257,7 @@ def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, TMP_850, TMP_500, HGT_850, HGT_500
                 FROM model_output
                 WHERE location=%s
@@ -279,7 +279,7 @@ def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, HGT_1000, HGT_500
                 FROM model_output
                 WHERE location=%s
@@ -300,7 +300,7 @@ def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, HGT_1000, HGT_850
                 FROM model_output
                 WHERE location=%s
@@ -321,7 +321,7 @@ def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, HGT_850, HGT_500
                 FROM model_output
                 WHERE location=%s
@@ -342,7 +342,7 @@ def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
 
     return df
 
-def snow(cur, sel_loc, sel_startdate, sel_enddate, custom_filter):
+def snow(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
     SQL = '''   SELECT datetime, precave, HGT_0C, TMP_2, RH_2, TMP_850
                 FROM model_output
                 WHERE location=%s

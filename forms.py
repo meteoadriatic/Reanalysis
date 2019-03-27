@@ -50,4 +50,6 @@ class StatisticsForm(FlaskForm):
     resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma'), ('count', 'Prebrojavanje')],
                               default='mean')
     submit = SubmitField('Pošalji')
-    customfilter = StringField('customfilter')
+    sqlfilter = StringField('sqlfilter')
+    filterprimin = StringField('filterprimin', default='')
+    filterprimax = StringField('filterprimax', default='')

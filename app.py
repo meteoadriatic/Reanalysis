@@ -114,7 +114,9 @@ def statistics():
         azimuth3d = int(form.azimuth3d.data)
         resampleperiod = form.resampleperiod.data
         resamplehow = form.resamplehow.data
-        custom_filter = form.customfilter.data
+        sql_filter = form.sqlfilter.data
+        filter_pri_min = form.filterprimin.data
+        filter_pri_max = form.filterprimax.data
 
         # Define optimal xticks relative to requested time range
         def myxticks(sel_startdate, sel_enddate):
@@ -174,7 +176,7 @@ def statistics():
         # Functions for additional parameters derived from raw sql data in params.py
         paramsfunc = getattr(params, sel_param, None)
         if sel_param in appends:
-            df = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate, custom_filter)
+            df = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate, sql_filter)
             sql_response = tuple(zip(df.index, df[sel_param]))
         else:
         # Retrieve data from MySQL
@@ -185,7 +187,7 @@ def statistics():
                         AND datetime <= %s
                         {}
                         ORDER BY datetime
-                '''.format(sel_param, custom_filter)
+                '''.format(sel_param, sql_filter)
             cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
             sql_response = cur.fetchall()
 
@@ -205,6 +207,14 @@ def statistics():
             df = df.groupby(pd.Grouper(freq=resampleperiod))[sel_param].agg([resamplehow]).round(1)
             df.columns = [sel_param]
             sql_response = tuple(zip(df.index, df[sel_param]))
+
+        # Filter data by min/max values if requested
+        if filter_pri_min:
+            filter_pri_min = float(filter_pri_min)
+            df = df[df[sel_param] >= filter_pri_min]
+        if filter_pri_max:
+            filter_pri_max = float(filter_pri_max)
+            df = df[df[sel_param] <= filter_pri_max]
 
         if sel_param2 in parameters:
             # Secondary parameter processing
@@ -241,6 +251,7 @@ def statistics():
                 df2 = df2.groupby(pd.Grouper(freq=resampleperiod))[sel_param2].agg([resamplehow]).round(1)
                 df2.columns = [sel_param2]
                 sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
+                
 
         if sel_param3 in parameters:
             # 3D parameter processing
@@ -274,6 +285,9 @@ def statistics():
             if resampleperiod != 'Off':
                 df3 = df3.groupby(pd.Grouper(freq=resampleperiod))[sel_param3].agg([resamplehow]).round(1)
                 df3.columns = [sel_param3]
+
+
+
 
         '''
         Old statistics based on pandas df.describe(), not used anymore:
@@ -402,7 +416,7 @@ def statistics():
         else:
             barwidthfactor=0.9
         # Customize plot according to selected parameter
-        if custom_filter or scatter_plot:
+        if sql_filter or scatter_plot or filter_pri_min or filter_pri_max:
             ax.plot(df.index, df[sel_param], '.', color='#77216F', alpha=scatter_alpha)
         else:
             if sel_param == 'precave' or sel_param == 'precpct':

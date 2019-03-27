@@ -130,7 +130,7 @@
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativekde }}
-                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Prim./sek. KDE</small>
+                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot. Sporo za veliki dataset!">Prim./sek. KDE</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.decompose }}
@@ -230,13 +230,25 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="tab-pane fade show" id="v-pills-customfilter" role="tabpanel" aria-labelledby="v-pills-customfilter-tab">
+                                <div class="tab-pane fade show" id="v-pills-prefilter" role="tabpanel" aria-labelledby="v-pills-prefilter-tab">
                                     <ul class="list-group list-group-flush">
-                                        {{ form.customfilter(class="form-control") }}
-                                        <small id="customfilter" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan SQL filter, dodatno na standardni upit definiran odabranim parametrima forme sučelja.
+                                        {{ form.sqlfilter(class="form-control") }}
+                                        <small id="sqlfilter" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan SQL filter, dodatno na standardni upit definiran odabranim parametrima forme sučelja.
                                          NAPOMENA: Mnoge funkcije sustava neće biti moguće, zavisno o odabranom dodatnom filtriranju podataka. Ako se sustav sruši, pokušajte odabrati satno uzorkovanje i/ili isključivanje statistike.
                                           Funkcija je samo za primarni parametar. Prikazani graf bit će raspršni (scatter) bez obzira na parametar.">
                                             Primjer:  AND PWAT_CLM > 30</small>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade show" id="v-pills-postfilter" role="tabpanel" aria-labelledby="v-pills-postfilter-tab">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.filterprimin(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                            <small id="filterprimin" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan filter podataka po minimalnoj vrijednosti za primarni parametar. Radi samo za primarni parameter, isljučivo!">Minimum</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.filterprimax(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                            <small id="filterprimax" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan filter podataka po maksimalnoj vrijednosti za primarni parametar. Radi samo za primarni parameter, isljučivo!">Maximum</small>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -248,7 +260,8 @@
                           <a class="nav-link micro-text" id="v-pills-3d-tab" data-toggle="pill" href="#v-pills-3d" role="tab" aria-controls="v-pills-3d" aria-selected="false" data-toggle="tooltip" title="Opcije 3D grafičkog prikaza (potrebno odabrati uz primarni i sekundarni, dodatno i 3D paramatar)">Opcije 3D grafa</a>
                           <a class="nav-link micro-text" id="v-pills-moving-tab" data-toggle="pill" href="#v-pills-moving" role="tab" aria-controls="v-pills-moving" aria-selected="false" data-toggle="tooltip" title="Pomične statistike (moving/rolling statistics)">Pomične statistike</a>
                           <a class="nav-link micro-text" id="v-pills-fft-tab" data-toggle="pill" href="#v-pills-fft" role="tab" aria-controls="v-pills-fft" aria-selected="false" data-toggle="tooltip" title="Opcije za provedbu Fast Fourier analize na podacima">FFT analiza</a>
-                          <a class="nav-link micro-text" id="v-pills-customfilter-tab" data-toggle="pill" href="#v-pills-customfilter" role="tab" aria-controls="v-pills-customfilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje kroz SQL upit">SQL filter</a>
+                          <a class="nav-link micro-text" id="v-pills-prefilter-tab" data-toggle="pill" href="#v-pills-prefilter" role="tab" aria-controls="v-pills-prefilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje kroz SQL upit">SQL filter</a>
+                          <a class="nav-link micro-text" id="v-pills-postfilter-tab" data-toggle="pill" href="#v-pills-postfilter" role="tab" aria-controls="v-pills-postfilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje u postprocesiranju podataka">Post filter</a>
                         </div>
                     </div>
                 </div>
