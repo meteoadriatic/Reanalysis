@@ -100,19 +100,11 @@
                     </div>
                     <div class="col-md-2">
                         <div class="card-body card-no-padding">
-                            <h7 class="card-title">Opcije grafa:</h7>
+                            <h7 class="card-title">Graf funkcije:</h7>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.trendline }}
                                     <small id="trendline" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži linearni trend i srednjak na grafu (samo za primarni parametar).">Trend</small>
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.largeplot }}
-                                    <small id="largeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Udvostruči visinu grafa.">Veći grafovi</small>
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.samey }}
-                                    <small id="samey" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Koristi zajedničku y os za primarni i sekundarni paramtetar.">Zajednička y os</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.distribution }}
@@ -159,6 +151,18 @@
                                         <li class="list-group-item py-1 li-no-padding">
                                             <small id="yminplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči minimum Y os grafa (x = 0 = automatski prema minimumu iz podataka)">y<sub>min</sub></small>
                                             {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.scatterplot }}
+                                            <small id="scatterplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Koristi raspršni graf (scatter) za primarni parametar.">Raspršni graf</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.largeplot }}
+                                            <small id="largeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Udvostruči visinu grafa.">Veći grafovi</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            {{ form.samey }}
+                                            <small id="samey" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Koristi zajedničku y os za primarni i sekundarni paramtetar.">Zajednička y os</small>
                                         </li>
                                     </ul>
                                 </div>
@@ -226,7 +230,7 @@
                                     <ul class="list-group list-group-flush">
                                         {{ form.customfilter(class="form-control") }}
                                         <small id="customfilter" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan SQL filter, dodatno na standardni upit definiran odabranim parametrima forme sučelja.
-                                         NAPOMENA: Mnoge funkcije sustava neće biti moguće, zavisno o odabranom dodatnom filtriranju podataka. Ako se sustav sruši, pokušajte odabrati satno uzrokovanje i/ili isključivanje statistike.
+                                         NAPOMENA: Mnoge funkcije sustava neće biti moguće, zavisno o odabranom dodatnom filtriranju podataka. Ako se sustav sruši, pokušajte odabrati satno uzorkovanje i/ili isključivanje statistike.
                                           Funkcija je samo za primarni parametar. Prikazani graf bit će raspršni (scatter) bez obzira na parametar.">
                                             Primjer:  AND PWAT_CLM > 30</small>
                                     </ul>

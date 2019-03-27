@@ -23,6 +23,7 @@ class StatisticsForm(FlaskForm):
     largeplot = BooleanField('largeplot')
     distribution = BooleanField('distribution')
     samey = BooleanField('samey')
+    scatterplot = BooleanField('scatterplot')
     rollcorr = BooleanField('rollcorr')
     cumsum = BooleanField('cumsum')
     decompose = BooleanField('decompose')
