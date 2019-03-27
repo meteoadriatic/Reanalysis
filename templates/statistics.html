@@ -126,10 +126,6 @@
                                     {{ form.cumsum }}
                                     <small id="cumsum" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
                                 </li>
-                                <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.decompose }}
-                                    <small id="decompose" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Izvrši sezonalnu dekompoziciju signala na komponente (trend, seasonal, residual). Odabrani period mora biti veći od godine dana.">Dekompozicija</small>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -143,6 +139,10 @@
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativekde }}
                                     <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot.">Primarni/sekundarni KDE</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.decompose }}
+                                    <small id="decompose" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Izvrši sezonalnu dekompoziciju signala na komponente (trend, seasonal, residual). Odabrani period mora biti veći od dvije godine (730) dana.">Sezonalna dekompozicija</small>
                                 </li>
                             </ul>
                         </div>
