@@ -47,7 +47,7 @@ class StatisticsForm(FlaskForm):
     max3d = StringField('max3d', default='0', validators=[InputRequired()])
     resampleperiod = SelectField(choices=[('Off','Satni'),('D','Dnevni'),('M','Mjesečni'),('Y','Godišnji')],
                                  default='Off')
-    resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma')],
+    resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma'), ('count', 'Prebrojavanje')],
                               default='mean')
     submit = SubmitField('Pošalji')
     customfilter = StringField('customfilter')

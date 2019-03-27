@@ -104,8 +104,8 @@ def statistics():
         rollcorr = int(form.rollcorr.data)
         fftspacing = int(form.fftspacing.data)
         fftxmax = int(form.fftxmax.data)
-        ymaxplot = int(form.ymaxplot.data)
-        yminplot = int(form.yminplot.data)
+        ymaxplot = float(form.ymaxplot.data)
+        yminplot = float(form.yminplot.data)
         limit3d = form.limit3d.data
         plot3dbar = form.plot3dbar.data
         min3d = float(form.min3d.data)
