@@ -58,6 +58,248 @@
 
 
 
+        <h2 class="mt-4">Podaci u bazi</h2>
+
+        <p>Temeljni podaci u MySQL bazi su organizirani u tablici s kolonama kako slijedi
+            (korisno za upotrebu SQL filtera na CRD sučelju):</p>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Kolona</th>
+              <th scope="col">Značenje</th>
+              <th scope="col">Mjerna jedinica</th>
+              <th scope="col">Preciznost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">datetime</th>
+              <td>Datum i vrijeme</td>
+              <td>(datetime type)</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th scope="row">TMP_2</th>
+              <td>Temperatura na 2m</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">DPT_2</th>
+              <td>Temperatura rosišta na 2m</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">RH_2</th>
+              <td>Relativna vlažnost na 2m</td>
+              <td>%</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">RH_700</th>
+              <td>Relativna vlažnost na 700hPa</td>
+              <td>%</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">MSLET_SF</th>
+              <td>Tlak zraka reduciran na morsku razinu</td>
+              <td>hPa</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">CAPE_180</th>
+              <td>Mixed Layer CAPE</td>
+              <td>J/kg</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">CIN_180</th>
+              <td>Mixed Layer CIN</td>
+              <td>J/kg</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">PWAT_CLM</th>
+              <td>Oboriva voda</td>
+              <td>mm</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">UGRD_10</th>
+              <td>U vektor vjetra na 10m</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">VGRD_10</th>
+              <td>V vektor vjetra na 10m</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">UGRD_850</th>
+              <td>U vektor vjetra na 850hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">VGRD_850</th>
+              <td>V vektor vjetra na 850hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">UGRD_500</th>
+              <td>U vektor vjetra na 500hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">VGRD_500</th>
+              <td>V vektor vjetra na 500hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">UGRD_300</th>
+              <td>U vektor vjetra na 300hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">VGRD_300</th>
+              <td>V vektor vjetra na 300hPa</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">GUST_SF</th>
+              <td>Brzina udara vjetra</td>
+              <td>m/s</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">HGT_0C</th>
+              <td>Visina izoterme 0°C iznad tla</td>
+              <td>m</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">TMP_1000</th>
+              <td>Temperatura zraka na 1000hPa</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">TMP_850</th>
+              <td>Temperatura zraka na 850hPa</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">TMP_500</th>
+              <td>Temperatura zraka na 500hPa</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">HGT_1000</th>
+              <td>Visina izobarne plohe 1000hPa</td>
+              <td>m</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">HGT_850</th>
+              <td>Visina izobarne plohe 850hPa</td>
+              <td>m</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">HGT_500</th>
+              <td>Visina izobarne plohe 500hPa</td>
+              <td>m</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">VVEL_900</th>
+              <td>Vertikalna brzina na 900hPa</td>
+              <td>Pa/s</td>
+              <td>0.1</td>
+            </tr>
+            <tr>
+              <th scope="row">VVEL_700</th>
+              <td>Vertikalna brzina na 700hPa</td>
+              <td>Pa/s</td>
+              <td>0.1</td>
+            </tr>
+            <tr>
+              <th scope="row">SNOD_SF</th>
+              <td>Visina snježnog pokrivača</td>
+              <td>cm</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">TMP_SF</th>
+              <td>Temperatura površine podloge</td>
+              <td>°C</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">DSWRF_SF</th>
+              <td>Dolazno kratkovalno zračenje</td>
+              <td>W/m2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <th scope="row">DLWRF_SF</th>
+              <td>Dolazno dugovalno zračenje</td>
+              <td>W/m2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <th scope="row">USWRF_SF</th>
+              <td>Odlazno kratkovalno zračenje</td>
+              <td>W/m2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <th scope="row">ULWRF_SF</th>
+              <td>Odlazno dugovalno zračenje</td>
+              <td>W/m2</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <th scope="row">rdrmax</th>
+              <td>Maksimalni radarski odraz unutar radijusa 40km od lokacije</td>
+              <td>dBz</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">cldave</th>
+              <td>Prosječna zastrtost neba naoblakom unutar radijusa 40km od lokacije</td>
+              <td>%</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th scope="row">precave</th>
+              <td>Srednja satna količina oborine unutar radijusa 40km od lokacije</td>
+              <td>mm</td>
+              <td>0.1</td>
+            </tr>
+            <tr>
+              <th scope="row">precpct</th>
+              <td>Postotak grid točaka unutar radijusa 40km od lokacije koje imaju satnu oborinu >0.0mm</td>
+              <td>%</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Preostali dostupni parametri u CRD sučelju računaju se iz temeljnih parametara u bazi matematičkim putem.</p>
+
+
         <h2 class="mt-4">Ograničenja</h2>
 
         <p>Baza podataka ne sadrži izravna mjerenja; svi podaci su produkt reanalize klime modelom i stoga su podaci
