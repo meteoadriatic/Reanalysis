@@ -9,7 +9,7 @@ def wspd_10(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -30,7 +30,7 @@ def wdir_10(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -51,7 +51,7 @@ def wspd_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -72,7 +72,7 @@ def wdir_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -93,7 +93,7 @@ def wspd_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -114,7 +114,7 @@ def wdir_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -135,7 +135,7 @@ def wspd_300(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -156,7 +156,7 @@ def wdir_300(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -177,7 +177,7 @@ def shear_10_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -199,7 +199,7 @@ def shear_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -221,7 +221,7 @@ def shear_10_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -243,7 +243,7 @@ def vtgrad_1000_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -265,7 +265,7 @@ def vtgrad_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -287,7 +287,7 @@ def thickness_1000_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -308,7 +308,7 @@ def thickness_1000_850(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -329,7 +329,7 @@ def thickness_850_500(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
@@ -350,7 +350,7 @@ def snow(cur, sel_loc, sel_startdate, sel_enddate, sql_filter):
                 AND datetime <= %s
                 {}
                 ORDER BY datetime
-        '''.format(custom_filter)
+        '''.format( sql_filter)
     cur.execute(SQL, (sel_loc, sel_startdate, sel_enddate))
     sql_response = cur.fetchall()
 
