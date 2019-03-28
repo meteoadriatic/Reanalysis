@@ -111,12 +111,12 @@
                                     <small id="distribution" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka na histogramu.">Razdioba</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.rollcorr }}
-                                    <small id="rollcorr" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra. Napomena: koristi pomični srednjak za reduciranje šuma.">Korelacija prim/sek</small>
-                                </li>
-                                <li class="list-group-item py-1 li-no-padding">
                                     {{ form.cumsum }}
                                     <small id="cumsum" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.decompose }}
+                                    <small id="decompose" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Izvrši sezonalnu dekompoziciju signala na komponente (trend, seasonal, residual). Odabrani period mora biti veći od dvije godine (730 dana). Samo primarni parametar.">S. dekompozicija</small>
                                 </li>
                             </ul>
                         </div>
@@ -126,15 +126,15 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativeplot }}
-                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao raspršni graf (scatter plot).">Odnos prim./sek.</small>
+                                    <small id="relativeplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao raspršni graf (scatter plot).">Odnos pri/sek</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.relativekde }}
-                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot. Sporo za veliki dataset!">Prim./sek. KDE</small>
+                                    <small id="relativekde" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži relativni odnos primarnog i sekundarnog parametra kao Kernel Density Estimation plot. Sporo za veliki dataset!">P/S KDE (sporo)</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
-                                    {{ form.decompose }}
-                                    <small id="decompose" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Izvrši sezonalnu dekompoziciju signala na komponente (trend, seasonal, residual). Odabrani period mora biti veći od dvije godine (730 dana). Samo primarni parametar.">S. dekompozicija</small>
+                                    {{ form.rollcorr }}
+                                    <small id="rollcorr" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži korelaciju primarnog i sekundarnog parametra. Napomena: koristi pomični srednjak za reduciranje šuma.">Korelacija pri/sek</small>
                                 </li>
                             </ul>
                         </div>
@@ -153,12 +153,16 @@
                                             {{ form.yminplot(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                         </li>
                                         <li class="list-group-item py-1 li-no-padding">
-                                            <small id="scatteralpha" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Alpha parametar (prozirnost) za raspršni graf primarnog parametra. Valjane decimalne vrijednosti su od 0 - potpuno prozirno do 1 - potpuno neprozirno.">Rasprš. &alpha;</small>
-                                            {{ form.scatteralpha(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
-                                        </li>
-                                        <li class="list-group-item py-1 li-no-padding">
                                             {{ form.scatterplot }}
                                             <small id="scatterplot" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Koristi raspršni graf (scatter) za primarni parametar.">Raspršni graf</small>
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="scattersize" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Veličina markera za raspršni graf primarnog parametra.">Rasprš. s</small>
+                                            {{ form.scattersize(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="scatteralpha" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Alpha parametar (prozirnost) za raspršni graf primarnog parametra. Valjane decimalne vrijednosti su od 0 - potpuno prozirno do 1 - potpuno neprozirno.">Rasprš. &alpha;</small>
+                                            {{ form.scatteralpha(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                         </li>
                                         <li class="list-group-item py-1 li-no-padding">
                                             {{ form.largeplot }}
@@ -232,7 +236,8 @@
                                 </div>
                                 <div class="tab-pane fade show" id="v-pills-prefilter" role="tabpanel" aria-labelledby="v-pills-prefilter-tab">
                                     <ul class="list-group list-group-flush">
-                                        {{ form.sqlfilter(class="form-control") }}
+                                        <small id="sqlwarning" class="form-text text-muted text-center">Nije kompatibilno s mnogim funkcijama!</small>
+                                        {{ form.sqlfilter(class="form-control", rows="6") }}
                                         <small id="sqlfilter" class="form-text text-muted text-center" data-toggle="tooltip" title="Proizvoljan SQL filter, dodatno na standardni upit definiran odabranim parametrima forme sučelja.
                                          NAPOMENA: Mnoge funkcije sustava neće biti moguće, zavisno o odabranom dodatnom filtriranju podataka. Ako se sustav sruši, pokušajte odabrati satno uzorkovanje i/ili isključivanje statistike.
                                           Funkcija je samo za primarni parametar. Prikazani graf bit će raspršni (scatter) bez obzira na parametar.">

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField, RadioField
+from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField, TextAreaField, RadioField
 from datetime import datetime
 from wtforms.validators import InputRequired
 
@@ -25,6 +25,7 @@ class StatisticsForm(FlaskForm):
     samey = BooleanField('samey')
     scatterplot = BooleanField('scatterplot')
     scatteralpha = StringField('scatteralpha', default='1.0', validators=[InputRequired()])
+    scattersize = StringField('scattersize', default='10', validators=[InputRequired()])
     rollcorr = BooleanField('rollcorr')
     cumsum = BooleanField('cumsum')
     decompose = BooleanField('decompose')
@@ -50,6 +51,6 @@ class StatisticsForm(FlaskForm):
     resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma'), ('count', 'Prebrojavanje')],
                               default='mean')
     submit = SubmitField('Pošalji')
-    sqlfilter = StringField('sqlfilter')
+    sqlfilter = TextAreaField('sqlfilter')
     filterprimin = StringField('filterprimin', default='')
     filterprimax = StringField('filterprimax', default='')
