@@ -476,10 +476,10 @@ def statistics():
         # Plot secondary parameter
         if sel_param2 in parameters:
             if samey:
-                ax.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
+                ax.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
             else:
                 ax2 = ax.twinx()
-                ax2.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
+                ax2.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
 
         # Include linear trendline
         if trendline:
