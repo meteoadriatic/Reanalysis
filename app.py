@@ -2,25 +2,33 @@ from config import *
 from flask import render_template
 from flask_mysqldb import MySQL
 from forms import StatisticsForm
+import params
+
 import pandas as pd
+import numpy as np
+import io
+import base64
+
 import matplotlib
-matplotlib.use("agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 from matplotlib.dates import HourLocator, DayLocator, MonthLocator, YearLocator
-import numpy as np
-import params
-import io
-import base64
 import seaborn as sns
+
+matplotlib.use("agg")
 sns.set_style("white")
 
+# ---------------------------------------------------------------------------------------
+
 mysql = MySQL(app)
+
 
 @app.route('/')
 def index():
     return render_template('index.html', title='CRD Početna')
+
+
 
 @app.route('/locations')
 def locations():
@@ -32,6 +40,8 @@ def locations():
     return render_template('locations.html',
                            title='Lokacije',
                            locs=response)
+
+
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
@@ -78,7 +88,7 @@ def statistics():
     last_date = last_available_date(cur)
 
     if form.is_submitted():
-        # Retrieve user choice of location and parameter from select forms
+        # Retrieve form data
         sel_loc = form.locations.data
         sel_param = form.parameters.data
         sel_param2 = form.parameters2.data
@@ -288,19 +298,6 @@ def statistics():
                 df3.columns = [sel_param3]
 
 
-
-
-        '''
-        Old statistics based on pandas df.describe(), not used anymore:
-        
-        # Build statistics list from df.describe() output
-        statskeys = df.describe().index.tolist()
-        statsvalues = df.describe().values.tolist()
-        statsvalues = [item for sublist in statsvalues for item in sublist]
-        statsvalues = ['%.1f' % elem for elem in statsvalues]
-        stats = [list(a) for a in zip(statskeys, statsvalues)]
-        '''
-
         if disablestats == False:
             # Perform detailed statistics on dataset
             from stats import variation, gmean, hmean, kurtosis, skew
@@ -484,7 +481,6 @@ def statistics():
                 ax2 = ax.twinx()
                 ax2.plot(df.index, df2[sel_param2], color='#111111', linewidth=0.28)
 
-
         # Include linear trendline
         if trendline:
             x = mdates.date2num(df.index)
@@ -505,8 +501,6 @@ def statistics():
         plot_url = base64.b64encode(img.getvalue()).decode()
         plt.close(fig)
         show_plot=True
-
-
 
 
         # 3D plot
@@ -821,6 +815,9 @@ def statistics():
                            std_err_sec=std_err_sec)
 
 
+
+
+
 @app.route('/map')
 def map():
     cur = mysql.connection.cursor()
@@ -831,6 +828,9 @@ def map():
     return render_template('map.html',
                            title='Karta',
                            locs=response)
+
+
+
 
 
 @app.route('/compare_locations', methods=['GET', 'POST'])
@@ -1014,10 +1014,16 @@ def compare_locations():
                            )
 
 
+
+
+
 @app.route('/documentation')
 def documentation():
     return render_template('documentation.html',
                            title='Dokumentacija')
+
+
+
 
 # Request browser not to cache responses (we need this for plots and other variable static content to work reliably)
 @app.after_request

@@ -1,11 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField, TextAreaField, RadioField
+from wtforms import StringField, SubmitField, SelectField, DateField, BooleanField, IntegerField, TextAreaField
 from datetime import datetime
 from wtforms.validators import InputRequired
-
-class SQLForm(FlaskForm):
-    sql = StringField('SQL')
-    submit = SubmitField('Pošalji')
 
 class StatisticsForm(FlaskForm):
     locations = SelectField('locations')
