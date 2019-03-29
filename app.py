@@ -269,7 +269,7 @@ def statistics():
             # Functions for additional parameters derived from raw sql data in params.py
             paramsfunc = getattr(params, sel_param3, None)
             if sel_param3 in appends:
-                df3 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
+                df3 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate, sql_filter)
             else:
             # Retrieve data from MySQL
                 SQL3 = '''  SELECT datetime, {}
