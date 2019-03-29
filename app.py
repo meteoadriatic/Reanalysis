@@ -232,7 +232,7 @@ def statistics():
             # Functions for additional parameters derived from raw sql data in params.py
             paramsfunc = getattr(params, sel_param2, None)
             if sel_param2 in appends:
-                df2 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate)
+                df2 = paramsfunc(cur, sel_loc, sel_startdate, sel_enddate, sql_filter)
                 sql_response2 = tuple(zip(df2.index, df2[sel_param2]))
             else:
             # Retrieve data from MySQL
