@@ -256,6 +256,12 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="tab-pane fade show" id="v-pills-final" role="tabpanel" aria-labelledby="v-pills-final-tab">
+                                    <ul class="list-group list-group-flush">
+                                        <small id="plottitle" class="form-text text-muted text-center">Naslov grafa</small>
+                                        {{ form.plottitle(class="form-control", rows="2") }}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,6 +273,7 @@
                           <a class="nav-link micro-text" id="v-pills-fft-tab" data-toggle="pill" href="#v-pills-fft" role="tab" aria-controls="v-pills-fft" aria-selected="false" data-toggle="tooltip" title="Opcije za provedbu Fast Fourier analize na podacima">FFT analiza</a>
                           <a class="nav-link micro-text" id="v-pills-prefilter-tab" data-toggle="pill" href="#v-pills-prefilter" role="tab" aria-controls="v-pills-prefilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje kroz SQL upit">SQL filter</a>
                           <a class="nav-link micro-text" id="v-pills-postfilter-tab" data-toggle="pill" href="#v-pills-postfilter" role="tab" aria-controls="v-pills-postfilter" aria-selected="false" data-toggle="tooltip" title="Opcije za prilagođeno filtriranje u postprocesiranju podataka">Post filter</a>
+                          <a class="nav-link micro-text" id="v-pills-final-tab" data-toggle="pill" href="#v-pills-final" role="tab" aria-controls="v-pills-final" aria-selected="false" data-toggle="tooltip" title="Opcije za finaliziranje produkata">Finalizacija</a>
                         </div>
                     </div>
                 </div>

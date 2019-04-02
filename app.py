@@ -126,6 +126,7 @@ def statistics():
         resampleperiod = form.resampleperiod.data
         resamplehow = form.resamplehow.data
         sql_filter = form.sqlfilter.data
+        plot_title = form.plottitle.data
         filter_pri_min = form.filterprimin.data
         filter_pri_max = form.filterprimax.data
 
@@ -403,6 +404,8 @@ def statistics():
             plt.title(str(sel_param) + ', ' + str(sel_param2))
         else:
             plt.title(sel_param)
+        if plot_title:
+            plt.title(plot_title)
 
         df_rows = df.shape[0]
         #timespan=(sel_enddate-sel_startdate).days
@@ -618,7 +621,7 @@ def statistics():
             else:
                 fig2.set_size_inches(12.5, 3.0)
             fig2.tight_layout()
-            plt.title('Distribucija')
+            plt.title('Razdioba')
 
             plt.hist(x=df[sel_param], color='#E88B0C', alpha=0.7, rwidth=0.9, bins=20)
 

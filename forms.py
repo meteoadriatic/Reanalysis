@@ -48,5 +48,6 @@ class StatisticsForm(FlaskForm):
                               default='mean')
     submit = SubmitField('Pošalji')
     sqlfilter = TextAreaField('sqlfilter')
+    plottitle = TextAreaField('plottitle')
     filterprimin = StringField('filterprimin', default='')
     filterprimax = StringField('filterprimax', default='')
