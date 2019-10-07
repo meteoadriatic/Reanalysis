@@ -87,8 +87,17 @@ def statistics():
     first_date = first_available_date(cur)
     last_date = last_available_date(cur)
 
+
+    ##
+    ## #############################
+    ##
+    ## if form.is_submitted()  START
+    ##
+    ## #############################
+    ##
+
     if form.is_submitted():
-        # Retrieve form data
+        # Retrieve forms data
         sel_loc = form.locations.data
         sel_param = form.parameters.data
         sel_param2 = form.parameters2.data
@@ -135,40 +144,14 @@ def statistics():
         filter_pri_min = form.filterprimin.data
         filter_pri_max = form.filterprimax.data
 
-        # Define optimal xticks relative to requested time range
-        def myxticks(sel_startdate, sel_enddate):
-            timespan = (sel_enddate - sel_startdate).days
-            plt.xlim(sel_startdate, sel_enddate)
-            if timespan < 5:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d    '))
-                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%H'))
-                ax.xaxis.set_major_locator(DayLocator())
-                ax.xaxis.set_minor_locator(HourLocator(interval=6))
-            elif timespan < 20:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                ax.xaxis.set_major_locator(DayLocator())
-            elif timespan < 50:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                ax.xaxis.set_major_locator(DayLocator(interval=2))
-            elif timespan < 180:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m   '))
-                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
-                ax.xaxis.set_major_locator(MonthLocator())
-                ax.xaxis.set_minor_locator(DayLocator(interval=4))
-            elif timespan < 700:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-                ax.xaxis.set_major_locator(MonthLocator())
-            elif timespan < 2000:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y     '))
-                ax.xaxis.set_minor_formatter(mdates.DateFormatter('%m'))
-                ax.xaxis.set_major_locator(YearLocator())
-                ax.xaxis.set_minor_locator(MonthLocator(interval=2))
-            elif timespan < 10000:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-                ax.xaxis.set_major_locator(YearLocator())
-            else:
-                ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-                ax.xaxis.set_major_locator(ticker.AutoLocator())
+
+
+
+        ########################################
+        #                                      #
+        #     DATA RETRIEVAL AND PROCESSING    #
+        #                                      #
+        ########################################
 
         sel_param_bak = sel_param
         sel_param2_bak = sel_param2
@@ -403,16 +386,64 @@ def statistics():
         else:
             pass
 
+
+
+        ################
+        #              #
+        #     PLOTS    #
+        #              #
+        ################
+
+        # Define optimal xticks relative to requested time range
+        def myxticks(sel_startdate, sel_enddate):
+            timespan = (sel_enddate - sel_startdate).days
+            plt.xlim(sel_startdate, sel_enddate)
+            if timespan < 5:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d    '))
+                ax_main.xaxis.set_minor_formatter(mdates.DateFormatter('%H'))
+                ax_main.xaxis.set_major_locator(DayLocator())
+                ax_main.xaxis.set_minor_locator(HourLocator(interval=6))
+            elif timespan < 20:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+                ax_main.xaxis.set_major_locator(DayLocator())
+            elif timespan < 50:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+                ax_main.xaxis.set_major_locator(DayLocator(interval=2))
+            elif timespan < 180:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m   '))
+                ax_main.xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
+                ax_main.xaxis.set_major_locator(MonthLocator())
+                ax_main.xaxis.set_minor_locator(DayLocator(interval=4))
+            elif timespan < 700:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+                ax_main.xaxis.set_major_locator(MonthLocator())
+            elif timespan < 2000:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y     '))
+                ax_main.xaxis.set_minor_formatter(mdates.DateFormatter('%m'))
+                ax_main.xaxis.set_major_locator(YearLocator())
+                ax_main.xaxis.set_minor_locator(MonthLocator(interval=2))
+            elif timespan < 10000:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+                ax_main.xaxis.set_major_locator(YearLocator())
+            else:
+                ax_main.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+                ax_main.xaxis.set_major_locator(ticker.AutoLocator())
+
+
+        #
+        # MAIN PLOT, always visible
+        ###########################
+
         # Create a plot from datetime (x axis) and selected parameter (y axis)
-        fig, ax = plt.subplots()
+        fig_main, ax_main = plt.subplots()
         if largeplot == True:
-            fig.set_size_inches(12.5, 10.0)
+            fig_main.set_size_inches(12.5, 10.0)
         else:
-            fig.set_size_inches(12.5, 5.0)
-        fig.tight_layout()
-        fig.autofmt_xdate(rotation=50, ha='center', which='both')
-        ax.set_axisbelow(True)
-        ax.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
+            fig_main.set_size_inches(12.5, 5.0)
+        fig_main.tight_layout()
+        fig_main.autofmt_xdate(rotation=50, ha='center', which='both')
+        ax_main.set_axisbelow(True)
+        ax_main.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
         if sel_param2 in parameters:
             plt.title(str(sel_param) + ', ' + str(sel_param2))
         else:
@@ -433,69 +464,73 @@ def statistics():
         if sql_filter or scatter_plot or\
                 filter_pri_min or filter_pri_max\
                 or filter_pri_min == 0 or filter_pri_max == 0:
-            ax.plot(df.index, df[sel_param], '.', color='#77216F', alpha=scatter_alpha, markersize=scatter_size)
+            ax_main.plot(df.index, df[sel_param], '.', color='#77216F', alpha=scatter_alpha, markersize=scatter_size)
         else:
             if sel_param == 'precave' or sel_param == 'precpct':
                 if df_rows < bigdata:
-                    ax.bar(df.index, df[sel_param], alpha=0.7, color='#772953', width=barwidthfactor)
+                    ax_main.bar(df.index, df[sel_param], alpha=0.7, color='#772953', width=barwidthfactor)
                 else:
-                    ax.plot(df.index, df[sel_param], color='#772953')
-                ax.set_ylim(bottom=0)
+                    ax_main.plot(df.index, df[sel_param], color='#772953')
+                ax_main.set_ylim(bottom=0)
             elif sel_param == 'snow':
                 if df_rows < bigdata:
-                    ax.bar(df.index, df[sel_param], alpha=0.7, color='#DC6EDC', width=barwidthfactor)
+                    ax_main.bar(df.index, df[sel_param], alpha=0.7, color='#DC6EDC', width=barwidthfactor)
                 else:
-                    ax.plot(df.index, df[sel_param], color='#DC6EDC')
-                ax.set_ylim(bottom=0)
+                    ax_main.plot(df.index, df[sel_param], color='#DC6EDC')
+                ax_main.set_ylim(bottom=0)
             elif sel_param == 'rdrmax':
                 if df_rows < bigdata:
-                    ax.scatter(df.index, df[sel_param], alpha=0.9, color='#E95420')
+                    ax_main.scatter(df.index, df[sel_param], alpha=0.9, color='#E95420')
                 else:
-                    ax.plot(df.index, df[sel_param], color='#E95420')
-                ax.set_ylim(bottom=0)
+                    ax_main.plot(df.index, df[sel_param], color='#E95420')
+                ax_main.set_ylim(bottom=0)
             elif 'wdir_' in sel_param or 'VVEL' in sel_param:
                 scatsiz=max((100000/(len(df.index))),50)
-                ax.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
+                ax_main.scatter(df.index, df[sel_param], s=scatsiz, alpha=0.1)
             elif 'SWRF' in sel_param or 'LWRF' in sel_param\
                     or 'RH_' in sel_param or 'PWAT' in sel_param:
-                ax.plot(df.index, df[sel_param])
-                ax.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
-                ax.set_ylim(bottom=0)
+                ax_main.plot(df.index, df[sel_param])
+                ax_main.fill_between(df.index, 0, df[sel_param], color='#41B3C5', alpha=0.3)
+                ax_main.set_ylim(bottom=0)
             elif 'cldave' in sel_param:
-                ax.plot(df.index, df[sel_param], color='#828282', alpha=0.31)
-                ax.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
-                ax.set_ylim(bottom=0)
+                ax_main.plot(df.index, df[sel_param], color='#828282', alpha=0.31)
+                ax_main.fill_between(df.index, 0, df[sel_param], color='#828282', alpha=0.3)
+                ax_main.set_ylim(bottom=0)
             elif 'CAPE' in sel_param or 'shear' in sel_param:
-                ax.plot(df.index, df[sel_param], color='#E95420')
-                ax.fill_between(df.index, 0, df[sel_param], color='#E95420', alpha=0.3)
-                ax.set_ylim(bottom=0)
+                ax_main.plot(df.index, df[sel_param], color='#E95420')
+                ax_main.fill_between(df.index, 0, df[sel_param], color='#E95420', alpha=0.3)
+                ax_main.set_ylim(bottom=0)
             elif 'CIN' in sel_param:
-                ax.plot(df.index, df[sel_param], color='#828282')
-                ax.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
-                ax.set_ylim(top=0)
+                ax_main.plot(df.index, df[sel_param], color='#828282')
+                ax_main.fill_between(df.index, df[sel_param], 0, color='#828282', alpha=0.3)
+                ax_main.set_ylim(top=0)
             elif 'vtgrad' in sel_param:
-                ax.plot(df.index, df[sel_param], color='#77216F')
-                ax.fill_between(df.index, df[sel_param], 0, color='#77216F', alpha=0.13)
-                ax.set_ylim(bottom=-0.01)
+                ax_main.plot(df.index, df[sel_param], color='#77216F')
+                ax_main.fill_between(df.index, df[sel_param], 0, color='#77216F', alpha=0.13)
+                ax_main.set_ylim(bottom=-0.01)
             else:
-                ax.plot(df.index, df[sel_param], color='#77216F')
+                ax_main.plot(df.index, df[sel_param], color='#77216F')
 
         if ymaxplot != 0:
-            ax.set_ylim(top=ymaxplot)
+            ax_main.set_ylim(top=ymaxplot)
         else:
             pass
         if yminplot != 0:
-            ax.set_ylim(bottom=yminplot)
+            ax_main.set_ylim(bottom=yminplot)
         else:
             pass
+
+        #
+        # main plot options
+        ###################
 
         # Plot secondary parameter
         if sel_param2 in parameters:
             if samey:
-                ax.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
+                ax_main.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
             else:
-                ax2 = ax.twinx()
-                ax2.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
+                ax_main2 = ax_main.twinx()
+                ax_main2.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
 
         # Include linear trendline
         if trendline:
@@ -504,8 +539,8 @@ def statistics():
             z = np.polyfit(x, y, 1)
             p = np.poly1d(z)
             y_mean = [np.mean(df[sel_param])] * len(df.index)
-            ax.plot(df.index, p(x), color='#2C001E')
-            ax.plot(df.index, y_mean, linestyle='--', color='#AEA79F')
+            ax_main.plot(df.index, p(x), color='#2C001E')
+            ax_main.plot(df.index, y_mean, linestyle='--', color='#AEA79F')
             plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
 
         myxticks(sel_startdate, sel_enddate)
@@ -515,11 +550,16 @@ def statistics():
         plt.savefig(img, bbox_inches = 'tight', format='png')
         img.seek(0)
         plot_url = base64.b64encode(img.getvalue()).decode()
-        plt.close(fig)
+        plt.close(fig_main)
         show_plot=True
 
 
-        # 3D plot
+        #
+        # ADDITIONAL PLOTS, visible on user request
+        ###########################################
+
+        # 1) 3D plot
+        ############
         if (sel_param2 in parameters) and (sel_param3 in parameters):
             # This import registers the 3D projection, but is otherwise unused.
             from mpl_toolkits import mplot3d
@@ -577,7 +617,8 @@ def statistics():
             plt.close(fig_3d)
 
 
-        # FFT
+        # 2) FFT analysis
+        #################
         if fftspacing != 0:
             import scipy as sp
             import scipy.fftpack
@@ -588,18 +629,18 @@ def statistics():
             i = fftfreq > 0
 
             # Initialize separate plot for FF frequency spectrum
-            fig1, ax1 = plt.subplots(sharex=False, sharey=False, clear=True)
+            fig_fft, ax_fft = plt.subplots(sharex=False, sharey=False, clear=True)
             if largeplot == True:
-                fig1.set_size_inches(12.5, 6.0)
+                fig_fft.set_size_inches(12.5, 6.0)
             else:
-                fig1.set_size_inches(12.5, 3.0)
-            fig1.tight_layout()
-            ax1.set_axisbelow(True)
+                fig_fft.set_size_inches(12.5, 3.0)
+            fig_fft.tight_layout()
+            ax_fft.set_axisbelow(True)
             plt.title('FFT analiza frekvencije')
             formatter1 = EngFormatter(places=1, sep="\N{THIN SPACE}")
-            ax1.yaxis.set_major_formatter(formatter1)
-            ax1.plot(fftfreq[i], y_psd[i], color='#5E2750')
-            ax1.fill_between(fftfreq[i], 0, y_psd[i], color='#77216F', alpha=0.3)
+            ax_fft.yaxis.set_major_formatter(formatter1)
+            ax_fft.plot(fftfreq[i], y_psd[i], color='#5E2750')
+            ax_fft.fill_between(fftfreq[i], 0, y_psd[i], color='#77216F', alpha=0.3)
             plt.xlim(0, fftxmax)
             plt.ylim(bottom=0)
 
@@ -607,33 +648,35 @@ def statistics():
             y_fft_bis[np.abs(fftfreq) > 1] = 0
             y_slow = np.real(sp.fftpack.ifft(y_fft_bis))
             df[sel_param].plot(ax=ax, lw=1)
-            ax4 = ax1.twinx().twiny()
-            ax4.plot_date(df.index, y_slow, '-', color='#AEA79F', lw='1')
-            ax4.set_axisbelow(True)
-            ax4.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
+            ax_fft2 = ax_fft.twinx().twiny()
+            ax_fft2.plot_date(df.index, y_slow, '-', color='#AEA79F', lw='1')
+            ax_fft2.set_axisbelow(True)
+            ax_fft2.grid(linestyle='--', linewidth='0.4', color='#E95420', alpha=0.5, axis='both')
             plt.xlim(sel_startdate, sel_enddate)
             plt.margins(x=0.0, y=0.3)
-            ax4.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-            ax4.xaxis.set_major_locator(ticker.AutoLocator())
+            ax_fft2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+            ax_fft2.xaxis.set_major_locator(ticker.AutoLocator())
 
             # Save additional plot for FFT frequency spectrum
             img = io.BytesIO()
             plt.savefig(img, bbox_inches='tight', format='png')
             img.seek(0)
             fft_url = base64.b64encode(img.getvalue()).decode()
-            plt.close(fig1)
+            plt.close(fig_fft)
 
         else:
             pass
 
-        # Distribution histogram
+
+        # 3) Distribution histogram
+        ###########################
         if distribution:
-            fig2, ax2 = plt.subplots(sharex=False, sharey=False, clear=True)
+            fig_dist, ax_dist = plt.subplots(sharex=False, sharey=False, clear=True)
             if largeplot == True:
-                fig2.set_size_inches(12.5, 6.0)
+                fig_dist.set_size_inches(12.5, 6.0)
             else:
-                fig2.set_size_inches(12.5, 3.0)
-            fig2.tight_layout()
+                fig_dist.set_size_inches(12.5, 3.0)
+            fig_dist.tight_layout()
             plt.title('Razdioba')
 
             plt.hist(x=df[sel_param], color='#E88B0C', alpha=0.7, rwidth=0.9, bins=20)
@@ -643,11 +686,13 @@ def statistics():
             plt.savefig(img, bbox_inches='tight', format='png')
             img.seek(0)
             dist_url = base64.b64encode(img.getvalue()).decode()
-            plt.close(fig2)
+            plt.close(fig_dist)
         else:
             pass
 
-        # Boxplot diagram
+
+        # 4) Boxplot-whiskers diagram
+        #############################
         if boxplot:
             fig_box, ax_box = plt.subplots(sharex=False, sharey=False, clear=True)
             if largeplot == True:
@@ -690,7 +735,7 @@ def statistics():
                 df_box = df.groupby(pd.Grouper(freq='M')).count()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).count().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).count().tail(13).head(13 - df.index[-1].month)
-                boxtitle = "Razdioba broja mjesečnih pojavljivanja zapisa"
+                boxtitle = "Razdioba srednjeg broja mjesečnih pojavljivanja zapisa"
             df_box['month'] = df_box.index.month
 
             curr_year = df_box_soy.index.year.values[0]
@@ -725,45 +770,48 @@ def statistics():
         else:
             pass
 
-        # Rolling correlation plot
+
+        # 5) Rolling correlation plot
+        #############################
         if (sel_param2 in parameters) and (rollcorr == True) :
             if rollingmean==0:
                 window=3
             else:
                 window=rollingmean
             df['rollcorr'] = df[sel_param].rolling(window).corr(df2[sel_param2])
-            fig3, ax3 = plt.subplots(sharex=False, sharey=False, clear=True)
+            fig_rollcorr, ax_rollcorr = plt.subplots(sharex=False, sharey=False, clear=True)
             if largeplot == True:
-                fig3.set_size_inches(12.5, 6.0)
+                fig_rollcorr.set_size_inches(12.5, 6.0)
             else:
-                fig3.set_size_inches(12.5, 3.0)
-            fig3.tight_layout()
-            fig3.autofmt_xdate(rotation=50, ha='center', which='both')
-            ax3.set_axisbelow(True)
-            ax3.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
-            ax3.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
-            ax3.set_ylim(top=1)
-            ax3.set_ylim(bottom=-1)
-            ax3.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=1)
+                fig_rollcorr.set_size_inches(12.5, 3.0)
+            fig_rollcorr.tight_layout()
+            fig_rollcorr.autofmt_xdate(rotation=50, ha='center', which='both')
+            ax_rollcorr.set_axisbelow(True)
+            ax_rollcorr.grid(linestyle='--', linewidth='0.4', color='#41B3C5', alpha=0.5, axis='both')
+            ax_rollcorr.hlines(y=0, xmin=sel_startdate, xmax=sel_enddate, linewidth=1, color='black')
+            ax_rollcorr.set_ylim(top=1)
+            ax_rollcorr.set_ylim(bottom=-1)
+            ax_rollcorr.fill_between(df.index, 0, df['rollcorr'], color='#000000', alpha=1)
             plt.title('Pomična korelacija')
 
             plt.plot(df.index, df['rollcorr'], color='#000000', linewidth=1, alpha=1)
 
             plt.xlim(sel_startdate, sel_enddate)
-            ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-            ax3.xaxis.set_major_locator(ticker.AutoLocator())
+            ax_rollcorr.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+            ax_rollcorr.xaxis.set_major_locator(ticker.AutoLocator())
 
             # Save additional plot for distribution histogram
             img = io.BytesIO()
             plt.savefig(img, bbox_inches='tight', format='png')
             img.seek(0)
             rollcorr_url = base64.b64encode(img.getvalue()).decode()
-            plt.close(fig3)
+            plt.close(fig_rollcorr)
         else:
             pass
 
 
-        # Relative plot
+        # 6) Relative plot
+        ##################
         if (sel_param2 in parameters) and (relativeplot == True):
 
             if relativekde == False:
@@ -805,7 +853,8 @@ def statistics():
             plt.close(fig_rel)
 
 
-        # Seasonal decompose plot
+        # 7) Seasonal decompose plot
+        ############################
         timespan = (sel_enddate - sel_startdate).days
         if decompose and (timespan > 730):
             dcmpsf=None
@@ -837,6 +886,13 @@ def statistics():
             pass
 
 
+
+        ################
+        #              #
+        #     MISC     #
+        #              #
+        ################
+
         # Limit number of table rows if user requested large amount of data
         if removetbllimit == False:
             if len(sql_response) > 720:
@@ -844,6 +900,16 @@ def statistics():
                 table_truncated = True
         else:
             pass
+
+
+    ##
+    ## ###########################
+    ##
+    ## if form.is_submitted()  END
+    ##
+    ## ###########################
+    ##
+
 
     # Join sql response tuples for primary and secondary parameter into one
     if sel_param2 in parameters:
