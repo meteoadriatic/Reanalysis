@@ -691,7 +691,6 @@ def statistics():
             curr_year = df_box_soy.index.year.values[0]
             df_box_soy.index = df_box_soy.index.month
             df_box_soy.drop(df_box_soy.tail(1).index, inplace=True)
-            df_box_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
             pre_year = df_box_pye.index.year.values[0]
             df_box_pye.index = df_box_pye.index.month
 
