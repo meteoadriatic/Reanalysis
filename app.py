@@ -686,6 +686,11 @@ def statistics():
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).std().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).std().tail(13).head(13 - df.index[-1].month)
                 boxtitle = "Razdioba mjesečnih standardnih devijacija"
+            if boxtype == 'count':
+                df_box = df.groupby(pd.Grouper(freq='M')).count()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).count().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).count().tail(13).head(13 - df.index[-1].month)
+                boxtitle = "Razdioba broja mjesečnih pojavljivanja zapisa"
             df_box['month'] = df_box.index.month
 
             curr_year = df_box_soy.index.year.values[0]

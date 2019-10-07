@@ -21,7 +21,7 @@ class StatisticsForm(FlaskForm):
     boxplot = BooleanField('boxplot')
     boxdislast = BooleanField('boxdislast')
     boxtype = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma'),
-                                   ('median', 'Medijan'), ('std', 'St. devijacija')], default='mean')
+                                   ('median', 'Medijan'), ('std', 'St. devijacija'), ('count', 'Prebrojavanje')], default='mean')
     samey = BooleanField('samey')
     scatterplot = BooleanField('scatterplot')
     scatteralpha = StringField('scatteralpha', default='1.0', validators=[InputRequired()])
