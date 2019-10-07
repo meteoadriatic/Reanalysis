@@ -308,8 +308,12 @@ def statistics():
             max_pri = df[sel_param].max()
             min_pri = df[sel_param].min()
             if min_pri > 0:
-                gmean_pri = gmean(df[sel_param].tolist()).round(1)
-                hmean_pri = hmean(df[sel_param].tolist()).round(1)
+                try:
+                    gmean_pri = gmean(df[sel_param].tolist()).round(1)
+                    hmean_pri = hmean(df[sel_param].tolist()).round(1)
+                except:
+                    gmean_pri = ''
+                    hmean_pri = ''
             mean_pri = df[sel_param].mean().round(1)
             sum_pri = df[sel_param].sum().round(1)
             std_pri = df[sel_param].std().round(2)
@@ -330,8 +334,12 @@ def statistics():
                 max_sec = df2[sel_param2].max()
                 min_sec = df2[sel_param2].min()
                 if min_sec > 0:
-                    gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
-                    hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
+                    try:
+                        gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
+                        hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
+                    except:
+                        gmean_sec = ''
+                        hmean_sec = ''
                 mean_sec = df2[sel_param2].mean().round(1)
                 sum_sec = df2[sel_param2].sum().round(1)
                 std_sec = df2[sel_param2].std().round(2)
@@ -659,9 +667,7 @@ def statistics():
             plt.scatter(df_mean_soy.index, df_mean_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
             plt.scatter(df_mean_pye.index, df_mean_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
             plt.xlabel('Mjesec')
-            #plt.ylabel('°C')
-            #plt.grid(True)
-            plt.title("Razdioba podataka po mjesecima")
+            plt.title("Razdioba srednjih mjesečnih vrijednosti")
             plt.suptitle("")
             plt.legend()
 
