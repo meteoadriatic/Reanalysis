@@ -100,6 +100,7 @@ def statistics():
         largeplot = form.largeplot.data
         distribution = form.distribution.data
         boxplot = form.boxplot.data
+        boxdislast = form.boxdislast.data
         samey = form.samey.data
         scatter_plot = form.scatterplot.data
         scatter_alpha = float(form.scatteralpha.data)
@@ -118,6 +119,8 @@ def statistics():
         fftxmax = int(form.fftxmax.data)
         ymaxplot = float(form.ymaxplot.data)
         yminplot = float(form.yminplot.data)
+        ymaxbox = float(form.ymaxbox.data)
+        yminbox = float(form.yminbox.data)
         limit3d = form.limit3d.data
         plot3dbar = form.plot3dbar.data
         min3d = float(form.min3d.data)
@@ -312,8 +315,8 @@ def statistics():
                     gmean_pri = gmean(df[sel_param].tolist()).round(1)
                     hmean_pri = hmean(df[sel_param].tolist()).round(1)
                 except:
-                    gmean_pri = ''
-                    hmean_pri = ''
+                    gmean_pri = 'N/A'
+                    hmean_pri = 'N/A'
             mean_pri = df[sel_param].mean().round(1)
             sum_pri = df[sel_param].sum().round(1)
             std_pri = df[sel_param].std().round(2)
@@ -338,8 +341,8 @@ def statistics():
                         gmean_sec = gmean(df2[sel_param2].tolist()).round(1)
                         hmean_sec = hmean(df2[sel_param2].tolist()).round(1)
                     except:
-                        gmean_sec = ''
-                        hmean_sec = ''
+                        gmean_sec = 'N/A'
+                        hmean_sec = 'N/A'
                 mean_sec = df2[sel_param2].mean().round(1)
                 sum_sec = df2[sel_param2].sum().round(1)
                 std_sec = df2[sel_param2].std().round(2)
@@ -653,23 +656,32 @@ def statistics():
             fig_box.tight_layout()
             plt.title('Kutijasti dijagram')
 
-            df_mean = df.groupby(pd.Grouper(freq='M')).mean().round(1)
+            df_mean = df.groupby(pd.Grouper(freq='M')).mean()
             df_mean['month'] = df_mean.index.month
-            df_mean_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month).round(1)
+            df_mean_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month)
             curr_year = df_mean_soy.index.year.values[0]
             df_mean_soy.index = df_mean_soy.index.month
             df_mean_soy.drop(df_mean_soy.tail(1).index, inplace=True)
-            df_mean_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month).round(1)
+            df_mean_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
             pre_year = df_mean_pye.index.year.values[0]
             df_mean_pye.index = df_mean_pye.index.month
 
             df_mean.boxplot(column=sel_param, by='month', figsize=(13, 6), notch=True, meanline=True)
-            plt.scatter(df_mean_soy.index, df_mean_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
-            plt.scatter(df_mean_pye.index, df_mean_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
+            if not boxdislast:
+                plt.scatter(df_mean_soy.index, df_mean_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
+                plt.scatter(df_mean_pye.index, df_mean_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
+                plt.legend()
             plt.xlabel('Mjesec')
             plt.title("Razdioba srednjih mjesečnih vrijednosti")
             plt.suptitle("")
-            plt.legend()
+            if ymaxbox != 0:
+                plt.ylim(top=ymaxbox)
+            else:
+                pass
+            if yminbox != 0:
+                plt.ylim(bottom=yminbox)
+            else:
+                pass
 
             # Save additional plot for boxplot
             img = io.BytesIO()

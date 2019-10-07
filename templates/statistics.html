@@ -112,7 +112,7 @@
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.boxplot }}
-                                    <small id="boxplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka po mjesecima na kutijastom dijagramu (boxplot-whiskers).">Kutijasti dijag.</small>
+                                    <small id="boxplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka po mjesecima na kutijastom dijagramu (boxplot-whiskers).">Kutijasti dijagram</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
                                     {{ form.cumsum }}
@@ -178,6 +178,22 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="tab-pane fade show" id="v-pills-basic2" role="tabpanel" aria-labelledby="v-pills-basic2-tab">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="ymaxbox" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os kutijastog grafa (x = 0 = automatski prema maksimumu iz podataka)">Box y<sub>max</sub></small>
+                                            {{ form.ymaxbox(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="yminbox" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči minimum Y os kutijastog grafa (x = 0 = automatski prema minimumu iz podataka)">Box y<sub>min</sub></small>
+                                            {{ form.yminbox(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="boxdislast" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Onemogući dodatno prikazivanje vrijednosti za posljednjih 12 mjeseci na kutijastom dijagramu.">Box bez 12</small>
+                                            {{ form.boxdislast }}
+                                        </li>
+                                    </ul>
+                                </div>
                                 <div class="tab-pane fade show" id="v-pills-moving" role="tabpanel" aria-labelledby="v-pills-moving-tab">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item py-1 li-no-padding">
@@ -185,7 +201,7 @@
                                             {{ form.rollingwindow(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
                                         </li>
                                         <li class="list-group-item py-1 li-no-padding">
-                                            {{ form.rollingmean}}
+                                            {{ form.rollingmean }}
                                             <small id="rollingmean" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Primijeni pomični srednjak na graf.">Srednjak</small>
                                         </li>
                                         <li class="list-group-item py-1 li-no-padding">
@@ -272,6 +288,7 @@
                     <div class="col-md-2 col-plot-options">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                           <a class="nav-link active micro-text" id="v-pills-basic-tab" data-toggle="pill" href="#v-pills-basic" role="tab" aria-controls="v-pills-basic" aria-selected="true" data-toggle="tooltip" title="Opcije za podešavanje grafičkog prikaza)">Opcije grafa</a>
+                          <a class="nav-link micro-text" id="v-pills-basic-tab2" data-toggle="pill" href="#v-pills-basic2" role="tab" aria-controls="v-pills-basic2" aria-selected="false" data-toggle="tooltip" title="Opcije za podešavanje grafičkog prikaza (2. dio))">Opcije grafa 2</a>
                           <a class="nav-link micro-text" id="v-pills-3d-tab" data-toggle="pill" href="#v-pills-3d" role="tab" aria-controls="v-pills-3d" aria-selected="false" data-toggle="tooltip" title="Opcije 3D grafičkog prikaza (potrebno odabrati uz primarni i sekundarni, dodatno i 3D paramatar)">Opcije 3D grafa</a>
                           <a class="nav-link micro-text" id="v-pills-moving-tab" data-toggle="pill" href="#v-pills-moving" role="tab" aria-controls="v-pills-moving" aria-selected="false" data-toggle="tooltip" title="Pomične statistike (moving/rolling statistics)">Pomične statistike</a>
                           <a class="nav-link micro-text" id="v-pills-fft-tab" data-toggle="pill" href="#v-pills-fft" role="tab" aria-controls="v-pills-fft" aria-selected="false" data-toggle="tooltip" title="Opcije za provedbu Fast Fourier analize na podacima">FFT analiza</a>
