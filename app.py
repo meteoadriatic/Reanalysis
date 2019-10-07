@@ -50,7 +50,7 @@ def statistics():
 
     # Set variables' defaults
     sql_response = sel_param = sel_param2 = sel_param3 = sel_param_bak = sel_param2_bak = sel_param3_bak = sel_loc = ''
-    min3d =  max3d = plot_url = fft_url = dist_url = relplot_url = rollcorr_url = plot3d_url = ''
+    min3d =  max3d = plot_url = fft_url = dist_url = boxplot_url = relplot_url = rollcorr_url = plot3d_url = ''
     trendline = removetbllimit = samey = distribution = table_truncated = limit3d = plot3dbar = show_plot = False
     max_pri = min_pri = mean_pri = max_sec = min_sec = mean_sec = std_pri = std_sec = gmean_pri = hmean_pri = 'N/A'
     gmean_sec = hmean_sec = variation_pri = variation_sec = sum_pri = sum_sec = kurtosis_pri = kurtosis_sec = 'N/A'
@@ -99,6 +99,7 @@ def statistics():
         removetbllimit = form.removetbllimit.data
         largeplot = form.largeplot.data
         distribution = form.distribution.data
+        boxplot = form.boxplot.data
         samey = form.samey.data
         scatter_plot = form.scatterplot.data
         scatter_alpha = float(form.scatteralpha.data)
@@ -634,6 +635,45 @@ def statistics():
         else:
             pass
 
+        # Boxplot diagram
+        if boxplot:
+            fig_box, ax_box = plt.subplots(sharex=False, sharey=False, clear=True)
+            if largeplot == True:
+                fig_box.set_size_inches(12.5, 6.0)
+            else:
+                fig_box.set_size_inches(12.5, 3.0)
+            fig_box.tight_layout()
+            plt.title('Kutijasti dijagram')
+
+            df_mean = df.groupby(pd.Grouper(freq='M')).mean().round(1)
+            df_mean['month'] = df_mean.index.month
+            df_mean_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month).round(1)
+            curr_year = df_mean_soy.index.year.values[0]
+            df_mean_soy.index = df_mean_soy.index.month
+            df_mean_soy.drop(df_mean_soy.tail(1).index, inplace=True)
+            df_mean_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month).round(1)
+            pre_year = df_mean_pye.index.year.values[0]
+            df_mean_pye.index = df_mean_pye.index.month
+
+            df_mean.boxplot(column=sel_param, by='month', figsize=(13, 6), notch=True, meanline=True)
+            plt.scatter(df_mean_soy.index, df_mean_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
+            plt.scatter(df_mean_pye.index, df_mean_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
+            plt.xlabel('Mjesec')
+            #plt.ylabel('°C')
+            #plt.grid(True)
+            plt.title("Razdioba podataka po mjesecima")
+            plt.suptitle("")
+            plt.legend()
+
+            # Save additional plot for boxplot
+            img = io.BytesIO()
+            plt.savefig(img, bbox_inches='tight', format='png')
+            img.seek(0)
+            boxplot_url = base64.b64encode(img.getvalue()).decode()
+            plt.close(fig_box)
+        else:
+            pass
+
         # Rolling correlation plot
         if (sel_param2 in parameters) and (rollcorr == True) :
             if rollingmean==0:
@@ -778,6 +818,7 @@ def statistics():
                            plot=plot_url,
                            fft=fft_url,
                            dist=dist_url,
+                           boxplot=boxplot_url,
                            relplot=relplot_url,
                            plot3d=plot3d_url,
                            rollcorr=rollcorr_url,

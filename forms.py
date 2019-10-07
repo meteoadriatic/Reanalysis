@@ -18,6 +18,7 @@ class StatisticsForm(FlaskForm):
     removetbllimit = BooleanField('removetbllimit')
     largeplot = BooleanField('largeplot')
     distribution = BooleanField('distribution')
+    boxplot = BooleanField('boxplot')
     samey = BooleanField('samey')
     scatterplot = BooleanField('scatterplot')
     scatteralpha = StringField('scatteralpha', default='1.0', validators=[InputRequired()])

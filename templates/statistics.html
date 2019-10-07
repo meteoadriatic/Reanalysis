@@ -111,6 +111,10 @@
                                     <small id="distribution" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka na histogramu.">Razdioba</small>
                                 </li>
                                 <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.boxplot }}
+                                    <small id="boxplot" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži razdiobu podataka po mjesecima na kutijastom dijagramu (boxplot-whiskers).">Kutijasti</small>
+                                </li>
+                                <li class="list-group-item py-1 li-no-padding">
                                     {{ form.cumsum }}
                                     <small id="cumsum" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Prikaži kumulativnu sumu parametra od početka do kraja odabranog razdoblja. Najkorisnije za sumiranje oborina u vremenu.">Kumulativna suma</small>
                                 </li>
@@ -301,6 +305,9 @@
                         {% endif %}
                         {% if dist != '' %}
                             <img class="img-fluid" src="data:image/png;base64, {{dist}}" alt="Distribution">
+                        {% endif %}
+                        {% if boxplot != '' %}
+                            <img class="img-fluid" src="data:image/png;base64, {{boxplot}}" alt="Boxplot">
                         {% endif %}
                     </div>
                 </fieldset>
