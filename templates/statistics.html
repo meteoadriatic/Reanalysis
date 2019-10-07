@@ -192,6 +192,15 @@
                                             <small id="boxdislast" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Onemogući dodatno prikazivanje vrijednosti za posljednjih 12 mjeseci na kutijastom dijagramu.">Box bez 12</small>
                                             {{ form.boxdislast }}
                                         </li>
+                                        <div class="card-body card-no-padding mt-3">
+                                            <small>Def. uzorka za box:</small>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item py-2 li-no-padding">
+                                                    {{ form.boxtype(class="li-no-padding small") }}
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </ul>
                                 </div>
                                 <div class="tab-pane fade show" id="v-pills-moving" role="tabpanel" aria-labelledby="v-pills-moving-tab">

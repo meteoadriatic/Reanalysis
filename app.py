@@ -101,6 +101,7 @@ def statistics():
         distribution = form.distribution.data
         boxplot = form.boxplot.data
         boxdislast = form.boxdislast.data
+        boxtype = form.boxtype.data
         samey = form.samey.data
         scatter_plot = form.scatterplot.data
         scatter_alpha = float(form.scatteralpha.data)
@@ -654,22 +655,44 @@ def statistics():
             else:
                 fig_box.set_size_inches(12.5, 3.0)
             fig_box.tight_layout()
-            plt.title('Kutijasti dijagram')
 
-            df_mean = df.groupby(pd.Grouper(freq='M')).mean()
-            df_mean['month'] = df_mean.index.month
-            df_mean_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month)
-            curr_year = df_mean_soy.index.year.values[0]
-            df_mean_soy.index = df_mean_soy.index.month
-            df_mean_soy.drop(df_mean_soy.tail(1).index, inplace=True)
-            df_mean_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
-            pre_year = df_mean_pye.index.year.values[0]
-            df_mean_pye.index = df_mean_pye.index.month
+            if boxtype == 'mean':
+                df_box = df.groupby(pd.Grouper(freq='M')).mean()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
+            if boxtype == 'max':
+                df_box = df.groupby(pd.Grouper(freq='M')).max()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).max().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).max().tail(13).head(13 - df.index[-1].month)
+            if boxtype == 'min':
+                df_box = df.groupby(pd.Grouper(freq='M')).min()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).min().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).min().tail(13).head(13 - df.index[-1].month)
+            if boxtype == 'median':
+                df_box = df.groupby(pd.Grouper(freq='M')).median()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).median().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).median().tail(13).head(13 - df.index[-1].month)
+            if boxtype == 'sum':
+                df_box = df.groupby(pd.Grouper(freq='M')).sum()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).sum().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).sum().tail(13).head(13 - df.index[-1].month)
+            if boxtype == 'std':
+                df_box = df.groupby(pd.Grouper(freq='M')).std()
+                df_box_soy = df.groupby(pd.Grouper(freq='M')).std().tail(df.index[-1].month)
+                df_box_pye = df.groupby(pd.Grouper(freq='M')).std().tail(13).head(13 - df.index[-1].month)
+            df_box['month'] = df_box.index.month
 
-            df_mean.boxplot(column=sel_param, by='month', figsize=(13, 6), notch=True, meanline=True)
+            curr_year = df_box_soy.index.year.values[0]
+            df_box_soy.index = df_box_soy.index.month
+            df_box_soy.drop(df_box_soy.tail(1).index, inplace=True)
+            df_box_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
+            pre_year = df_box_pye.index.year.values[0]
+            df_box_pye.index = df_box_pye.index.month
+
+            df_box.boxplot(column=sel_param, by='month', figsize=(13, 6), notch=True, meanline=True)
             if not boxdislast:
-                plt.scatter(df_mean_soy.index, df_mean_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
-                plt.scatter(df_mean_pye.index, df_mean_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
+                plt.scatter(df_box_soy.index, df_box_soy[sel_param], color='red', alpha=1.0, s=45, label=curr_year)
+                plt.scatter(df_box_pye.index, df_box_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
                 plt.legend()
             plt.xlabel('Mjesec')
             plt.title("Razdioba srednjih mjesečnih vrijednosti")
