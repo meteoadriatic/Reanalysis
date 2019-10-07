@@ -660,26 +660,32 @@ def statistics():
                 df_box = df.groupby(pd.Grouper(freq='M')).mean()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).mean().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).mean().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba srednjih mjesečnih vrijednosti")
             if boxtype == 'max':
                 df_box = df.groupby(pd.Grouper(freq='M')).max()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).max().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).max().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba maksimalnih mjesečnih vrijednosti")
             if boxtype == 'min':
                 df_box = df.groupby(pd.Grouper(freq='M')).min()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).min().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).min().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba minimalnih mjesečnih vrijednosti")
             if boxtype == 'median':
                 df_box = df.groupby(pd.Grouper(freq='M')).median()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).median().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).median().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba mjesečnih medijana")
             if boxtype == 'sum':
                 df_box = df.groupby(pd.Grouper(freq='M')).sum()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).sum().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).sum().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba mjesečnih suma")
             if boxtype == 'std':
                 df_box = df.groupby(pd.Grouper(freq='M')).std()
                 df_box_soy = df.groupby(pd.Grouper(freq='M')).std().tail(df.index[-1].month)
                 df_box_pye = df.groupby(pd.Grouper(freq='M')).std().tail(13).head(13 - df.index[-1].month)
+                plt.title("Razdioba mjesečnih standardnih devijacija")
             df_box['month'] = df_box.index.month
 
             curr_year = df_box_soy.index.year.values[0]
@@ -695,7 +701,6 @@ def statistics():
                 plt.scatter(df_box_pye.index, df_box_pye[sel_param], color='red', alpha=0.5, s=20, label=pre_year)
                 plt.legend()
             plt.xlabel('Mjesec')
-            plt.title("Razdioba srednjih mjesečnih vrijednosti")
             plt.suptitle("")
             if ymaxbox != 0:
                 plt.ylim(top=ymaxbox)
