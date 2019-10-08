@@ -11,11 +11,11 @@
     -->
 
     <!-- Ubuntu theme instead of bootstrap default: https://bootswatch.com/united/ -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='bootstrap.min.css') }}">
 
     <!-- Custom CSS and favicon.ico -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('.static', filename='favicon.ico') }}">
 
     <!-- Leaflet -->
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
@@ -32,17 +32,17 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
             <div class="container">
-                <a class="navbar-brand mr-4" href="{{ url_for('index') }}">CRD početna</a>
+                <a class="navbar-brand mr-4" href="{{ url_for('public.index') }}">CRD početna</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{{ url_for('locations') }}">Lokacije</a>
-                        <a class="nav-item nav-link" href="{{ url_for('map') }}">Karta</a>
-                        <a class="nav-item nav-link" href="{{ url_for('statistics') }}">Statistika</a>
-                        <a class="nav-item nav-link" href="{{ url_for('compare_locations') }}">Usporedba</a>
-                        <a class="nav-item nav-link" href="{{ url_for('documentation') }}">Dokumentacija</a>
+                        <a class="nav-item nav-link" href="{{ url_for('public.locations') }}">Lokacije</a>
+                        <a class="nav-item nav-link" href="{{ url_for('public.map') }}">Karta</a>
+                        <a class="nav-item nav-link" href="{{ url_for('public.statistics') }}">Statistika</a>
+                        <a class="nav-item nav-link" href="{{ url_for('public.compare_locations') }}">Usporedba</a>
+                        <a class="nav-item nav-link" href="{{ url_for('public.documentation') }}">Dokumentacija</a>
                     </div>
                 </div>
             </div>

@@ -17,10 +17,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in locs %}
+                    {% for location in locs %}
                         <tr>
-                        {% for d in row %}
-                            <td>{{ d }}</td>
+                        {% for key in location.columns() %}
+                            <td>{{ location[key] }}</td>
                         {% endfor %}
                         </tr>
                     {% endfor %}
