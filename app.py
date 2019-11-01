@@ -592,11 +592,11 @@ def statistics():
 
             print(dfstat.head())
 
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_max'], color='red', alpha=statalpha, lw=0.7)
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_mean'], color='orange', alpha=statalpha, lw=0.7)
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'], color='black', alpha=statalpha, lw=1.2)
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'], color='cyan', alpha=statalpha, lw=0.7)
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='blue', alpha=statalpha, lw=0.7)
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_max'], color='red', alpha=statalpha, lw=0.7, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_mean'], color='orange', alpha=statalpha, lw=0.7, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'], color='black', alpha=statalpha, lw=1.2, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'], color='cyan', alpha=statalpha, lw=0.7, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='blue', alpha=statalpha, lw=0.7, linestyle='--')
 
 
         myxticks(sel_startdate, sel_enddate)
