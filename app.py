@@ -588,6 +588,7 @@ def statistics():
                 dfstat = dfstat.append(dfstat_i)
 
             dfstat = dfstat.sort_index()
+            dfstat = dfstat.truncate(sel_startdate, sel_enddate)
 
             print(dfstat.head())
 
