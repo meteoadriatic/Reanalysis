@@ -122,6 +122,10 @@
                                     {{ form.decompose }}
                                     <small id="decompose" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Izvrši sezonalnu dekompoziciju signala na komponente (trend, seasonal, residual). Odabrani period mora biti veći od dvije godine (730 dana). Samo primarni parametar.">S. dekompozicija</small>
                                 </li>
+                                <li class="list-group-item py-1 li-no-padding">
+                                    {{ form.statlines }}
+                                    <small id="statlines" class="d-inline-block text-muted align-top" data-toggle="tooltip" title="Dodaj na graf statističke linije za dan u godini (srednja vrijednost, apsolutna maksimalna, apsolutna minimalna, srednja maksimalna i srednja minimalna vrijednost. Statističke linije ne postoje za kombinirane parametre (npr. smicanje, relativna topografija, smjer vjetra, ...)">Statističke linije</small>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -180,6 +184,10 @@
                                 </div>
                                 <div class="tab-pane fade show" id="v-pills-basic2" role="tabpanel" aria-labelledby="v-pills-basic2-tab">
                                     <ul class="list-group list-group-flush">
+                                        <li class="list-group-item py-1 li-no-padding">
+                                            <small id="statalpha" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Alpha parametar (prozirnost) za statističke linije. Valjane decimalne vrijednosti su od 0 - potpuno prozirno do 1 - potpuno neprozirno.">Stat. l. &alpha;</small>
+                                            {{ form.statalpha(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}
+                                        </li>
                                         <li class="list-group-item py-1 li-no-padding">
                                             <small id="ymaxbox" class="d-inline-block text-muted align-middle" data-toggle="tooltip" title="Ograniči maksimum Y os kutijastog grafa (x = 0 = automatski prema maksimumu iz podataka)">Box y<sub>max</sub></small>
                                             {{ form.ymaxbox(class="form-control form-control-sm narrow-form-control-fr d-inline-block") }}

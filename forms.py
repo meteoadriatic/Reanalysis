@@ -15,6 +15,8 @@ class StatisticsForm(FlaskForm):
     startdate = DateField('startdate', format='%Y-%m-%d', default=datetime(2018, 9, 1, 00, 00, 00, 00), validators=[InputRequired()])
     enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00), validators=[InputRequired()])
     trendline = BooleanField('trendline')
+    statlines = BooleanField('statlines')
+    statalpha = StringField('statalpha', default=1.0, validators=[InputRequired()])
     removetbllimit = BooleanField('removetbllimit')
     largeplot = BooleanField('largeplot')
     distribution = BooleanField('distribution')

@@ -105,6 +105,8 @@ def statistics():
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
+        statlines = form.statlines.data
+        statalpha = float(form.statalpha.data)
         removetbllimit = form.removetbllimit.data
         largeplot = form.largeplot.data
         distribution = form.distribution.data
@@ -542,6 +544,59 @@ def statistics():
             ax_main.plot(df.index, p(x), color='#2C001E')
             ax_main.plot(df.index, y_mean, linestyle='--', color='#AEA79F')
             plt.title("MEAN=%.3f TREND SLOPE=%.6fx" % (y_mean[0], z[0]))
+
+        # Include statistical lines (mean, mins, maxs)
+        if statlines and sel_param not in appends:
+            import calendar
+            START_YYYY = df.index[0].year
+            END_YYYY = df.index[-1].year
+            # Retrieve data from MySQL
+            SQL = '''   SELECT month, day, type, {}
+                            FROM statistics
+                            WHERE location={}
+                    '''.format(sel_param, '"' + sel_loc + '"')
+            cur.execute(SQL)
+            statlines_response = cur.fetchall()
+
+            # Load MySQL response into pandas dataframe
+            dfstat = pd.DataFrame(list(statlines_response))
+            dfstat.columns = ['month', 'day', 'type', sel_param]
+            dfstat_copy = dfstat
+            YYYY = START_YYYY
+            if calendar.isleap(YYYY):
+                pass
+            else:
+                dfstat = dfstat.drop(dfstat[(dfstat.month == 2) & (dfstat.day == 29)].index)
+
+            dfstat['year'] = YYYY
+            dfstat['datetime'] = pd.to_datetime(dfstat[['year', 'month', 'day']])
+            dfstat = dfstat.set_index('datetime')
+
+            for i in range((START_YYYY + 1), (END_YYYY + 1)):
+                dfstat_i = dfstat_copy
+
+                YYYY = i
+                if calendar.isleap(YYYY):
+                    pass
+                else:
+                    dfstat_i = dfstat_i.drop(dfstat_i[(dfstat_i.month == 2) & (dfstat_i.day == 29)].index)
+
+                dfstat_i['year'] = YYYY
+                dfstat_i['datetime'] = pd.to_datetime(dfstat_i[['year', 'month', 'day']])
+                dfstat_i = dfstat_i.set_index('datetime')
+
+                dfstat = dfstat.append(dfstat_i)
+
+            dfstat = dfstat.sort_index()
+
+            print(dfstat.head())
+
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_max'], color='red', alpha=statalpha, lw=0.7)
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_mean'], color='orange', alpha=statalpha, lw=0.7)
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'], color='black', alpha=statalpha, lw=1.2)
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'], color='cyan', alpha=statalpha, lw=0.7)
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='blue', alpha=statalpha, lw=0.7)
+
 
         myxticks(sel_startdate, sel_enddate)
 
