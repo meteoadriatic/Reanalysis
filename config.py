@@ -9,3 +9,4 @@ app.config['MYSQL_PASSWORD'] = 'Power/Off'
 app.config['MYSQL_DB'] = 'reanalysis_test'
 app.config['MYSQL_PORT'] = 33333
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
