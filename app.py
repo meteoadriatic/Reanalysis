@@ -590,12 +590,11 @@ def statistics():
             dfstat = dfstat.sort_index()
             dfstat = dfstat.truncate(sel_startdate, sel_enddate)
 
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_max'], color='red', alpha=statalpha, lw=0.7, linestyle='--')
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_mean'].rolling(5, min_periods=1, center=True).mean(), color='orange', alpha=statalpha, lw=0.7, linestyle='--')
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'].rolling(7, min_periods=1, center=True).mean(), color='black', alpha=statalpha, lw=1.2, linestyle='--')
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'].rolling(5, min_periods=1, center=True).mean(), color='cyan', alpha=statalpha, lw=0.7, linestyle='--')
-            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='blue', alpha=statalpha, lw=0.7, linestyle='--')
-
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_max'], color='red', alpha=statalpha, lw=1.2, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'max_mean'].rolling(5, min_periods=1, center=True).mean(), color='orangered', alpha=statalpha, lw=1.6, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'].rolling(7, min_periods=1, center=True).mean(), color='black', alpha=statalpha, lw=1.8, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'].rolling(5, min_periods=1, center=True).mean(), color='dodgerblue', alpha=statalpha, lw=1.6, linestyle='--')
+            ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='mediumblue', alpha=statalpha, lw=1.2, linestyle='--')
 
         myxticks(sel_startdate, sel_enddate)
 
