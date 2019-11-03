@@ -352,30 +352,30 @@ def statistics():
 
         # Apply rolling sum to plot data if requested by user
         if rollingsum == True:
-            df[sel_param] = df[sel_param].rolling(rollingwindow).sum()
+            df[sel_param] = df[sel_param].rolling(rollingwindow, center=True).sum()
             df.dropna(inplace=True)
             if sel_param2 in parameters:
-                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).sum()
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow, center=True).sum()
                 df2.dropna(inplace=True)
         else:
             pass
 
         # Apply rolling mean to plot data if requested by user
         if rollingmean == True:
-            df[sel_param] = df[sel_param].rolling(rollingwindow).mean()
+            df[sel_param] = df[sel_param].rolling(rollingwindow, center=True, min_periods=1).mean()
             df.dropna(inplace=True)
             if sel_param2 in parameters:
-                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).mean()
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow, center=True, min_periods=1).mean()
                 df2.dropna(inplace=True)
         else:
             pass
 
         # Apply rolling standard deviation to plot data if requested by user
         if rollingstdev == True:
-            df[sel_param] = df[sel_param].rolling(rollingwindow).std()
+            df[sel_param] = df[sel_param].rolling(rollingwindow, center=True, min_periods=1).std()
             df.dropna(inplace=True)
             if sel_param2 in parameters:
-                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow).std()
+                df2[sel_param2] = df2[sel_param2].rolling(rollingwindow, center=True, min_periods=1).std()
                 df2.dropna(inplace=True)
         else:
             pass
@@ -595,7 +595,7 @@ def statistics():
             ax_main.plot(dfstat[sel_param][dfstat['type'] == 'mean_mean'].rolling(7, min_periods=1, center=True).mean(), color='black', alpha=statalpha, lw=1.8, linestyle='--')
             ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_mean'].rolling(5, min_periods=1, center=True).mean(), color='dodgerblue', alpha=statalpha, lw=1.6, linestyle='--')
             ax_main.plot(dfstat[sel_param][dfstat['type'] == 'min_min'], color='mediumblue', alpha=statalpha, lw=1.2, linestyle='--')
- 
+
         myxticks(sel_startdate, sel_enddate)
 
         # Save plot into memory
