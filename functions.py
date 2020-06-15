@@ -106,3 +106,15 @@ def last_available_date(cur):
     ''')
     last_date = cur.fetchall()
     return last_date
+
+def observations():
+    observations = ['Temperature', 'Humidity', 'Pressure', 'WSpd']
+    return observations
+
+def user_friendly_obsnames():
+    obsUFmap = {'Temperature': 'Temperatura zraka',
+                   'Humidity': 'Vlažnost zraka',
+                   'Pressure': 'Tlak zraka',
+                   'WSpd': 'Brzina vjetra',
+       }
+    return obsUFmap

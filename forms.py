@@ -12,6 +12,7 @@ class StatisticsForm(FlaskForm):
     parameters = SelectField('parameters')
     parameters2 = SelectField('parameters2')
     parameters3 = SelectField('parameters3')
+    observations = SelectField('observations')
     startdate = DateField('startdate', format='%Y-%m-%d', default=datetime(2018, 9, 1, 00, 00, 00, 00), validators=[InputRequired()])
     enddate = DateField('enddate', format='%Y-%m-%d', default=datetime(2018, 9, 30, 00, 00, 00, 00), validators=[InputRequired()])
     trendline = BooleanField('trendline')

@@ -53,6 +53,16 @@
                             {% endif %}
                         {% endfor %}
                     </select>
+                    <select name="observations" class="form-control">
+                        <option value="" SELECTED>Mjerenje (opcionalno)</option>"
+                        {% for obs in observations %}
+                            {% if obs==sel_obs %}
+                                <option value="{{obs}}" SELECTED>{{obs}}</option>"
+                            {% else %}
+                                <option value="{{obs}}">{{obs}}</option>"
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                     </div>
                 </div>
             </fieldset>

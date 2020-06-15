@@ -49,8 +49,8 @@ def statistics():
     form = StatisticsForm()
 
     # Set variables' defaults
-    sql_response = sel_param = sel_param2 = sel_param3 = sel_param_bak = sel_param2_bak = sel_param3_bak = sel_loc = ''
-    min3d =  max3d = plot_url = fft_url = dist_url = boxplot_url = relplot_url = rollcorr_url = plot3d_url = ''
+    sql_response = sel_param = sel_param2 = sel_param3 = sel_param_bak = sel_param2_bak = sel_param3_bak = sel_obs_bak = sel_loc = ''
+    min3d =  max3d = plot_url = fft_url = dist_url = boxplot_url = relplot_url = rollcorr_url = plot3d_url = sel_obs = ''
     trendline = removetbllimit = samey = distribution = table_truncated = limit3d = plot3dbar = show_plot = False
     max_pri = min_pri = mean_pri = max_sec = min_sec = mean_sec = std_pri = std_sec = gmean_pri = hmean_pri = 'N/A'
     gmean_sec = hmean_sec = variation_pri = variation_sec = sum_pri = sum_sec = kurtosis_pri = kurtosis_sec = 'N/A'
@@ -67,6 +67,10 @@ def statistics():
     from functions import retrieve_parameters
     parameters = retrieve_parameters(cur)
 
+    # Retrieve observations and populate select field
+    from functions import observations
+    observations = observations()
+
     # Append calculated parameters (params.py)
     from functions import append_calculates
     parameters, appends = append_calculates(parameters)
@@ -81,6 +85,16 @@ def statistics():
     form.parameters.choices = parametersUF
     form.parameters2.choices = parametersUF
     form.parameters3.choices = parametersUF
+
+    # Same for observations
+    observationsUF = observations
+    from functions import user_friendly_obsnames
+    obsUFmap = user_friendly_obsnames()
+    for x in observationsUF:
+        if x in obsUFmap:
+            observationsUF = [i.replace(x, obsUFmap.get(x)) for i in observationsUF]
+    form.observations.choices = observationsUF
+
 
     # Retrieve first and last datetime from database
     from functions import first_available_date, last_available_date
@@ -102,6 +116,7 @@ def statistics():
         sel_param = form.parameters.data
         sel_param2 = form.parameters2.data
         sel_param3 = form.parameters3.data
+        sel_obs = form.observations.data
         sel_startdate = form.startdate.data
         sel_enddate = form.enddate.data
         trendline = form.trendline.data
@@ -158,6 +173,7 @@ def statistics():
         sel_param_bak = sel_param
         sel_param2_bak = sel_param2
         sel_param3_bak = sel_param3
+        sel_obs_bak = sel_obs
 
         if sel_param in paramsUFmap.values():
             for key, value in paramsUFmap.items():
@@ -173,6 +189,11 @@ def statistics():
             for key, value in paramsUFmap.items():
                 if value == sel_param3:
                     sel_param3 = key
+
+        if sel_obs in obsUFmap.values():
+            for key, value in obsUFmap.items():
+                if value == sel_obs:
+                    sel_obs = key
 
         # Primary parameter processing
         # Functions for additional parameters derived from raw sql data in params.py
@@ -287,6 +308,30 @@ def statistics():
             if resampleperiod != 'Off':
                 df3 = df3.groupby(pd.Grouper(freq=resampleperiod))[sel_param3].agg([resamplehow]).round(1)
                 df3.columns = [sel_param3]
+
+
+        if sel_obs in observations:
+            try:
+                # Observation parameter processing
+                # Retrieve data from MySQL
+                SQL_obs = '''  SELECT DateTime, {}
+                            FROM dhmz_obs
+                            WHERE location=%s
+                            AND DateTime > %s
+                            AND DateTime <= %s
+                            ORDER BY DateTime
+                    '''.format(sel_obs)
+                cur.execute(SQL_obs, (sel_loc, sel_startdate, sel_enddate))
+                sql_obs = cur.fetchall()
+
+                # Load MySQL response into pandas dataframe
+                df4 = pd.DataFrame(list(sql_obs))
+                df4.set_index([0], inplace=True)
+                df4.index.name = ''
+                df4.columns = [sel_obs]
+
+            except:
+                pass
 
 
         if disablestats == False:
@@ -533,6 +578,17 @@ def statistics():
             else:
                 ax_main2 = ax_main.twinx()
                 ax_main2.plot(df.index, df2[sel_param2], '.', color='grey', markersize=5)
+
+        # Plot observation
+        try:
+            if sel_obs in observations:
+                if samey:
+                    ax_main.scatter(df4.index, df4[sel_obs], marker='+', color='violet', alpha=0.7)
+                else:
+                    ax_mainobs = ax_main.twinx()
+                    ax_mainobs.scatter(df4.index, df4[sel_obs], marker='+', color='violet', alpha=0.7)
+        except:
+            pass
 
         # Include linear trendline
         if trendline:
@@ -975,6 +1031,7 @@ def statistics():
                            form=form,
                            locations=locations,
                            parameters=parametersUF,
+                           observations=observationsUF,
                            first_date=first_date,
                            last_date=last_date,
                            response=response,
@@ -982,6 +1039,7 @@ def statistics():
                            sel_param=sel_param_bak,
                            sel_param2=sel_param2_bak,
                            sel_param3=sel_param3_bak,
+                           sel_obs=sel_obs_bak,
                            sel_loc=sel_loc,
                            trendline=trendline,
                            removetbllimit=removetbllimit,
