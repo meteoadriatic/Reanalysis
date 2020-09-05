@@ -55,7 +55,7 @@ class StatisticsForm(FlaskForm):
                                  default='Off')
     resamplehow = SelectField(choices=[('min', 'Minimum'), ('max', 'Maksimum'), ('mean', 'Srednjak'), ('sum', 'Suma'), ('count', 'Prebrojavanje')],
                               default='mean')
-    submit = SubmitField('Pošalji')
+    submit = SubmitField('Pošalji', render_kw={"onclick": "loading();"})
     sqlfilter = TextAreaField('sqlfilter')
     plottitle = TextAreaField('plottitle')
     filterprimin = StringField('filterprimin', default='')

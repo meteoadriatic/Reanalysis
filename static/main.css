@@ -110,6 +110,17 @@ a.article-title:hover {
     text-align: center;
 }
 
+div#loading {
+    width: 200px;
+    height: 200px;
+    display: none;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    background: url(/static/loadingimage.gif) no-repeat;
+    cursor: wait;
+    }
+
 /*
 .navbar {
     background-color: #2c3e50;
