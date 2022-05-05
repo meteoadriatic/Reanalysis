@@ -37,6 +37,7 @@ def locations():
         SELECT * FROM locations;
     ''')
     response = cur.fetchall()
+    cur.close()    
     return render_template('locations.html',
                            title='Lokacije',
                            locs=response)
@@ -1010,7 +1011,8 @@ def statistics():
         else:
             pass
 
-
+    cur.close()
+    
     ##
     ## ###########################
     ##
@@ -1097,6 +1099,7 @@ def map():
         SELECT latitude, longitude, name FROM locations;
     ''')
     response = cur.fetchall()
+    cur.close()
     return render_template('map.html',
                            title='Karta',
                            locs=response)
@@ -1266,6 +1269,7 @@ def compare_locations():
             plt.close(fig)
             show_plot = True
 
+    cur.close()            
 
     return render_template('compare_locations.html',
                            title='Usporedba lokacija',
